@@ -1,0 +1,3 @@
+[submodule "public/oatts"]
+	path = public/oatts
+	url = https://github.com/af-oatts/oatts-content

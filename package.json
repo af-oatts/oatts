@@ -1,0 +1,52 @@
+{
+  "name": "oatts",
+  "private": true,
+  "version": "0.3.1",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "tauri": "tauri"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "@fontsource/inter": "^5.2.5",
+    "@mui/icons-material": "^6.4.7",
+    "@mui/material": "^6.4.7",
+    "@tanstack/react-router": "^1.114.17",
+    "@tauri-apps/api": "^2.3.0",
+    "@tauri-apps/plugin-dialog": "~2.2.0",
+    "@tauri-apps/plugin-fs": "~2.2.0",
+    "@tauri-apps/plugin-shell": "^2.2.0",
+    "@tauri-apps/plugin-sql": "github:tauri-apps/tauri-plugin-sql#v2",
+    "@types/canvas-confetti": "^1.9.0",
+    "@types/xml2js": "^0.4.14",
+    "canvas-confetti": "^1.9.3",
+    "dayjs": "^1.11.13",
+    "duration": "^0.2.2",
+    "events": "^3.3.0",
+    "i18next": "^24.2.3",
+    "i18next-http-backend": "1.0.10",
+    "motion": "^12.5.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-i18next": "^15.4.1",
+    "react-markdown": "^10.1.0",
+    "rxjs": "^7.8.2",
+    "uuid": "^11.1.0",
+    "xml2js": "^0.6.2",
+    "yaml": "^2.7.0"
+  },
+  "devDependencies": {
+    "@tanstack/router-devtools": "^1.114.21",
+    "@tanstack/router-plugin": "^1.114.17",
+    "@tauri-apps/cli": "^2.3.1",
+    "@types/react": "^19.0.10",
+    "@types/react-dom": "^19.0.4",
+    "@vitejs/plugin-react": "^4.3.4",
+    "typescript": "^5.8.2",
+    "vite": "^6.2.2"
+  }
+}

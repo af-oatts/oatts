@@ -1,0 +1,6 @@
+{
+  "header": "{{moduleName}} Module Complete",
+  "completionMessage": "Congratulations! You have completed the module. Send it here!",
+  "confirmButton": "Go to Dashboard",
+  "exportButton": "Export"
+}

@@ -1,0 +1,43 @@
+[package]
+name = "OATTS"
+version = "1.0.0"
+description = "OATTS"
+authors = ["The OATTS Authors"]
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[lib]
+# The `_lib` suffix may seem redundant but it is necessary
+# to make the lib name unique and wouldn't conflict with the bin name.
+# This seems to be only an issue on Windows, see https://github.com/rust-lang/cargo/issues/8519
+name = "oatts_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2.0.5", features = [] }
+
+[dependencies]
+tauri = { version = "2.2.1", features = [] }
+tauri-plugin-shell = "2.2.0"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+tauri-plugin-fs = "2"
+tauri-plugin-dialog = "2"
+# tokio + rustls with ring and WebPKI CA certificates
+sqlx = { version = "0.8", features = ["runtime-tokio", "tls-native-tls"] }
+tokio = { version = "1.44.1", features = ["full"] }
+zip = "2.2.3"
+tempfile = "3.21.0"
+aes-gcm = "0.10.3"
+rand_core = "0.9.3"
+rsa = {version="0.9.8", features = ["pem"] }
+pkcs8 = "0.10"
+rand = "0.8"
+sha2 = "0.10.9"
+base64 = "0.22"
+
+[dependencies.tauri-plugin-sql]
+git = "https://github.com/tauri-apps/plugins-workspace"
+branch = "v2"
+features = ["sqlite"]                                   # or "postgres", or "mysql"

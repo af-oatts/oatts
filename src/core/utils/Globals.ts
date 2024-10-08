@@ -1,0 +1,1 @@
+export const OATTS_ROOT: string = '/oatts'
