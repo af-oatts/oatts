@@ -1,0 +1,174 @@
+name: 'publish'
+
+on:
+  push:
+    branches:
+      - release
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: 'Reason for running manually'
+        required: false
+
+jobs:
+  build:
+    permissions:
+      contents: write
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: 'macos-latest' # for Arm based macs (M1 and above).
+            args: '--target aarch64-apple-darwin'
+          - platform: 'macos-latest' # for Intel based macs.
+            args: '--target x86_64-apple-darwin'
+          - platform: 'ubuntu-22.04' # for Tauri v1 you could replace this with ubuntu-20.04.
+            args: ''
+          - platform: 'windows-latest'
+            args: ''
+
+    runs-on: ${{ matrix.platform }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          fetch-depth: 0
+
+      - name: update submodule
+        run: git submodule update --remote --merge
+
+      - name: setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+
+      - name: install Rust stable
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          # Those targets are only used on macos runners so it's in an `if` to slightly speed up windows and linux builds.
+          targets: ${{ matrix.platform == 'macos-latest' && 'aarch64-apple-darwin,x86_64-apple-darwin' || '' }}
+
+      - name: install dependencies (ubuntu only)
+        if: matrix.platform == 'ubuntu-22.04' # This must match the platform value defined above.
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
+
+      - name: Install pnpm
+        uses: pnpm/action-setup/@v3
+
+
+      - name: install frontend dependencies
+        run: pnpm install
+
+
+      - name: Read content version (Linux/macOS)
+        if: runner.os != 'Windows'
+        run: |
+          VERSION="$(yq eval '.versionNumber' public/content/manifest.yml)"
+          echo "CONTENT_VERSION=$VERSION" >> $GITHUB_ENV
+
+      - name: Read content version (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          Invoke-WebRequest -Uri https://github.com/mikefarah/yq/releases/latest/download/yq_windows_amd64.exe -OutFile yq.exe
+          $VERSION = ./yq.exe eval '.versionNumber' public/content/manifest.yml
+          echo "CONTENT_VERSION=$VERSION" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+
+      - name: Read app version & Create Version Number
+        shell: bash
+        run: |
+          VERSION=$(jq -r '.version' src-tauri/tauri.conf.json)
+          echo "APP_VERSION=$VERSION" >> $GITHUB_ENV
+          echo "VERSION=${VERSION}_${CONTENT_VERSION}c" >> $GITHUB_ENV
+
+      - name: Print version
+        run: | 
+          echo "Version: ${{ env.VERSION }}"
+
+      - name: generate public key
+        id: keygen
+        uses: af-oatts/keygen/.github/actions/keygen@ec4e41792ebf69d9921fd5c6add9023ea546a538
+        with:
+          version: ${{ env.VERSION }}
+          master-password: ${{secrets.MASTER_PASSWORD}}
+
+      - name: write public key
+        shell: bash
+        run: |
+          echo "${{steps.keygen.outputs.public-key}}" > public/key.pub
+
+      - name: Build App
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          releaseDraft: false
+          prerelease: false
+          args: ${{ matrix.args }}
+
+
+    # ------ BEGIN MACOS STUFF ONLY  -------
+
+      - name: Checkout installer repo
+        if: runner.os == 'macOS'
+        uses: actions/checkout@v4
+        with:
+            path: installer
+            repository: af-oatts/oatts-installer
+
+        # Runs on same arch as app build, thus copied app WILL be compatible.
+      - name: Copy app to installer folder.
+        run: |
+            cp "$(ls ./src-tauri/target/release/bundle/macos/*.app.tar.gz | head -n 1)" ./installer/src-tauri/assets/oatts.app.tar.gz
+            chmod +x ./installer/src-tauri/assets/oatts.app.tar.gz
+
+      - name: Build Installer
+        if: runner.os == 'macOS'
+        uses: tauri-apps/tauri-action@v0
+        env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with: 
+            projectPath: ./installer
+            releaseName: ''
+            releaseDraft: false
+            prerelease: false
+            args: ${{ matrix.args }}
+
+      
+
+    # ----- END MACOS STUFF ONLY ------
+
+      - name: Upload binaries to artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: binaries-${{ matrix.platform }}
+          path: |
+            ./src-tauri/target/release/bundle/**/*
+            # macOS installer (only on macOS jobs)
+            ${{ runner.os == 'macOS' && './installer/src-tauri/target/release/bundle/macos/*.tar.gz' || '' }}
+          if-no-files-found: error
+          retention-days: 1   # keep only long enough for the next job
+          # Give each platform a unique name so the next job can find it
+          compression-level: 0
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Artifacts
+        uses: actions/download-artifact@v4
+        with:
+            path: ./artifacts
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/') # Only run on tag pushes
+        with:
+            tag_name: 'oatts-v${{ env.VERSION }}'
+            name: 'OATTS v${{ env.VERSION }}'
+            body: Release notes here
+            draft: false
+            prerelease: false
+            files: 
+                ./artifacts/*
