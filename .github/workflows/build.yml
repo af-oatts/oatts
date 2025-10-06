@@ -156,9 +156,8 @@ jobs:
         with:
           name: binaries-${{ matrix.platform }}
           path: |
-            ./src-tauri/target/release/bundle/**/*
-            # macOS installer (only on macOS jobs)
-            ${{ runner.os == 'macOS' && './installer/src-tauri/target/release/bundle/macos/*.tar.gz' || '' }}
+            ./src-tauri/target/**/release/bundle/*/*
+            ${{ runner.os == 'macOS' && './installer/src-tauri/target/*/release/bundle/macos/*app.tar.gz' || '' }}
           if-no-files-found: error
           retention-days: 1   # keep only long enough for the next job
           # Give each platform a unique name so the next job can find it
