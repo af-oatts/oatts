@@ -120,6 +120,8 @@ jobs:
             path: installer
             repository: af-oatts/oatts-installer
 
+      
+
       - name: Copy app to installer folder.
         if: runner.os == 'macOS'
         run: |
@@ -127,6 +129,12 @@ jobs:
             [ -d ./installer/src-tauri/assets ] || (test -d ./installer/src-tauri && mkdir ./installer/src-tauri/assets)
             cp "$(ls ./src-tauri/target/*/release/bundle/macos/*.app.tar.gz | head -n 1)" ./installer/src-tauri/assets/oatts.app.tar.gz
             chmod +x ./installer/src-tauri/assets/oatts.app.tar.gz
+
+      - name: Install frontend Deps (installer)
+        if: runner.os == 'macOS'
+        run: |
+          cd ./installer
+          yarn install
 
       - name: Build Installer
         if: runner.os == 'macOS'
