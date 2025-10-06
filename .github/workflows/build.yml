@@ -92,7 +92,7 @@ jobs:
         uses: af-oatts/keygen/.github/actions/keygen@ec4e41792ebf69d9921fd5c6add9023ea546a538
         with:
           version: ${{ env.VERSION }}
-          master-password: ${{secrets.MASTER_PASSWORD}}
+          master-password: ${{ secrets.MASTER_PASSWORD }}
 
       - name: write public key
         shell: bash
@@ -117,6 +117,7 @@ jobs:
         with:
             path: installer
             repository: af-oatts/oatts-installer
+            token: ${{ secrets.GH_CLONE_KEY}}
 
         # Runs on same arch as app build, thus copied app WILL be compatible.
       - name: Copy app to installer folder.
