@@ -123,7 +123,9 @@ jobs:
       - name: Copy app to installer folder.
         if: runner.os == 'macOS'
         run: |
-            cp "$(ls ./src-tauri/target/release/bundle/macos/*.app.tar.gz | head -n 1)" ./installer/src-tauri/assets/oatts.app.tar.gz
+            set -euo pipefail
+            [ -d ./installer/src-tauri/assets ] || (test -d ./installer/src-tauri && mkdir ./installer/src-tauri/assets)
+            cp "$(ls ./src-tauri/target/*/release/bundle/macos/*.app.tar.gz | head -n 1)" ./installer/src-tauri/assets/oatts.app.tar.gz
             chmod +x ./installer/src-tauri/assets/oatts.app.tar.gz
 
       - name: Build Installer
