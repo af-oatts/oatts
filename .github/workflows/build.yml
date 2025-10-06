@@ -135,7 +135,6 @@ jobs:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with: 
             projectPath: ./installer
-            releaseName: ''
             releaseDraft: false
             prerelease: false
             args: ${{ matrix.args }}
