@@ -119,10 +119,9 @@ jobs:
         with:
             path: installer
             repository: af-oatts/oatts-installer
-            token: ${{ secrets.GH_CLONE_KEY}}
 
-        # Runs on same arch as app build, thus copied app WILL be compatible.
       - name: Copy app to installer folder.
+        if: runner.os == 'macOS'
         run: |
             cp "$(ls ./src-tauri/target/release/bundle/macos/*.app.tar.gz | head -n 1)" ./installer/src-tauri/assets/oatts.app.tar.gz
             chmod +x ./installer/src-tauri/assets/oatts.app.tar.gz
