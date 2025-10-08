@@ -162,6 +162,7 @@ jobs:
             args: ${{ matrix.args }}
 
       - name: Copy installer to binaries folder
+        if: runner.os == 'macOS'
         run: |
           find installer/src-tauri/target/*/release/bundle/* \( \
           -iname "*.tar.gz" -o \
