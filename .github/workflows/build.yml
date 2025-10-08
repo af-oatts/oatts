@@ -26,7 +26,7 @@ jobs:
             name: 'macos-intel'
           - platform: 'ubuntu-22.04' # for Tauri v1 you could replace this with ubuntu-20.04.
             args: ''
-            name: 'debian'
+            name: 'linux'
           - platform: 'windows-latest'
             args: ''
             name: 'windows'
@@ -115,15 +115,21 @@ jobs:
           args: ${{ matrix.args }}
 
       - name: Copy app to binaries folder
+        shell: bash # windows you are the worst
         run: |
-          mkdir binaries
-          find src-tauri/target/*/release/bundle/* -type f \( \
+          mkdir -p binaries
+          # Handle both target/release/bundle/* and target/*/release/bundle/*
+          find src-tauri/target -type f \( \
           -iname "*.deb" -o \
-          -iname "*.exe" -o \
+          -iname "*.rpm" -o \
+          -iname "*.appimage" -o \
           -iname "*.dmg" -o \
           -iname "*.app.tar.gz" -o \
+          -iname "*.exe" -o \
+          -iname "*.msi" -o \
           ! -name "*.*" \
-          \) -exec cp {} ./binaries/ \;
+          \) -path "*/release/*" -exec cp {} ./binaries/ \;
+
 
     # ------ BEGIN MACOS STUFF ONLY  -------
 
