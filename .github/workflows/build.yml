@@ -20,12 +20,16 @@ jobs:
         include:
           - platform: 'macos-latest' # for Arm based macs (M1 and above).
             args: '--target aarch64-apple-darwin'
+            name: 'macos-arm'
           - platform: 'macos-latest' # for Intel based macs.
             args: '--target x86_64-apple-darwin'
+            name: 'macos-intel'
           - platform: 'ubuntu-22.04' # for Tauri v1 you could replace this with ubuntu-20.04.
             args: ''
+            name: 'debian'
           - platform: 'windows-latest'
             args: ''
+            name: 'windows'
 
     runs-on: ${{ matrix.platform }}
     steps:
@@ -110,6 +114,16 @@ jobs:
           prerelease: false
           args: ${{ matrix.args }}
 
+      - name: Copy app to binaries folder
+        run: |
+          mkdir binaries
+          find src-tauri/target/*/release/bundle/* -type f \( \
+          -iname "*.deb" -o \
+          -iname "*.exe" -o \
+          -iname "*.dmg" -o \
+          -iname "*.app.tar.gz" -o \
+          ! -name "*.*" \
+          \) -exec cp {} ./binaries/ \;
 
     # ------ BEGIN MACOS STUFF ONLY  -------
 
@@ -147,6 +161,12 @@ jobs:
             prerelease: false
             args: ${{ matrix.args }}
 
+      - name: Copy installer to binaries folder
+        run: |
+          find installer/src-tauri/target/*/release/bundle/* \( \
+          -iname "*.tar.gz" -o \
+          -iname "*.app" -o \
+          \) -exec cp {} ./binaries/ \;
       
 
     # ----- END MACOS STUFF ONLY ------
@@ -154,10 +174,8 @@ jobs:
       - name: Upload binaries to artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: binaries-${{ matrix.platform }}
-          path: |
-            ./src-tauri/target/**/release/bundle/*/*
-            ${{ runner.os == 'macOS' && './installer/src-tauri/target/*/release/bundle/macos/*app.tar.gz' || '' }}
+          name: binaries-${{ matrix.name }}
+          path: binaries
           if-no-files-found: error
           retention-days: 1   # keep only long enough for the next job
           # Give each platform a unique name so the next job can find it
