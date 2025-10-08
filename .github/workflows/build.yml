@@ -181,7 +181,7 @@ jobs:
       - name: Upload binaries to artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: binaries-${{ matrix.name }}
+          name: artifacts-${{ matrix.name }}
           path: binaries
           if-no-files-found: error
           retention-days: 1   # keep only long enough for the next job
