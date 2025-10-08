@@ -165,7 +165,7 @@ jobs:
         run: |
           find installer/src-tauri/target/*/release/bundle/* \( \
           -iname "*.tar.gz" -o \
-          -iname "*.app" -o \
+          -iname "*.app" \
           \) -exec cp {} ./binaries/ \;
       
 
