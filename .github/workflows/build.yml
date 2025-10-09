@@ -127,7 +127,7 @@ jobs:
           -iname "*.app.tar.gz" -o \
           -iname "*.exe" -o \
           -iname "*.msi" \
-          \) -path "*/release/*" -exec cp {} ./binaries/ \;
+          \) -path "*/release/bundle/*" -exec cp {} ./binaries/ \;
 
 
     # ------ BEGIN MACOS STUFF ONLY  -------
