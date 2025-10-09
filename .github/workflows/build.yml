@@ -126,8 +126,7 @@ jobs:
           -iname "*.dmg" -o \
           -iname "*.app.tar.gz" -o \
           -iname "*.exe" -o \
-          -iname "*.msi" -o \
-          ! -name "*.*" \
+          -iname "*.msi" \
           \) -path "*/release/*" -exec cp {} ./binaries/ \;
 
 
