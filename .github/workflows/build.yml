@@ -212,8 +212,13 @@ jobs:
             for file in "$dir"*; do
               if [ -f "$file" ]; then
                 filename=$(basename "$file")
-                # Insert platform name before the first dot
-                newname="${filename%%.*}_${platform}.${filename#*.}"
+                # Insert platform name before first dot that's NOT preceded by a number
+                if [[ "$filename" =~ ^([^.]*[^0-9])\.(.*)$ ]]; then
+                  newname="${BASH_REMATCH[1]}_${platform}.${BASH_REMATCH[2]}"
+                else
+                  # Fallback if no suitable dot found
+                  newname="${filename}_${platform}"
+                fi
                 cp "$file" "./release-files/$newname"
               fi
             done
