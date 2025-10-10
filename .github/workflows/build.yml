@@ -212,12 +212,15 @@ jobs:
             for file in "$dir"*; do
               if [ -f "$file" ]; then
                 filename=$(basename "$file")
-                # Insert platform name before first dot that's NOT preceded by a number
-                if [[ "$filename" =~ ^([^.]*[^0-9])\.(.*)$ ]]; then
-                  newname="${BASH_REMATCH[1]}_${platform}.${BASH_REMATCH[2]}"
+                # Use extended regex to find first dot followed by a letter
+                if [[ "$filename" =~ ^(.+)(\.[A-Za-z].*)$ ]]; then
+                  # Find the position before .letter
+                  base=$(echo "$filename" | grep -oP '^.+?(?=\.[A-Za-z])')
+                  rest="${filename:${#base}}"
+                  newname="${base}_${platform}${rest}"
                 else
                   # Fallback if no suitable dot found
-                  newname="${filename}_${platform}"
+                  newname="${platform}_${filename}"
                 fi
                 cp "$file" "./release-files/$newname"
               fi
