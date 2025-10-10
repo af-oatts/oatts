@@ -115,6 +115,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           releaseDraft: false
+          tagName: ''
           prerelease: false
           args: ${{ matrix.args }}
 
@@ -166,6 +167,7 @@ jobs:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with: 
             projectPath: ./installer
+            tagName: ''
             releaseDraft: false
             prerelease: false
             args: ${{ matrix.args }}
