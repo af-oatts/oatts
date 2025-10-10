@@ -203,6 +203,22 @@ jobs:
         uses: actions/download-artifact@v4
         with:
             path: ./artifacts
+      - name: Flatten and rename artifacts
+        shell: bash
+        run: |
+          mkdir -p ./release-files
+          for dir in ./artifacts/*/; do
+            platform=$(basename "$dir" | sed 's/artifacts-//')
+            for file in "$dir"*; do
+              if [ -f "$file" ]; then
+                filename=$(basename "$file")
+                # Insert platform name before the first dot
+                newname="${filename%%.*}_${platform}.${filename#*.}"
+                cp "$file" "./release-files/$newname"
+              fi
+            done
+          done
+          ls -la ./release-files/
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
@@ -212,4 +228,4 @@ jobs:
             draft: false
             prerelease: false
             files: 
-                ./artifacts/**/*
+                ./release-files/*
