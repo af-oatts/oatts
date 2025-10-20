@@ -3,6 +3,7 @@
   "productName": "OATTS",
   "version": "1.0.0",
   "identifier": "com.oatts-authors.oatts",
+
   "build": {
     "beforeDevCommand": "pnpm dev",
     "devUrl": "http://localhost:1420",
@@ -15,7 +16,6 @@
         "title": "Official AFOQT and TBAS Test-familiarization Software",
         "width": 900,
         "height": 800
-        
       }
     ],
     "security": {
@@ -26,12 +26,26 @@
     "active": true,
     "targets": "all",
     "category": "Education",
-    "icon": [
-      "icons/32x32.png",
-      "icons/128x128.png",
-      "icons/128x128@2x.png",
-      "icons/icon.icns",
-      "icons/icon.ico"
-    ]
+    "icon": ["icons/32x32.png", "icons/128x128.png", "icons/128x128@2x.png", "icons/icon.icns", "icons/icon.ico"],
+    "macOS": {
+      "signingIdentity": "-",
+      "dmg": {
+        "appPosition": {
+          "x": 180,
+          "y": 170
+        },
+        "applicationFolderPosition": {
+          "x": 480,
+          "y": 170
+        },
+        "windowSize": {
+          "height": 400,
+          "width": 660
+        }
+      },
+      "files": {},
+      "hardenedRuntime": true,
+      "minimumSystemVersion": "10.13"
+    }
   }
 }
