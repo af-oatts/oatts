@@ -1,5 +1,5 @@
 import { createFileRoute, useRouteContext } from "@tanstack/react-router";
-import { loadRequiredAndOptionalModules } from "@/core/modules/ModuleLoader";
+import { loadRequiredAndOptionalCourses } from "@/core/modules/ModuleLoader";
 import { ModulesView } from "@/components/dashboard/ModulesView";
 import { BigLoadingScreen } from "@/components/common/BigLoadingScreen";
 import { checkIfRequirementsAreComplete } from "@/core/modules/ModuleUtils";
@@ -10,7 +10,7 @@ import PostQuizPage from "@/components/quiz/PostQuiz";
 export const Route = createFileRoute("/_authenticated/_authorized/dashboard")({
   component: DashboardPage,
   pendingComponent: () => <BigLoadingScreen name="modules"/>,
-  loader: loadRequiredAndOptionalModules,
+  loader: loadRequiredAndOptionalCourses,
   gcTime: 0,
   // Only reload the route when the user navigates to it or when deps change
   shouldReload: false,

@@ -8,6 +8,7 @@ import {
   OldOattsConfig,
   Role,
   QuizContent,
+  OattsManifest,
 } from "@/core/model/OattsModel";
 import { join } from "@tauri-apps/api/path";
 import { parse } from "yaml";
@@ -255,7 +256,7 @@ type ModuleMetadataFile = {
   path: string;
 };
 
-export async function loadRequiredAndOptionalModules({
+export async function loadRequiredAndOptionalCourses({
   context,
 }: {
   context: { authentication: UserContextType; modules: ModuleContext; config: OldOattsConfig };
