@@ -20,7 +20,7 @@ import { Route as AuthenticatedOnboardingImport } from './routes/_authenticated/
 import { Route as AuthenticatedAuthorizedImport } from './routes/_authenticated/_authorized'
 import { Route as AuthenticatedAuthorizedDashboardImport } from './routes/_authenticated/_authorized/dashboard'
 import { Route as AuthenticatedAuthorizedCertificateImport } from './routes/_authenticated/_authorized/certificate'
-import { Route as AuthenticatedAuthorizedModulesModuleIdImport } from './routes/_authenticated/_authorized/modules/$moduleId'
+import { Route as AuthenticatedAuthorizedCoursesCourseIdImport } from './routes/_authenticated/_authorized/courses/$courseId'
 
 // Create/Update Routes
 
@@ -77,10 +77,10 @@ const AuthenticatedAuthorizedCertificateRoute =
     getParentRoute: () => AuthenticatedAuthorizedRoute,
   } as any)
 
-const AuthenticatedAuthorizedModulesModuleIdRoute =
-  AuthenticatedAuthorizedModulesModuleIdImport.update({
-    id: '/modules/$moduleId',
-    path: '/modules/$moduleId',
+const AuthenticatedAuthorizedCoursesCourseIdRoute =
+  AuthenticatedAuthorizedCoursesCourseIdImport.update({
+    id: '/courses/$courseId',
+    path: '/courses/$courseId',
     getParentRoute: () => AuthenticatedAuthorizedRoute,
   } as any)
 
@@ -151,11 +151,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAuthorizedDashboardImport
       parentRoute: typeof AuthenticatedAuthorizedImport
     }
-    '/_authenticated/_authorized/modules/$moduleId': {
-      id: '/_authenticated/_authorized/modules/$moduleId'
-      path: '/modules/$moduleId'
-      fullPath: '/modules/$moduleId'
-      preLoaderRoute: typeof AuthenticatedAuthorizedModulesModuleIdImport
+    '/_authenticated/_authorized/courses/$courseId': {
+      id: '/_authenticated/_authorized/courses/$courseId'
+      path: '/courses/$courseId'
+      fullPath: '/courses/$courseId'
+      preLoaderRoute: typeof AuthenticatedAuthorizedCoursesCourseIdImport
       parentRoute: typeof AuthenticatedAuthorizedImport
     }
   }
@@ -166,7 +166,7 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedAuthorizedRouteChildren {
   AuthenticatedAuthorizedCertificateRoute: typeof AuthenticatedAuthorizedCertificateRoute
   AuthenticatedAuthorizedDashboardRoute: typeof AuthenticatedAuthorizedDashboardRoute
-  AuthenticatedAuthorizedModulesModuleIdRoute: typeof AuthenticatedAuthorizedModulesModuleIdRoute
+  AuthenticatedAuthorizedCoursesCourseIdRoute: typeof AuthenticatedAuthorizedCoursesCourseIdRoute
 }
 
 const AuthenticatedAuthorizedRouteChildren: AuthenticatedAuthorizedRouteChildren =
@@ -175,8 +175,8 @@ const AuthenticatedAuthorizedRouteChildren: AuthenticatedAuthorizedRouteChildren
       AuthenticatedAuthorizedCertificateRoute,
     AuthenticatedAuthorizedDashboardRoute:
       AuthenticatedAuthorizedDashboardRoute,
-    AuthenticatedAuthorizedModulesModuleIdRoute:
-      AuthenticatedAuthorizedModulesModuleIdRoute,
+    AuthenticatedAuthorizedCoursesCourseIdRoute:
+      AuthenticatedAuthorizedCoursesCourseIdRoute,
   }
 
 const AuthenticatedAuthorizedRouteWithChildren =
@@ -220,7 +220,7 @@ export interface FileRoutesByFullPath {
   '/register': typeof AuthenticationRegisterRoute
   '/certificate': typeof AuthenticatedAuthorizedCertificateRoute
   '/dashboard': typeof AuthenticatedAuthorizedDashboardRoute
-  '/modules/$moduleId': typeof AuthenticatedAuthorizedModulesModuleIdRoute
+  '/courses/$courseId': typeof AuthenticatedAuthorizedCoursesCourseIdRoute
 }
 
 export interface FileRoutesByTo {
@@ -231,7 +231,7 @@ export interface FileRoutesByTo {
   '/register': typeof AuthenticationRegisterRoute
   '/certificate': typeof AuthenticatedAuthorizedCertificateRoute
   '/dashboard': typeof AuthenticatedAuthorizedDashboardRoute
-  '/modules/$moduleId': typeof AuthenticatedAuthorizedModulesModuleIdRoute
+  '/courses/$courseId': typeof AuthenticatedAuthorizedCoursesCourseIdRoute
 }
 
 export interface FileRoutesById {
@@ -245,7 +245,7 @@ export interface FileRoutesById {
   '/_authentication/register': typeof AuthenticationRegisterRoute
   '/_authenticated/_authorized/certificate': typeof AuthenticatedAuthorizedCertificateRoute
   '/_authenticated/_authorized/dashboard': typeof AuthenticatedAuthorizedDashboardRoute
-  '/_authenticated/_authorized/modules/$moduleId': typeof AuthenticatedAuthorizedModulesModuleIdRoute
+  '/_authenticated/_authorized/courses/$courseId': typeof AuthenticatedAuthorizedCoursesCourseIdRoute
 }
 
 export interface FileRouteTypes {
@@ -258,7 +258,7 @@ export interface FileRouteTypes {
     | '/register'
     | '/certificate'
     | '/dashboard'
-    | '/modules/$moduleId'
+    | '/courses/$courseId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -268,7 +268,7 @@ export interface FileRouteTypes {
     | '/register'
     | '/certificate'
     | '/dashboard'
-    | '/modules/$moduleId'
+    | '/courses/$courseId'
   id:
     | '__root__'
     | '/'
@@ -280,7 +280,7 @@ export interface FileRouteTypes {
     | '/_authentication/register'
     | '/_authenticated/_authorized/certificate'
     | '/_authenticated/_authorized/dashboard'
-    | '/_authenticated/_authorized/modules/$moduleId'
+    | '/_authenticated/_authorized/courses/$courseId'
   fileRoutesById: FileRoutesById
 }
 
@@ -334,7 +334,7 @@ export const routeTree = rootRoute
       "children": [
         "/_authenticated/_authorized/certificate",
         "/_authenticated/_authorized/dashboard",
-        "/_authenticated/_authorized/modules/$moduleId"
+        "/_authenticated/_authorized/courses/$courseId"
       ]
     },
     "/_authenticated/onboarding": {
@@ -357,8 +357,8 @@ export const routeTree = rootRoute
       "filePath": "_authenticated/_authorized/dashboard.tsx",
       "parent": "/_authenticated/_authorized"
     },
-    "/_authenticated/_authorized/modules/$moduleId": {
-      "filePath": "_authenticated/_authorized/modules/$moduleId.tsx",
+    "/_authenticated/_authorized/courses/$courseId": {
+      "filePath": "_authenticated/_authorized/courses/$courseId.tsx",
       "parent": "/_authenticated/_authorized"
     }
   }

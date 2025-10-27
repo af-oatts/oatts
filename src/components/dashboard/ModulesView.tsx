@@ -80,7 +80,7 @@ export function CoursesRack({ label, courses }: { label: string; courses: Course
       >
         {courses.map((course, idx) => (
           <Box key={idx} sx={{ height: "100%" }}>
-            <Link to={`/modules/$moduleId`} style={{ textDecoration: 'none' }} params={{ moduleId: course.id }}>
+            <Link to={`/courses/$courseId`} style={{ textDecoration: 'none' }} params={{ courseId: course.id }}>
               <CourseCard course={course} />
             </Link>
           </Box>

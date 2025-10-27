@@ -34,5 +34,5 @@ export default function DashboardPage() {
     return <PostQuizPage onNext={() => {}} />;
   }
 
-  return <CoursesView {...{ required, optional, }} mayCollectData={context.config.allowDataCollection?? false} />;
+  return <CoursesView required={required} optional={optional} mayCollectData={context.config.allowDataCollection?? false} />;
 }

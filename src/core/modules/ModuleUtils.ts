@@ -78,14 +78,19 @@ export function FlattenContents(contents: CourseContent[]): CourseContent[] {
   return flattenedContents;
 }
 
-export function GetContentURL(content: CourseContent) {
-  return `${OATTS_ROOT}/content/${content.id}/${content.entrypoint}`
-}
 function FlattenContentItem(content: CourseContent): CourseContent[] {
   if (Array.isArray(content.children)) {
     return content.children.flatMap(FlattenContentItem);
   }
-
+  
   return [content];
 }
 
+
+export function GetContentURL(content: CourseContent) {
+  return `${OATTS_ROOT}/content/${content.id}/${content.entrypoint}`
+}
+
+export function GetCourseImageURL(course: Course) {
+  return `${OATTS_ROOT}/assets/${course.img}`
+}

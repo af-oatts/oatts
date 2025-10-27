@@ -2,7 +2,7 @@ import { CompletionStatus, Course } from "@/core/model/OattsModel";
 import { Box, Card, CardContent, IconButton, Menu, MenuItem, Typography, useTheme } from "@mui/material";
 import CoursePreviewImage from "../module/ModulePreviewImage";
 import { AnimatePresence, motion } from "motion/react";
-import {calculateCourseCompletionStatus, CompletionStatusToString } from "../../core/modules/ModuleUtils";
+import {calculateCourseCompletionStatus, CompletionStatusToString, GetCourseImageURL } from "../../core/modules/ModuleUtils";
 import { SecondsToTimeString } from "../../core/utils/TimeStuff";
 import { resetUserAssessment } from "../../core/database/Content";
 import { useAuth } from "@/contexts/hooks/useAuth";
@@ -116,7 +116,7 @@ export default function CourseCard({ course }: { course: Course }) {
               backgroundColor: "inherit",
             }}
           >
-            <CoursePreviewImage completed={completed} src={course.img} name={course.name} />
+            <CoursePreviewImage completed={completed} src={GetCourseImageURL(course)} name={course.name} />
           </Box>
           <Box
             sx={{

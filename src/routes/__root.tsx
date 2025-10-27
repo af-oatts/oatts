@@ -28,6 +28,8 @@ export const Route = routeWithCtx({
       config = {
         courses: [],
         roles: [],
+        prequizzes: [],
+        postquizzes: []
       };
     }
     return { config };
