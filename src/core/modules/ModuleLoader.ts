@@ -4,7 +4,6 @@ import {
   OldContentMetadata,
   ContentState,
   Role,
-  QuizContent,
   RawOattsManifest,
   RawCourse,
   Course,
@@ -98,45 +97,6 @@ function roleIdsToRoles(roleIds: string[], availableRoles: Role[]): Role[] {
 }
 
 
-export async function LoadQuiz(manifest: OattsManifest, quizId: string): Promise<QuizContent[] | undefined> {
-
-  const quizPath = await join(OATTS_ROOT, quizId);
-  const metadataPath = await join(quizPath, ".oatts");
-  const metadataString = await FetchFile(metadataPath, "text/yaml");
-  if (metadataString === undefined) {
-    console.warn("Unable to find quiz metadata in", metadataPath);
-    return undefined;
-  }
-
-  const quizConfig: QuizConfigFile = parse(metadataString);
-  if (quizConfig.contents === undefined) 
-    return undefined;
-
-  const quizContentConfigPromises = quizConfig.contents.map(async (contentId) => {
-    const contentPath = await join(quizPath, contentId.name);
-    const contentMetadataPath = await join(contentPath, ".oatts");
-    const contentMetadataString = await FetchFile(contentMetadataPath, "text/yaml");
-    if (contentMetadataString === undefined) {
-      console.warn("Unable to find quiz content metadata in", contentMetadataPath);
-      return undefined;
-    }
-
-    const cfg: QuizContentConfigFile = parse(contentMetadataString);
-    if (cfg.contentConfig === undefined) {
-      return undefined;
-    }
-
-    const contentItem = await contentCfgToItem(cfg.contentConfig, contentPath);
-    const roles = roleIdsToRoles(cfg.roleIds, manifest.roles);
-
-    return {content: contentItem, roles: roles};
-  });
-
-  const potentiallyUndefinedQuizContents = await Promise.all(quizContentConfigPromises);
-  const quizContents = potentiallyUndefinedQuizContents.filter((c) => c !== undefined);
-
-  return quizContents;
-}
 
 async function contentCfgToItem(config: ContentMetadataFile, contentPath: string): Promise<OldContentItem> {
   let contentId = contentPath.replace("/\s\g", "");

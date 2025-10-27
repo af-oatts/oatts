@@ -8,8 +8,8 @@ import { Subject } from "rxjs";
 
 export type OattsManifest = {
   courses: Course[];
-  preQuiz?: Course;
-  postQuiz?: Course;
+  prequizzes: Course[]; // Quizzes are grouped into "Quizsets" which can have roles. Quizsets are basically just modules so we treat them as such. This doesn't *entirely* break liskov substitution principle... only a tiny bit!
+  postquizzes: Course[];
   versionNumber?: string;
   allowDataCollection?: boolean;
   roles: Role[];
@@ -158,11 +158,6 @@ export type PostQuizModule = {
 export type PostQuizContent = {
   roleIds: string[];
   content: CourseContent;
-};
-
-export type QuizContent = {
-  content: CourseContent;
-  roles: Role[];
 };
 
 export type OldManifestMetadata = {
