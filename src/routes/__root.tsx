@@ -5,12 +5,12 @@ import { CssBaseline } from "@mui/material";
 import { createRootRouteWithContext, Outlet } from "@tanstack/react-router";
 import AppTheme from "@/theme/AppTheme";
 import LoadConfig from "@/core/utils/ConfigLoader";
-import { OldOattsConfig } from "@/core/model/OattsModel";
+import { OattsManifest } from "@/core/model/OattsModel";
 
 type RouterContext = {
   authentication: UserContextType;
-  modules: CoursesContext;
-  config: OldOattsConfig;
+  courses: CoursesContext;
+  manifest: OattsManifest;
 };
 
 declare global {

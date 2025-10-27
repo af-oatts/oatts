@@ -1,4 +1,4 @@
-import { OldContentItem, ContentState, ContentStateType, CourseContent } from "@/core/model/OattsModel";
+import { ContentState, ContentStateType, CourseContent } from "@/core/model/OattsModel";
 import User from "@/core/model/UserModel";
 import loadDatabase from "./DatabaseLoader";
 import { CompletionStatus, ScormDbEntity, ScormModel } from "@/core/model/ScormModel";
@@ -25,11 +25,12 @@ export async function GetInternalContentState(user: User, contentUri: string): P
     return undefined;
   }
   let state: ContentStateType = JSON.parse(dbState.data);
-  return internalizeContentState(state);
+  let contentState = new ContentState();
+  internalizeContentState(state, contentState);
+  return contentState;
 }
 
-export function internalizeContentState(stateType: ContentStateType) : ContentState {
-  let contentState = new ContentState();
+export function internalizeContentState(stateType: ContentStateType, contentState: ContentState) : ContentState {
   contentState.completionStatus = stateType.completionStatus;
   return contentState;
 }

@@ -35,7 +35,7 @@ export async function GetCoursesWithState(user: User, config: OattsManifest): Pr
 
 
 // Adds state to a raw course, returning a course.
-async function StatefulifyRawCourse(course: RawCourse, user: User): Promise<Course> {
+export async function StatefulifyRawCourse(course: RawCourse, user: User): Promise<Course> {
   let statefulContents: CourseContent[] = []
   for (const content of course.contents) {
     let statefulContent = await StatefulifyRawContent(content, user);

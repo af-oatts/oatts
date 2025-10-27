@@ -1,5 +1,5 @@
-import { RawCourse } from "@/core/model/OattsModel";
+import { Course } from "@/core/model/OattsModel";
 
 export default class CoursesContext {
-  courses: RawCourse[] | undefined;
+  courses: Course[] | undefined;
 }
