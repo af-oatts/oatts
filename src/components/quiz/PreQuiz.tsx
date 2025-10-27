@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { LoadQuiz } from "../../core/modules/ModuleLoader";
 import { motion } from "motion/react";
 import { TransitionParams } from "../../theme/TransitionParams";
-import { CompletionStatus, ContentItem } from "@/core/model/OattsModel";
+import { CompletionStatus, OldContentItem } from "@/core/model/OattsModel";
 import { useRouteContext } from "@tanstack/react-router";
 import { UserStatusFlag } from "@/core/model/UserModel";
 import { addUserStatusFlag } from "../../core/authentication/UserStatusFlag";
@@ -11,7 +11,7 @@ import { useMultiCompletionStatus } from "../../core/modules/hooks/useMultiCompl
 import ModuleViewer from "../module/ModuleViewer";
 
 export default function PreQuizPage({ onNext }: { onNext: () => void }) {
-  let [quizzes, setQuizzes] = useState<ContentItem[] | undefined>(undefined);
+  let [quizzes, setQuizzes] = useState<OldContentItem[] | undefined>(undefined);
   let [quizExists, setQuizExists] = useState<boolean | undefined>(undefined);
   let { user, quizId, oattsConfig } = useRouteContext({
     from: "/_authenticated",

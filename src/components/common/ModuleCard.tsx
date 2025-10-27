@@ -1,4 +1,4 @@
-import { CompletionStatus, Module } from "@/core/model/OattsModel";
+import { CompletionStatus, OldModule } from "@/core/model/OattsModel";
 import { Box, Card, CardContent, IconButton, Menu, MenuItem, Typography, useTheme } from "@mui/material";
 import ModulePreviewImage from "../module/ModulePreviewImage";
 import { AnimatePresence, motion } from "motion/react";
@@ -11,7 +11,7 @@ import { MoreVert } from "@mui/icons-material";
 import { useState } from "react";
 import dayjs from "dayjs";
 
-export default function ModuleCard({ module }: { module: Module }) {
+export default function ModuleCard({ module }: { module: OldModule }) {
   let [menuAnchor, setMenuAnchor] = useState<null | HTMLElement>(null);
   const timeToComplete = module.timeToComplete == undefined ? CalculateEstimatedDuration(module) : dayjs.duration(module.timeToComplete, 'seconds');
   const completionStatus = calculateModuleCompletionStatus(module);

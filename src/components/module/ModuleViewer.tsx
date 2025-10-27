@@ -1,4 +1,4 @@
-import { CompletionStatus, ContentItem } from "@/core/model/OattsModel";
+import { CompletionStatus, OldContentItem } from "@/core/model/OattsModel";
 import { Box, Button, Divider, List, Typography } from "@mui/material";
 import { motion, useAnimate } from "motion/react";
 import { useEffect, useMemo, useState } from "react";
@@ -7,16 +7,16 @@ import { FlattenContents } from "../../core/modules/ModuleUtils";
 import { useNavigate } from "@tanstack/react-router";
 import { ContentMenuItem } from "@/components/common/ContentMenu";
 
-function firstIncomplete(contentItems: ContentItem[]): ContentItem | undefined {
+function firstIncomplete(contentItems: OldContentItem[]): OldContentItem | undefined {
   const incomplete = contentItems.find((c) => c.state.completionStatus !== CompletionStatus.Completed);
   return incomplete;
 }
 
-function firstIncompleteOrDefault(contentItems: ContentItem[]): ContentItem {
+function firstIncompleteOrDefault(contentItems: OldContentItem[]): OldContentItem {
   return firstIncomplete(contentItems) ?? contentItems[0];
 }
 
-function nextIncomplete(contentItems: ContentItem[], currentItem: ContentItem): ContentItem | undefined {
+function nextIncomplete(contentItems: OldContentItem[], currentItem: OldContentItem): OldContentItem | undefined {
   const currentItemIdx = contentItems.indexOf(currentItem);
   const firstHalf = contentItems.slice(currentItemIdx);
   const secondHalf = contentItems.slice(0, currentItemIdx);
@@ -25,17 +25,17 @@ function nextIncomplete(contentItems: ContentItem[], currentItem: ContentItem): 
   return incomplete;
 }
 
-function nextIncompleteOrDefault(contentItems: ContentItem[], currentItem: ContentItem): ContentItem {
+function nextIncompleteOrDefault(contentItems: OldContentItem[], currentItem: OldContentItem): OldContentItem {
   return nextIncomplete(contentItems, currentItem) ?? contentItems[0];
 }
 
-function nasNext(contentItems: ContentItem[]): boolean {
+function nasNext(contentItems: OldContentItem[]): boolean {
   return firstIncomplete(contentItems) !== undefined;
 }
 
-export default function ModuleViewer({ contents, paNumber }: { contents: ContentItem[], paNumber?: string }) {
+export default function ModuleViewer({ contents, paNumber }: { contents: OldContentItem[], paNumber?: string }) {
   const flattenedContents = useMemo(() => FlattenContents(contents), []);
-  const [content, setContent] = useState<ContentItem>(firstIncompleteOrDefault(flattenedContents));
+  const [content, setContent] = useState<OldContentItem>(firstIncompleteOrDefault(flattenedContents));
   const [scope, animate] = useAnimate();
   const [hasNext, setHasNext] = useState(nasNext(flattenedContents));
 

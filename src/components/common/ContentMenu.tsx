@@ -1,4 +1,4 @@
-import { ContentItem, ContentType } from "@/core/model/OattsModel";
+import { OldContentItem, OldContentType } from "@/core/model/OattsModel";
 import { Box, Collapse, List, ListItemButton, ListItemButtonProps, ListItemText } from "@mui/material";
 
 import { useState } from "react";
@@ -37,9 +37,9 @@ function CollapsibleMenuItem(props: ContentMenuItemProps) {
 }
 
 interface ContentMenuItemProps extends ListItemButtonProps {
-  contentItem: ContentItem;
-  setContent: (contentItem: ContentItem) => void;
-  isSelected: (contentItem: ContentItem) => boolean;
+  contentItem: OldContentItem;
+  setContent: (contentItem: OldContentItem) => void;
+  isSelected: (contentItem: OldContentItem) => boolean;
 }
 
 export function ContentMenuItem(props: ContentMenuItemProps) {
@@ -47,7 +47,7 @@ export function ContentMenuItem(props: ContentMenuItemProps) {
 
   const status = useCompletionStatus(contentItem);
 
-  if (contentItem.type == ContentType.CONTAINER) {
+  if (contentItem.type == OldContentType.CONTAINER) {
     return <CollapsibleMenuItem {...props} />;
   }
 

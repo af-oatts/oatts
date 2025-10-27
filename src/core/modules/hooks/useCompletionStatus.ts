@@ -1,8 +1,8 @@
-import { CompletionStatus, ContentItem } from "@/core/model/OattsModel";
+import { CompletionStatus, OldContentItem } from "@/core/model/OattsModel";
 import { useEffect, useState } from "react";
 import { CalculateContentCompletionStatus } from "../ModuleUtils";
 
-export default function useCompletionStatus(contentItem?: ContentItem) {
+export default function useCompletionStatus(contentItem?: OldContentItem) {
   const [status, setStatus] = useState<CompletionStatus>(
     contentItem !== undefined ? CalculateContentCompletionStatus(contentItem) : CompletionStatus.Unknown,
   );

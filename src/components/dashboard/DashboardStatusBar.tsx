@@ -1,4 +1,4 @@
-import { Module } from "@/core/model/OattsModel";
+import { OldModule } from "@/core/model/OattsModel";
 import {
   Alert,
   Box,
@@ -21,7 +21,7 @@ import { useSetOverlay } from "@/contexts/hooks/useOverlay";
 import InformedConsent from "@/components/dashboard/InformedConsent";
 
 export interface StatusTileProps extends CardOwnProps {
-  modules: Module[];
+  modules: OldModule[];
   mayCollectData: boolean
 }
 

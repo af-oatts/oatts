@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import { useNavigate, useRouteContext } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { CompletionStatus, Module } from "@/core/model/OattsModel";
+import { CompletionStatus, OldModule } from "@/core/model/OattsModel";
 import { GetModulesWithState } from "../../core/modules/ModuleLoader";
 import { addUserStatusFlag } from "../../core/authentication/UserStatusFlag";
 import { UserStatusFlag } from "@/core/model/UserModel";
@@ -16,7 +16,7 @@ function usePostQuizModule() {
       return { user: ctx.authentication.user, config: ctx.config };
     },
   });
-  const [module, setModule] = useState<Module>();
+  const [module, setModule] = useState<OldModule>();
 
   useEffect(() => {
     let mounted = true;

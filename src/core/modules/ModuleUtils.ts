@@ -1,13 +1,13 @@
-import { CompletionStatus, ContentItem, Module } from "@/core/model/OattsModel";
+import { CompletionStatus, OldContentItem, OldModule } from "@/core/model/OattsModel";
 import dayjs from "dayjs";
 import { Duration } from "dayjs/plugin/duration";
 
-export function CalculateEstimatedDuration(module: Module): Duration {
+export function CalculateEstimatedDuration(module: OldModule): Duration {
   let duration = module.contents.map(CalculateContentDuration).reduce((prev, curr) => prev.add(curr));
   return duration;
 }
 
-function CalculateContentDuration(content: ContentItem): Duration {
+function CalculateContentDuration(content: OldContentItem): Duration {
   if (Array.isArray(content.subContents)) {
     let subContentsDuration = content.subContents.map(CalculateContentDuration);
     return subContentsDuration.reduce((prev, curr) => prev.add(curr));
@@ -16,20 +16,20 @@ function CalculateContentDuration(content: ContentItem): Duration {
   return content.metadata.duration ?? dayjs.duration(0);
 }
 
-export function calculateModuleCompletionStatus(module: Module): CompletionStatus {
+export function calculateModuleCompletionStatus(module: OldModule): CompletionStatus {
   return calculateMultiContentCompletionStatus(module.contents);
 }
 
-export function calculateMultiContentCompletionStatus(contents: ContentItem[]): CompletionStatus {
+export function calculateMultiContentCompletionStatus(contents: OldContentItem[]): CompletionStatus {
   let statuses = contents.map(CalculateContentCompletionStatus);
   return ReduceCompletionStatus(statuses);
 }
 
-export function checkIfRequirementsAreComplete(modules: Module[]): boolean {
+export function checkIfRequirementsAreComplete(modules: OldModule[]): boolean {
   return modules.every((module) => calculateModuleCompletionStatus(module) === CompletionStatus.Completed);
 }
 
-export function CalculateContentCompletionStatus(content: ContentItem): CompletionStatus {
+export function CalculateContentCompletionStatus(content: OldContentItem): CompletionStatus {
   if (Array.isArray(content.subContents)) {
     let completionStatuses = content.subContents.map(CalculateContentCompletionStatus);
     return ReduceCompletionStatus(completionStatuses);
@@ -65,13 +65,13 @@ export function CompletionStatusToString(status: CompletionStatus): string {
   }
 }
 
-export function CalculateModulesProgress(modules: Module[]): number {
+export function CalculateModulesProgress(modules: OldModule[]): number {
   return (
     modules.map((m) => CalculateModuleProgress(m)).reduce((accumulator, val) => accumulator + val, 0) / modules.length
   );
 }
 
-function CalculateModuleProgress(module: Module): number {
+function CalculateModuleProgress(module: OldModule): number {
   const statuses = module.contents.flatMap(FlattenContentStatuses);
   const total = statuses.length;
   const completed = statuses.filter((s) => s === CompletionStatus.Completed).length;
@@ -80,7 +80,7 @@ function CalculateModuleProgress(module: Module): number {
   return (completed + inProgress * 0.5) / total;
 }
 
-function FlattenContentStatuses(content: ContentItem): CompletionStatus[] {
+function FlattenContentStatuses(content: OldContentItem): CompletionStatus[] {
   const contents = FlattenContentItem(content);
 
   const statuses = contents.map((c) => c.state.completionStatus);
@@ -88,12 +88,12 @@ function FlattenContentStatuses(content: ContentItem): CompletionStatus[] {
   return statuses;
 }
 
-export function FlattenContents(contents: ContentItem[]): ContentItem[] {
+export function FlattenContents(contents: OldContentItem[]): OldContentItem[] {
   const flattenedContents = contents.flatMap(FlattenContentItem);
   return flattenedContents;
 }
 
-function FlattenContentItem(content: ContentItem): ContentItem[] {
+function FlattenContentItem(content: OldContentItem): OldContentItem[] {
   if (Array.isArray(content.subContents)) {
     return content.subContents.flatMap(FlattenContentItem);
   }

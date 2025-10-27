@@ -1,9 +1,9 @@
-import { ContentItem, CompletionStatus } from "@/core/model/OattsModel";
+import { OldContentItem, CompletionStatus } from "@/core/model/OattsModel";
 import { useState, useEffect } from "react";
 import { calculateMultiContentCompletionStatus, ReduceCompletionStatus } from "../ModuleUtils";
 
 
-export function useMultiCompletionStatus(contentItems?: ContentItem[]) {
+export function useMultiCompletionStatus(contentItems?: OldContentItem[]) {
   const [status, setStatus] = useState<CompletionStatus>(
     contentItems !== undefined ? calculateMultiContentCompletionStatus(contentItems) : CompletionStatus.Unknown
   );

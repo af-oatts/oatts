@@ -10,10 +10,8 @@ export async function FetchFile(filePath: string, expectedContentType: string): 
       let textResponse = await response.text();
       return textResponse;
     } 
-    else if (expectedContentType == "text/yaml" && filePath.endsWith(".oatts"))
+    else if (expectedContentType == "text/yaml" && filePath.endsWith(".yml"))
     {
-      // Due to the .oatts files, they are returned with content type of text
-      // so we can just pretend they're fine for now.
       let textResponse = await response.text();
       return textResponse;
     }

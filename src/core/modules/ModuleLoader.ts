@@ -1,11 +1,11 @@
 import {
-  Module,
-  ContentItem,
-  ContentType,
-  ContentMetadata,
+  OldModule,
+  OldContentItem,
+  OldContentType,
+  OldContentMetadata,
   ContentState,
-  ManifestMetadata,
-  OattsConfig,
+  OldManifestMetadata,
+  OldOattsConfig,
   Role,
   QuizContent,
 } from "@/core/model/OattsModel";
@@ -21,22 +21,22 @@ import { populateContentState } from "../database/Content";
 import { UserContextType } from "../../contexts/UserContext";
 import ModuleContext from "./ModuleContext";
 
-export async function GetModulesWithState(user: User, config: OattsConfig): Promise<Module[]> {
+export async function GetModulesWithState(user: User, config: OldOattsConfig): Promise<OldModule[]> {
 
   const modules = await GetModules(config);
   await Promise.all(modules.map((mod) => PopulateModuleState(mod, user)));
   return modules;
 }
 
-async function PopulateModuleState(module: Module, user: User) {
+async function PopulateModuleState(module: OldModule, user: User) {
   for (const content of module.contents) {
     await PopulateInternalState(content, user);
     await PopulateScormState(content, user);
   }
 }
 
-async function PopulateInternalState(content: ContentItem, user: User) {
-  if (content.type === ContentType.CONTAINER && content.subContents !== undefined) {
+async function PopulateInternalState(content: OldContentItem, user: User) {
+  if (content.type === OldContentType.CONTAINER && content.subContents !== undefined) {
     for (const subContent of content.subContents) {
       await PopulateInternalState(subContent, user);
     }
@@ -45,13 +45,13 @@ async function PopulateInternalState(content: ContentItem, user: User) {
   }
 }
 
-async function PopulateScormState(content: ContentItem, user: User) {
-  if (content.type === ContentType.CONTAINER && content.subContents !== undefined) {
+async function PopulateScormState(content: OldContentItem, user: User) {
+  if (content.type === OldContentType.CONTAINER && content.subContents !== undefined) {
     for (const subContent of content.subContents) {
       await PopulateScormState(subContent, user);
     }
   } else {
-    if (content.type !== ContentType.SCORM) {
+    if (content.type !== OldContentType.SCORM) {
       return;
     }
 
@@ -61,7 +61,7 @@ async function PopulateScormState(content: ContentItem, user: User) {
   }
 }
 
-export async function GetModules(config: OattsConfig): Promise<Module[]> {
+export async function GetModules(config: OldOattsConfig): Promise<OldModule[]> {
   let modules = await Promise.all(config.modules.map(async (mod) => await LoadModule(mod, config.roles)));
   return modules.filter((mod) => mod !== undefined);
 }
@@ -72,7 +72,7 @@ function roleIdsToRoles(roleIds: string[], availableRoles: Role[]): Role[] {
   return roles;
 }
 
-export async function LoadModule(moduleManifestData: ManifestMetadata, roles: Role[]): Promise<Module | undefined> {
+export async function LoadModule(moduleManifestData: OldManifestMetadata, roles: Role[]): Promise<OldModule | undefined> {
   let metadata = await LoadModuleMetadata(moduleManifestData.name);
   if (metadata === undefined) {
     return undefined;
@@ -91,7 +91,7 @@ export async function LoadModule(moduleManifestData: ManifestMetadata, roles: Ro
 
   const moduleRoles = roleIdsToRoles(metadata.roleIds ?? [], roles);
 
-  let module: Module = {
+  let module: OldModule = {
     id: metadata.id ?? metadata.name,
     description: metadata.description ?? "",
     paNumber: metadata.paNumber,
@@ -109,7 +109,7 @@ export async function LoadModule(moduleManifestData: ManifestMetadata, roles: Ro
   return module;
 }
 
-export async function LoadQuiz(oattsCfg: OattsConfig, quizId?: string): Promise<QuizContent[] | undefined> {
+export async function LoadQuiz(oattsCfg: OldOattsConfig, quizId?: string): Promise<QuizContent[] | undefined> {
   if (quizId == undefined)
     return undefined;
 
@@ -151,10 +151,10 @@ export async function LoadQuiz(oattsCfg: OattsConfig, quizId?: string): Promise<
   return quizContents;
 }
 
-async function contentCfgToItem(config: ContentMetadataFile, contentPath: string): Promise<ContentItem> {
+async function contentCfgToItem(config: ContentMetadataFile, contentPath: string): Promise<OldContentItem> {
   let contentId = contentPath.replace("/\s\g", "");
   contentId = contentId.replaceAll("/", "_");
-  let metadata: ContentMetadata = {
+  let metadata: OldContentMetadata = {
     name: config.name,
     description: config.description,
     id: contentId,
@@ -162,14 +162,14 @@ async function contentCfgToItem(config: ContentMetadataFile, contentPath: string
 
   let contentState = new ContentState();
 
-  let content: ContentItem = {
+  let content: OldContentItem = {
     metadata: metadata,
     type: config.type,
     workingDir: contentPath,
     state: contentState,
   };
 
-  if (config.type === ContentType.CONTAINER && config.contents !== undefined) {
+  if (config.type === OldContentType.CONTAINER && config.contents !== undefined) {
     let subcontent = await Promise.all(
       config.contents.map(async (desc) => {
         let path = await join(contentPath, desc.name);
@@ -185,7 +185,7 @@ async function contentCfgToItem(config: ContentMetadataFile, contentPath: string
   return content;
 }
 
-async function LoadContent(contentPath: string): Promise<ContentItem | undefined> {
+async function LoadContent(contentPath: string): Promise<OldContentItem | undefined> {
   let metadataFile = await LoadContentMetadata(contentPath);
   if (metadataFile === undefined) {
     return undefined;
@@ -223,7 +223,7 @@ type ContentMetadataFile = {
   readonly id: string;
   readonly name: string;
   readonly description?: string;
-  readonly type: ContentType;
+  readonly type: OldContentType;
   readonly dataPath?: string;
   readonly contents?: Descriptor[];
 };
@@ -258,7 +258,7 @@ type ModuleMetadataFile = {
 export async function loadRequiredAndOptionalModules({
   context,
 }: {
-  context: { authentication: UserContextType; modules: ModuleContext; config: OattsConfig };
+  context: { authentication: UserContextType; modules: ModuleContext; config: OldOattsConfig };
 }) {
   const user = context.authentication.user;
   if (user === undefined) {

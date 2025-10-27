@@ -1,14 +1,14 @@
 import { LoadScormMetadata } from "./ScormHelper";
 import { ScormMetadata } from "@/core/model/ScormMetadata";
-import { ContentItem, ContentType } from "@/core/model/OattsModel";
+import { OldContentItem, OldContentType } from "@/core/model/OattsModel";
 import dayjs from "dayjs";
 import duration from "dayjs/plugin/duration";
 
 dayjs.extend(duration);
 
 // Populates any info we might care about in our model from SCORM metadata if it exists.
-export async function PopulateInfoFromScorm(content: ContentItem) {
-  if (content.type === ContentType.CONTAINER && content.subContents !== undefined) {
+export async function PopulateInfoFromScorm(content: OldContentItem) {
+  if (content.type === OldContentType.CONTAINER && content.subContents !== undefined) {
     for (const subContent of content.subContents) {
       PopulateInfoFromScorm(subContent);
     }
@@ -22,7 +22,7 @@ export async function PopulateInfoFromScorm(content: ContentItem) {
   PopulateDuration(metadata, content);
 }
 
-function PopulateId(metadata: ScormMetadata, content: ContentItem) {
+function PopulateId(metadata: ScormMetadata, content: OldContentItem) {
   const newId = metadata.general?.identifier?.entry;
   if (newId === undefined)
     return;
@@ -30,7 +30,7 @@ function PopulateId(metadata: ScormMetadata, content: ContentItem) {
   content.metadata.id = newId;
 }
 
-function PopulateDuration(metadata: ScormMetadata, content: ContentItem) {
+function PopulateDuration(metadata: ScormMetadata, content: OldContentItem) {
   const stringDuration = metadata.educational?.typicalLearningTime.duration;
   if (stringDuration === undefined) {
     return;

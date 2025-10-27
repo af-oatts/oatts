@@ -1,4 +1,4 @@
-import { CompletionStatus, ContentItem, ContentType } from "@/core/model/OattsModel";
+import { CompletionStatus, OldContentItem, OldContentType } from "@/core/model/OattsModel";
 import { Box } from "@mui/material";
 import { useRouteContext } from "@tanstack/react-router";
 import { motion, useAnimate } from "motion/react";
@@ -6,7 +6,7 @@ import { useEffect, useRef } from "react";
 import { loadModel } from "../../core/scorm/ScormHelper";
 import { saveContentState } from "../../core/database/Content";
 
-export default function ContentViewer({ content }: { content: ContentItem }) {
+export default function ContentViewer({ content }: { content: OldContentItem }) {
   const contentFrameRef = useRef<HTMLIFrameElement>(null);
   const [frameScope, frameAnimate] = useAnimate();
 
@@ -28,7 +28,7 @@ export default function ContentViewer({ content }: { content: ContentItem }) {
   }, [content]);
 
   useEffect(() => {
-    if (content.type !== ContentType.SCORM) {
+    if (content.type !== OldContentType.SCORM) {
       // No point in setting up scorm API if the content isn't scorm
       return;
     }
@@ -70,7 +70,7 @@ export default function ContentViewer({ content }: { content: ContentItem }) {
   }
 
   useEffect(() => {
-    if (content.type === ContentType.SCORM) {
+    if (content.type === OldContentType.SCORM) {
       return;
     }
     const timeout = setTimeout(() => {

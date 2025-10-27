@@ -1,7 +1,7 @@
 import { ScormModel } from "@/core/model/ScormModel";
 import { Commit, getValue, setValue, updateInternalState } from "./ScormHelper";
 import User from "@/core/model/UserModel";
-import { ContentItem } from "@/core/model/OattsModel";
+import { OldContentItem } from "@/core/model/OattsModel";
 
 export interface IScormApi {
   Initialize(): boolean;
@@ -14,13 +14,13 @@ export interface IScormApi {
   GetDiagnostic(err: CMIErrorCode): string;
   SetModel(model: ScormModel): void;
   SetUser(user: User): void;
-  SetContent(content: ContentItem): void;
+  SetContent(content: OldContentItem): void;
 }
 
 export class ScormApi implements IScormApi {
   private _model: ScormModel | undefined;
   private _user: User | undefined;
-  private _content: ContentItem | undefined;
+  private _content: OldContentItem | undefined;
   private _latestCommit: NodeJS.Timeout | undefined;
 
   constructor() {}
@@ -34,7 +34,7 @@ export class ScormApi implements IScormApi {
     this._user = user;
   }
 
-  SetContent(content: ContentItem): void {
+  SetContent(content: OldContentItem): void {
     this._content = content;
   }
 

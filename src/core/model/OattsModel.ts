@@ -3,8 +3,80 @@ import { Duration } from "dayjs/plugin/duration";
 // TODO: This is the only spot we use rxjs. Can we remove it?
 import { Subject } from "rxjs";
 
+
+
+
+
+
+
+// Raw datatypes.
+export type RawManifest = {
+  modules: OldManifestMetadata[];
+  preQuiz?: OldManifestMetadata;
+  postQuiz?: OldManifestMetadata;
+  versionNumber?: string;
+  allowDataCollection?: boolean;
+  roles: Role[];
+};
+
+export type RawModule = {
+  id: string,
+  name: string,
+  roleIds: string[],
+  contents: ModuleContents[],
+  img?: string,
+  description?: string,
+  paNumber?: string,
+  timeToComplete?: number,
+}
+
+// Also serves as raw version. They are the same.
+export type ModuleContents = {
+  id: string, 
+  name: string,
+  type: ModuleContentsItemType,
+  entrypoint?: string,
+  description?: string,
+  children?: ModuleContents[]
+}
+
+// Represents the types a module's contents can be.
+export enum ModuleContentsItemType {  
+  SUBMODULE = "SUBMODULE",
+  SCORM = "SCORM",
+  PDF = "PDF",
+  HTML = "HTML",
+  UNKNOWN = "UNKNOWN",
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+///////////////
+// OLD STUFF //
+///////////////
+
+export type OldOattsConfig = {
+  modules: OldManifestMetadata[];
+  preQuiz?: OldManifestMetadata;
+  postQuiz?: OldManifestMetadata;
+  versionNumber?: string;
+  allowDataCollection?: boolean;
+  roles: Role[];
+};
+
 // The learning module with one or more content items
-export type Module = {
+export type OldModule = {
   id: string;
   name: string;
   description: string;
@@ -12,22 +84,22 @@ export type Module = {
   paNumber?: string;
   timeToComplete? : number;
   roles: Role[];
-  contents: ContentItem[];
+  contents: OldContentItem[];
 };
 
-export type ContentItem = {
-  metadata: ContentMetadata;
-  type: ContentType;
+export type OldContentItem = {
+  metadata: OldContentMetadata;
+  type: OldContentType;
   workingDir: string;
   content?: string;
-  subContents?: ContentItem[];
+  subContents?: OldContentItem[];
   // ideally we'd just have the ContentState instead of both, but for now we can just have both and slowly
   // move scorm stuff to our internal state
   scormState?: ScormModel;
   state: ContentState;
 };
 
-export type ContentMetadata = {
+export type OldContentMetadata = {
   id: string;
   name: string;
   description?: string;
@@ -40,18 +112,9 @@ export type QuizName = {
 export type PreQuiz = QuizName;
 export type PostQuiz = QuizName;
 
-// Basic config values for OATTS. Can be parsed from yaml
-export type OattsConfig = {
-  modules: ManifestMetadata[];
-  preQuiz?: ManifestMetadata;
-  postQuiz?: ManifestMetadata;
-  versionNumber?: string;
-  allowDataCollection?: boolean;
-  roles: Role[];
-};
 
 export type PostQuizConfig = {
-  content: ManifestMetadata[];
+  content: OldManifestMetadata[];
 };
 
 export type PostQuizModule = {
@@ -60,19 +123,19 @@ export type PostQuizModule = {
 
 export type PostQuizContent = {
   roleIds: string[];
-  content: ContentItem;
+  content: OldContentItem;
 };
 
 export type QuizContent = {
-  content: ContentItem;
+  content: OldContentItem;
   roles: Role[];
 };
 
-export type ManifestMetadata = {
+export type OldManifestMetadata = {
   name: string;
 };
 
-export enum ContentType {
+export enum OldContentType {
   CONTAINER = "CONTAINER",
   MODULE = "MODULE",
   ROOT = "ROOT",

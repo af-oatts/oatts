@@ -1,11 +1,11 @@
-import { Module } from "@/core/model/OattsModel";
+import { OldModule } from "@/core/model/OattsModel";
 import { Box, Button, Typography } from "@mui/material";
 import { motion, useAnimate } from "motion/react";
 import { useEffect } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 
-export function ModuleCompletionView({ module }: { module: Module }) {
+export function ModuleCompletionView({ module }: { module: OldModule }) {
   const navigate = useNavigate();
   const [scope, animate] = useAnimate();
   const { t } = useTranslation("moduleCompletion");

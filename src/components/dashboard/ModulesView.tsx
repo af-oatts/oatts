@@ -3,11 +3,11 @@ import { Link } from "@tanstack/react-router";
 
 import ModuleCard from "@/components/common/ModuleCard";
 import DashboardStatusBar from "@/components/dashboard/DashboardStatusBar";
-import { Module } from "@/core/model/OattsModel";
+import { OldModule } from "@/core/model/OattsModel";
 import CheckForUpdates from "@/core/modules/UpdateChecker";
 import { useEffect, useState } from "react";
 
-export function ModulesView({ required, optional, mayCollectData}: { required: Module[]; optional: Module[], mayCollectData: boolean}) {
+export function ModulesView({ required, optional, mayCollectData}: { required: OldModule[]; optional: OldModule[], mayCollectData: boolean}) {
   const [showUpdatePopup, setShowUpdatePopup] = useState(false);
   useEffect(() => {
     CheckForUpdates().then((u) => {
@@ -49,7 +49,7 @@ export function ModulesView({ required, optional, mayCollectData}: { required: M
   );
 }
 
-export function ModulesRack({ label, modules }: { label: string; modules: Module[] }) {
+export function ModulesRack({ label, modules }: { label: string; modules: OldModule[] }) {
   return (
     <>
       <Box sx={{ display: "flex", flexDirection: "column" }}>
