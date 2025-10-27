@@ -4,44 +4,38 @@ import { Duration } from "dayjs/plugin/duration";
 import { Subject } from "rxjs";
 
 
-
-
-
-
-
-// Raw datatypes.
-export type RawManifest = {
-  modules: OldManifestMetadata[];
-  preQuiz?: OldManifestMetadata;
-  postQuiz?: OldManifestMetadata;
+export type OattsManifest = {
+  courses: Course[];
+  preQuiz?: Course;
+  postQuiz?: Course;
   versionNumber?: string;
   allowDataCollection?: boolean;
   roles: Role[];
 };
 
-export type RawModule = {
+export type Course = {
   id: string,
   name: string,
   roleIds: string[],
-  contents: ModuleContents[],
+  contents: CourseContents[],
   img?: string,
   description?: string,
   paNumber?: string,
   timeToComplete?: number,
 }
 
-// Also serves as raw version. They are the same.
-export type ModuleContents = {
-  id: string, 
+
+export type CourseContents = {
+  id: string,
   name: string,
-  type: ModuleContentsItemType,
+  type: CourseContentItemType,
   entrypoint?: string,
   description?: string,
-  children?: ModuleContents[]
+  children?: CourseContents[]
 }
 
-// Represents the types a module's contents can be.
-export enum ModuleContentsItemType {  
+// Represents the types a course's contents can be.
+export enum CourseContentItemType {
   SUBMODULE = "SUBMODULE",
   SCORM = "SCORM",
   PDF = "PDF",
@@ -49,11 +43,6 @@ export enum ModuleContentsItemType {
   UNKNOWN = "UNKNOWN",
 
 }
-
-
-
-
-
 
 
 
@@ -82,7 +71,7 @@ export type OldModule = {
   description: string;
   previewImage?: string;
   paNumber?: string;
-  timeToComplete? : number;
+  timeToComplete?: number;
   roles: Role[];
   contents: OldContentItem[];
 };
