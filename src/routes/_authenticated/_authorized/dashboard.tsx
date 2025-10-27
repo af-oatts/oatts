@@ -1,6 +1,6 @@
 import { createFileRoute, useRouteContext } from "@tanstack/react-router";
 import { loadRequiredAndOptionalCourses } from "@/core/modules/ModuleLoader";
-import { ModulesView } from "@/components/dashboard/ModulesView";
+import { CoursesView } from "@/components/dashboard/ModulesView";
 import { BigLoadingScreen } from "@/components/common/BigLoadingScreen";
 import { checkIfRequirementsAreComplete } from "@/core/modules/ModuleUtils";
 import { UserStatusFlag } from "@/core/model/UserModel";
@@ -34,5 +34,5 @@ export default function DashboardPage() {
     return <PostQuizPage onNext={() => {}} />;
   }
 
-  return <ModulesView {...{ required, optional, }} mayCollectData={context.config.allowDataCollection?? false} />;
+  return <CoursesView {...{ required, optional, }} mayCollectData={context.config.allowDataCollection?? false} />;
 }

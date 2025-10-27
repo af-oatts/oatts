@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import { useNavigate, useRouteContext } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { CompletionStatus, OldModule } from "@/core/model/OattsModel";
+import { CompletionStatus, Course, OldModule } from "@/core/model/OattsModel";
 import { GetCoursesWithState } from "../../core/modules/ModuleLoader";
 import { addUserStatusFlag } from "../../core/authentication/UserStatusFlag";
 import { UserStatusFlag } from "@/core/model/UserModel";
@@ -16,7 +16,7 @@ function usePostQuizModule() {
       return { user: ctx.authentication.user, config: ctx.config };
     },
   });
-  const [module, setModule] = useState<OldModule>();
+  const [course, setCourse] = useState<Course>();
 
   useEffect(() => {
     let mounted = true;
@@ -26,7 +26,7 @@ function usePostQuizModule() {
         if (!mounted)
           return;
 
-        setModule(modules[0]);
+        setCourse(modules[0]);
       })
       .finally(() => {
         if (!mounted)
@@ -39,7 +39,7 @@ function usePostQuizModule() {
     }
   }, [config]);
 
-  return { user, module, isLoading };
+  return { user, module: course, isLoading };
 }
 
 export default function PostQuizPage({ onNext }: { onNext: () => void }) {

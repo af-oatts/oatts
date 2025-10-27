@@ -1,4 +1,4 @@
-import { OldModule } from "@/core/model/OattsModel";
+import { Course, OldModule } from "@/core/model/OattsModel";
 import {
   Alert,
   Box,
@@ -11,7 +11,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { CalculateModulesProgress, checkIfRequirementsAreComplete } from "../../core/modules/ModuleUtils";
+import { CalculateCoursesProgress, checkIfRequirementsAreComplete } from "../../core/modules/ModuleUtils";
 import LinearProgressWithLabel from "../common/LinearProgressWithLabel";
 import { ExportUserProgress } from "../../core/utils/DataExporter";
 import { useNavigate, useRouteContext } from "@tanstack/react-router";
@@ -21,7 +21,7 @@ import { useSetOverlay } from "@/contexts/hooks/useOverlay";
 import InformedConsent from "@/components/dashboard/InformedConsent";
 
 export interface StatusTileProps extends CardOwnProps {
-  modules: OldModule[];
+  courses: Course[];
   mayCollectData: boolean
 }
 
@@ -45,12 +45,12 @@ function FailedAlert(msg?: string) {
 }
 
 export default function DashboardStatusBar(props: StatusTileProps) {
-  const { modules, ...rest } = props;
+  const { courses: modules, ...rest } = props;
   const navigate = useNavigate();
   const [snackOpen, setSnackOpen] = useState(false);
   const [snackContent, setSnackContent] = useState(<Box></Box>);
   const ctx = useRouteContext({ from: "/_authenticated/_authorized" });
-  const modulesProgress = Math.round(CalculateModulesProgress(modules) * 100);
+  const modulesProgress = Math.round(CalculateCoursesProgress(modules) * 100);
   const setOverlay = useSetOverlay();
 
   const isComplete = checkIfRequirementsAreComplete(modules);

@@ -1,4 +1,4 @@
-import { CompletionStatus, OldContentItem } from "@/core/model/OattsModel";
+import { CompletionStatus, CourseContent } from "@/core/model/OattsModel";
 import { Box, Button, Divider, List, Typography } from "@mui/material";
 import { motion, useAnimate } from "motion/react";
 import { useEffect, useMemo, useState } from "react";
@@ -7,16 +7,16 @@ import { FlattenContents } from "../../core/modules/ModuleUtils";
 import { useNavigate } from "@tanstack/react-router";
 import { ContentMenuItem } from "@/components/common/ContentMenu";
 
-function firstIncomplete(contentItems: OldContentItem[]): OldContentItem | undefined {
+function firstIncomplete(contentItems: CourseContent[]): CourseContent | undefined {
   const incomplete = contentItems.find((c) => c.state.completionStatus !== CompletionStatus.Completed);
   return incomplete;
 }
 
-function firstIncompleteOrDefault(contentItems: OldContentItem[]): OldContentItem {
+function firstIncompleteOrDefault(contentItems: CourseContent[]): CourseContent {
   return firstIncomplete(contentItems) ?? contentItems[0];
 }
 
-function nextIncomplete(contentItems: OldContentItem[], currentItem: OldContentItem): OldContentItem | undefined {
+function nextIncomplete(contentItems: CourseContent[], currentItem: CourseContent): CourseContent | undefined {
   const currentItemIdx = contentItems.indexOf(currentItem);
   const firstHalf = contentItems.slice(currentItemIdx);
   const secondHalf = contentItems.slice(0, currentItemIdx);
@@ -25,17 +25,17 @@ function nextIncomplete(contentItems: OldContentItem[], currentItem: OldContentI
   return incomplete;
 }
 
-function nextIncompleteOrDefault(contentItems: OldContentItem[], currentItem: OldContentItem): OldContentItem {
+function nextIncompleteOrDefault(contentItems: CourseContent[], currentItem: CourseContent): CourseContent {
   return nextIncomplete(contentItems, currentItem) ?? contentItems[0];
 }
 
-function nasNext(contentItems: OldContentItem[]): boolean {
+function nasNext(contentItems: CourseContent[]): boolean {
   return firstIncomplete(contentItems) !== undefined;
 }
 
-export default function ModuleViewer({ contents, paNumber }: { contents: OldContentItem[], paNumber?: string }) {
+export default function ModuleViewer({ contents, paNumber }: { contents: CourseContent[], paNumber?: string }) {
   const flattenedContents = useMemo(() => FlattenContents(contents), []);
-  const [content, setContent] = useState<OldContentItem>(firstIncompleteOrDefault(flattenedContents));
+  const [content, setContent] = useState(firstIncompleteOrDefault(flattenedContents));
   const [scope, animate] = useAnimate();
   const [hasNext, setHasNext] = useState(nasNext(flattenedContents));
 
@@ -87,7 +87,7 @@ export default function ModuleViewer({ contents, paNumber }: { contents: OldCont
         <List component="nav">
           {contents.map((c) => (
             <ContentMenuItem
-              key={c.metadata.id}
+              key={c.id}
               contentItem={c}
               isSelected={(c) => c === content}
               setContent={setContent}
@@ -116,7 +116,7 @@ export default function ModuleViewer({ contents, paNumber }: { contents: OldCont
           }}
         >
           <Box sx={{ alignItems: "center", margin: "5px", display: "grid", gridTemplateColumns: "1fr 1fr" }}>
-            <ContentNavigationComponent hasNext={hasNext} nextItem={nextItem} contentName={content?.metadata.name} />
+            <ContentNavigationComponent hasNext={hasNext} nextItem={nextItem} contentName={content?.name} />
           </Box>
         </Box>
       </Box>

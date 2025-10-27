@@ -1,20 +1,5 @@
-import { CompletionStatus, OldContentItem, OldModule, CourseContent, Course } from "@/core/model/OattsModel";
-import dayjs from "dayjs";
-import { Duration } from "dayjs/plugin/duration";
-
-export function CalculateEstimatedDuration(module: OldModule): Duration {
-  let duration = module.contents.map(CalculateContentDuration).reduce((prev, curr) => prev.add(curr));
-  return duration;
-}
-
-function CalculateContentDuration(content: OldContentItem): Duration {
-  if (Array.isArray(content.subContents)) {
-    let subContentsDuration = content.subContents.map(CalculateContentDuration);
-    return subContentsDuration.reduce((prev, curr) => prev.add(curr));
-  }
-
-  return content.metadata.duration ?? dayjs.duration(0);
-}
+import { CompletionStatus, CourseContent, Course } from "@/core/model/OattsModel";
+import { OATTS_ROOT } from "../utils/Globals";
 
 export function calculateCourseCompletionStatus(course: Course): CompletionStatus {
   return calculateMultiContentCompletionStatus(course.contents);
@@ -65,14 +50,14 @@ export function CompletionStatusToString(status: CompletionStatus): string {
   }
 }
 
-export function CalculateModulesProgress(modules: OldModule[]): number {
+export function CalculateCoursesProgress(modules: Course[]): number {
   return (
-    modules.map((m) => CalculateModuleProgress(m)).reduce((accumulator, val) => accumulator + val, 0) / modules.length
+    modules.map((m) => CalculateCourseProgress(m)).reduce((accumulator, val) => accumulator + val, 0) / modules.length
   );
 }
 
-function CalculateModuleProgress(module: OldModule): number {
-  const statuses = module.contents.flatMap(FlattenContentStatuses);
+function CalculateCourseProgress(course: Course): number {
+  const statuses = course.contents.flatMap(FlattenContentStatuses);
   const total = statuses.length;
   const completed = statuses.filter((s) => s === CompletionStatus.Completed).length;
   const inProgress = statuses.filter((s) => s === CompletionStatus.Started).length;
@@ -80,7 +65,7 @@ function CalculateModuleProgress(module: OldModule): number {
   return (completed + inProgress * 0.5) / total;
 }
 
-function FlattenContentStatuses(content: OldContentItem): CompletionStatus[] {
+function FlattenContentStatuses(content: CourseContent): CompletionStatus[] {
   const contents = FlattenContentItem(content);
 
   const statuses = contents.map((c) => c.state.completionStatus);
@@ -88,15 +73,19 @@ function FlattenContentStatuses(content: OldContentItem): CompletionStatus[] {
   return statuses;
 }
 
-export function FlattenContents(contents: OldContentItem[]): OldContentItem[] {
+export function FlattenContents(contents: CourseContent[]): CourseContent[] {
   const flattenedContents = contents.flatMap(FlattenContentItem);
   return flattenedContents;
 }
 
-function FlattenContentItem(content: OldContentItem): OldContentItem[] {
-  if (Array.isArray(content.subContents)) {
-    return content.subContents.flatMap(FlattenContentItem);
+export function GetContentURL(content: CourseContent) {
+  return `${OATTS_ROOT}/content/${content.id}/${content.entrypoint}`
+}
+function FlattenContentItem(content: CourseContent): CourseContent[] {
+  if (Array.isArray(content.children)) {
+    return content.children.flatMap(FlattenContentItem);
   }
 
   return [content];
 }
+

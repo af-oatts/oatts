@@ -1,20 +1,18 @@
-import { CompletionStatus, OldModule } from "@/core/model/OattsModel";
+import { CompletionStatus, Course } from "@/core/model/OattsModel";
 import { Box, Card, CardContent, IconButton, Menu, MenuItem, Typography, useTheme } from "@mui/material";
-import ModulePreviewImage from "../module/ModulePreviewImage";
+import CoursePreviewImage from "../module/ModulePreviewImage";
 import { AnimatePresence, motion } from "motion/react";
-import { CalculateEstimatedDuration, calculateCourseCompletionStatus, CompletionStatusToString } from "../../core/modules/ModuleUtils";
-import { DurationToString } from "../../core/utils/TimeStuff";
+import {calculateCourseCompletionStatus, CompletionStatusToString } from "../../core/modules/ModuleUtils";
+import { SecondsToTimeString } from "../../core/utils/TimeStuff";
 import { resetUserAssessment } from "../../core/database/Content";
 import { useAuth } from "@/contexts/hooks/useAuth";
 import { useRouter } from "@tanstack/react-router";
 import { MoreVert } from "@mui/icons-material";
 import { useState } from "react";
-import dayjs from "dayjs";
 
-export default function ModuleCard({ module }: { module: OldModule }) {
+export default function CourseCard({ course }: { course: Course }) {
   let [menuAnchor, setMenuAnchor] = useState<null | HTMLElement>(null);
-  const timeToComplete = module.timeToComplete == undefined ? CalculateEstimatedDuration(module) : dayjs.duration(module.timeToComplete, 'seconds');
-  const completionStatus = calculateCourseCompletionStatus(module);
+  const completionStatus = calculateCourseCompletionStatus(course);
   const { user } = useAuth();
   const router = useRouter();
   const completed = completionStatus === CompletionStatus.Completed;
@@ -23,8 +21,8 @@ export default function ModuleCard({ module }: { module: OldModule }) {
 
   const closeMenu = () => setMenuAnchor(null);
   const resetProgress = () => Promise.all(
-    module.contents
-      .map((x) => x.metadata.id)
+    course.contents
+      .map((x) => x.id)
       .map((id) => {
         user && resetUserAssessment(user, id);
       }),
@@ -118,7 +116,7 @@ export default function ModuleCard({ module }: { module: OldModule }) {
               backgroundColor: "inherit",
             }}
           >
-            <ModulePreviewImage completed={completed} src={module.previewImage} name={module.name} />
+            <CoursePreviewImage completed={completed} src={course.img} name={course.name} />
           </Box>
           <Box
             sx={{
@@ -136,11 +134,16 @@ export default function ModuleCard({ module }: { module: OldModule }) {
                 gridTemplateRows: "auto 1fr 0.5fr 0.5fr",
               }}
             >
-              <Typography variant="h6">{module.name}</Typography>
-              <Typography variant="caption">{module.description}</Typography>
-              <Typography sx={{ alignSelf: "end" }} variant="blended">
-                {DurationToString(timeToComplete)}
-              </Typography>
+              <Typography variant="h6">{course.name}</Typography>
+              <Typography variant="caption">{course.description}</Typography>
+              {course.timeToComplete != undefined ?
+                <Typography sx={{ alignSelf: "end" }} variant="blended">
+                  {SecondsToTimeString(course.timeToComplete)}
+                </Typography>
+                :
+                <></>
+              }
+
               <Typography sx={{ textAlign: "center" }} variant="caption">
                 {CompletionStatusToString(completionStatus)}
               </Typography>

@@ -1,12 +1,13 @@
-import { CompletionStatus, OldContentItem, OldContentType } from "@/core/model/OattsModel";
+import { CompletionStatus, CourseContent, CourseContentItemType } from "@/core/model/OattsModel";
 import { Box } from "@mui/material";
 import { useRouteContext } from "@tanstack/react-router";
 import { motion, useAnimate } from "motion/react";
 import { useEffect, useRef } from "react";
 import { loadModel } from "../../core/scorm/ScormHelper";
 import { saveContentState } from "../../core/database/Content";
+import { GetContentURL } from "@/core/modules/ModuleUtils";
 
-export default function ContentViewer({ content }: { content: OldContentItem }) {
+export default function ContentViewer({ content }: { content: CourseContent }) {
   const contentFrameRef = useRef<HTMLIFrameElement>(null);
   const [frameScope, frameAnimate] = useAnimate();
 
@@ -28,13 +29,13 @@ export default function ContentViewer({ content }: { content: OldContentItem }) 
   }, [content]);
 
   useEffect(() => {
-    if (content.type !== OldContentType.SCORM) {
+    if (content.type !== CourseContentItemType.SCORM) {
       // No point in setting up scorm API if the content isn't scorm
       return;
     }
 
     if (user !== undefined) {
-      loadModel(user, content.metadata.id).then((model) => {
+      loadModel(user, content.id).then((model) => {
         window.API_1484_11.SetModel(model);
         window.API_1484_11.SetContent(content);
       });
@@ -55,7 +56,7 @@ export default function ContentViewer({ content }: { content: OldContentItem }) 
     }
 
     frameAnimate(currentFrameScope, { opacity: 0.4, scale: 0.99 }, { duration: 0.25, ease: "easeIn" }).then(() => {
-      currentFrameRef.src = content.content ?? "";
+      currentFrameRef.src = GetContentURL(content)
     });
   }, [content]);
 
@@ -70,7 +71,7 @@ export default function ContentViewer({ content }: { content: OldContentItem }) 
   }
 
   useEffect(() => {
-    if (content.type === OldContentType.SCORM) {
+    if (content.type === CourseContentItemType.SCORM) {
       return;
     }
     const timeout = setTimeout(() => {

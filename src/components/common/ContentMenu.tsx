@@ -1,4 +1,4 @@
-import { OldContentItem, OldContentType } from "@/core/model/OattsModel";
+import { CourseContent, CourseContentItemType, OldContentItem, OldContentType } from "@/core/model/OattsModel";
 import { Box, Collapse, List, ListItemButton, ListItemButtonProps, ListItemText } from "@mui/material";
 
 import { useState } from "react";
@@ -23,13 +23,13 @@ function CollapsibleMenuItem(props: ContentMenuItemProps) {
       <ListItemButton onClick={handleClick}>
         <Box width="100%" display="grid" gridTemplateColumns="30px 1fr auto" alignItems="center">
           {open ? <ExpandLess /> : <ExpandMore />}
-          <ListItemText primary={contentItem.metadata.name} />
+          <ListItemText primary={contentItem.name} />
           <ContentCompletionIndicator completion={status} />
         </Box>
       </ListItemButton>
       <Collapse in={open} timeout="auto" unmountOnExit>
         <List component="div" disablePadding sx={{ paddingRight: 0 }}>
-          {contentItem.subContents?.map((c) => <ContentMenuItem key={c.metadata.id} contentItem={c} {...rest} />)}
+          {contentItem.children?.map((c) => <ContentMenuItem key={c.id} contentItem={c} {...rest} />)}
         </List>
       </Collapse>
     </>
@@ -37,9 +37,9 @@ function CollapsibleMenuItem(props: ContentMenuItemProps) {
 }
 
 interface ContentMenuItemProps extends ListItemButtonProps {
-  contentItem: OldContentItem;
-  setContent: (contentItem: OldContentItem) => void;
-  isSelected: (contentItem: OldContentItem) => boolean;
+  contentItem: CourseContent;
+  setContent: (contentItem: CourseContent) => void;
+  isSelected: (contentItem: CourseContent) => boolean;
 }
 
 export function ContentMenuItem(props: ContentMenuItemProps) {
@@ -47,7 +47,7 @@ export function ContentMenuItem(props: ContentMenuItemProps) {
 
   const status = useCompletionStatus(contentItem);
 
-  if (contentItem.type == OldContentType.CONTAINER) {
+  if (contentItem.type == CourseContentItemType.SUBMODULE) {
     return <CollapsibleMenuItem {...props} />;
   }
 
@@ -55,7 +55,7 @@ export function ContentMenuItem(props: ContentMenuItemProps) {
     <>
       <ListItemButton {...rest} onClick={(_) => setContent(contentItem)} selected={isSelected(contentItem)}>
         <Box width="100%" display="grid" gridTemplateColumns="1fr auto" alignItems="center">
-          <ListItemText primary={contentItem.metadata.name} />
+          <ListItemText primary={contentItem.name} />
           <ContentCompletionIndicator completion={status} />
         </Box>
       </ListItemButton>

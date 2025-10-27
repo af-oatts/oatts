@@ -1,4 +1,4 @@
-import { Duration } from "dayjs/plugin/duration";
+
 
 export type Timespan = {
   years?: number,
@@ -28,11 +28,14 @@ export function FromIsoTimespan(isoString: string): Timespan | undefined {
   };
 }
 
-export function DurationToString(timespan: Duration | undefined) {
-  if (timespan === undefined) {
-    return "";
-  }
-  let str = timespan.hours() === undefined ? "" : `${timespan.hours()}h `;
-  str += `${timespan.minutes()}m`
+export function SecondsToTimeString(seconds: number | undefined) {
+  if (seconds === undefined) return "";
+  
+  const hours = Math.floor(seconds / 3600);
+  const minutes = Math.floor((seconds % 3600) / 60);
+  
+  let str = hours > 0 ? `${hours}h ` : "";
+  str += `${minutes}m`;
+  
   return str;
 }

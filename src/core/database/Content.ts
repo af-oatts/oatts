@@ -1,4 +1,4 @@
-import { OldContentItem, ContentState, ContentStateType } from "@/core/model/OattsModel";
+import { OldContentItem, ContentState, ContentStateType, CourseContent } from "@/core/model/OattsModel";
 import User from "@/core/model/UserModel";
 import loadDatabase from "./DatabaseLoader";
 import { CompletionStatus, ScormDbEntity, ScormModel } from "@/core/model/ScormModel";
@@ -105,7 +105,7 @@ export async function resetUserAssessment(user: User, contentUri: string) {
   await deleteUserScorm(user, contentUri);
 }
 
-export function saveContentState(user: User, content: OldContentItem) {
+export function saveContentState(user: User, content: CourseContent) {
   let stateType = externalizeContentState(content.state);
-  return saveContentStateType(user, content.metadata.id, stateType);
+  return saveContentStateType(user, content.id, stateType);
 }

@@ -37,7 +37,7 @@ export type CourseContent = {
   // ideally we'd just have the ContentState instead of both, but for now we can just have both and slowly
   // move scorm stuff to our internal state
   scormState?: ScormModel;
-  state?: ContentState;
+  state: ContentState;
 }
 
 
@@ -148,7 +148,7 @@ export type PostQuiz = QuizName;
 
 
 export type PostQuizConfig = {
-  content: OldManifestMetadata[];
+  content: Course[];
 };
 
 export type PostQuizModule = {
@@ -157,11 +157,11 @@ export type PostQuizModule = {
 
 export type PostQuizContent = {
   roleIds: string[];
-  content: OldContentItem;
+  content: CourseContent;
 };
 
 export type QuizContent = {
-  content: OldContentItem;
+  content: CourseContent;
   roles: Role[];
 };
 

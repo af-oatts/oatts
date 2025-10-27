@@ -1,13 +1,13 @@
 import { Alert, Box, Button, Snackbar, Stack, Typography } from "@mui/material";
 import { Link } from "@tanstack/react-router";
 
-import ModuleCard from "@/components/common/ModuleCard";
+import CourseCard from "@/components/common/ModuleCard";
 import DashboardStatusBar from "@/components/dashboard/DashboardStatusBar";
-import { OldModule } from "@/core/model/OattsModel";
+import { Course } from "@/core/model/OattsModel";
 import CheckForUpdates from "@/core/modules/UpdateChecker";
 import { useEffect, useState } from "react";
 
-export function ModulesView({ required, optional, mayCollectData}: { required: OldModule[]; optional: OldModule[], mayCollectData: boolean}) {
+export function CoursesView({ required, optional, mayCollectData}: { required: Course[]; optional: Course[], mayCollectData: boolean}) {
   const [showUpdatePopup, setShowUpdatePopup] = useState(false);
   useEffect(() => {
     CheckForUpdates().then((u) => {
@@ -28,10 +28,10 @@ export function ModulesView({ required, optional, mayCollectData}: { required: O
       })}
     >
       <Box sx={{ margin: "5px" }}>
-        <DashboardStatusBar sx={{ height: "100%" }} modules={required} mayCollectData={mayCollectData} />
+        <DashboardStatusBar sx={{ height: "100%" }} courses={required} mayCollectData={mayCollectData} />
       </Box>
-      <ModulesRack label="Focused Modules" modules={required} />
-      <ModulesRack label="Supplemental Modules" modules={optional} />
+      <CoursesRack label="Focused Modules" courses={required} />
+      <CoursesRack label="Supplemental Modules" courses={optional} />
       <Snackbar
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
         open={showUpdatePopup}
@@ -49,7 +49,7 @@ export function ModulesView({ required, optional, mayCollectData}: { required: O
   );
 }
 
-export function ModulesRack({ label, modules }: { label: string; modules: OldModule[] }) {
+export function CoursesRack({ label, courses }: { label: string; courses: Course[] }) {
   return (
     <>
       <Box sx={{ display: "flex", flexDirection: "column" }}>
@@ -78,10 +78,10 @@ export function ModulesRack({ label, modules }: { label: string; modules: OldMod
           padding: "5px",
         }}
       >
-        {modules.map((mod, idx) => (
+        {courses.map((course, idx) => (
           <Box key={idx} sx={{ height: "100%" }}>
-            <Link to={`/modules/$moduleId`} style={{ textDecoration: 'none' }} params={{ moduleId: mod.id }}>
-              <ModuleCard module={mod} />
+            <Link to={`/modules/$moduleId`} style={{ textDecoration: 'none' }} params={{ moduleId: course.id }}>
+              <CourseCard course={course} />
             </Link>
           </Box>
         ))}

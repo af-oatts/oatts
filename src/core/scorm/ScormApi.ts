@@ -1,7 +1,7 @@
 import { ScormModel } from "@/core/model/ScormModel";
 import { Commit, getValue, setValue, updateInternalState } from "./ScormHelper";
 import User from "@/core/model/UserModel";
-import { OldContentItem } from "@/core/model/OattsModel";
+import { CourseContent, OldContentItem } from "@/core/model/OattsModel";
 
 export interface IScormApi {
   Initialize(): boolean;
@@ -14,13 +14,13 @@ export interface IScormApi {
   GetDiagnostic(err: CMIErrorCode): string;
   SetModel(model: ScormModel): void;
   SetUser(user: User): void;
-  SetContent(content: OldContentItem): void;
+  SetContent(content: CourseContent): void;
 }
 
 export class ScormApi implements IScormApi {
   private _model: ScormModel | undefined;
   private _user: User | undefined;
-  private _content: OldContentItem | undefined;
+  private _content: CourseContent | undefined;
   private _latestCommit: NodeJS.Timeout | undefined;
 
   constructor() {}
@@ -34,7 +34,7 @@ export class ScormApi implements IScormApi {
     this._user = user;
   }
 
-  SetContent(content: OldContentItem): void {
+  SetContent(content: CourseContent): void {
     this._content = content;
   }
 
@@ -93,7 +93,7 @@ export class ScormApi implements IScormApi {
       console.warn("Tried to commit with undefined vars");
       return false;
     }
-    let uri = this._content.metadata.id;
+    let uri = this._content.id;
     if (uri === undefined) {
       console.warn("Tried to commit without a set URI for the module");
       return false;

@@ -1,10 +1,8 @@
 import {
-  OldModule,
   OldContentItem,
   OldContentType,
   OldContentMetadata,
   ContentState,
-  OldOattsConfig,
   Role,
   QuizContent,
   RawOattsManifest,
@@ -100,9 +98,7 @@ function roleIdsToRoles(roleIds: string[], availableRoles: Role[]): Role[] {
 }
 
 
-export async function LoadQuiz(oattsCfg: OldOattsConfig, quizId?: string): Promise<QuizContent[] | undefined> {
-  if (quizId == undefined)
-    return undefined;
+export async function LoadQuiz(manifest: OattsManifest, quizId: string): Promise<QuizContent[] | undefined> {
 
   const quizPath = await join(OATTS_ROOT, quizId);
   const metadataPath = await join(quizPath, ".oatts");
@@ -131,7 +127,7 @@ export async function LoadQuiz(oattsCfg: OldOattsConfig, quizId?: string): Promi
     }
 
     const contentItem = await contentCfgToItem(cfg.contentConfig, contentPath);
-    const roles = roleIdsToRoles(cfg.roleIds, oattsCfg.roles);
+    const roles = roleIdsToRoles(cfg.roleIds, manifest.roles);
 
     return {content: contentItem, roles: roles};
   });

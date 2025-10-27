@@ -57,7 +57,7 @@ function ImageViewer(props: PreviewImageProps) {
   );
 }
 
-export default function ModulePreviewImage(props: PreviewImageProps) {
+export default function CoursePreviewImage(props: PreviewImageProps) {
   const { src, name, completed } = props;
 
   return (
