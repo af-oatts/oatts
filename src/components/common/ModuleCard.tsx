@@ -2,7 +2,7 @@ import { CompletionStatus, OldModule } from "@/core/model/OattsModel";
 import { Box, Card, CardContent, IconButton, Menu, MenuItem, Typography, useTheme } from "@mui/material";
 import ModulePreviewImage from "../module/ModulePreviewImage";
 import { AnimatePresence, motion } from "motion/react";
-import { CalculateEstimatedDuration, calculateModuleCompletionStatus, CompletionStatusToString } from "../../core/modules/ModuleUtils";
+import { CalculateEstimatedDuration, calculateCourseCompletionStatus, CompletionStatusToString } from "../../core/modules/ModuleUtils";
 import { DurationToString } from "../../core/utils/TimeStuff";
 import { resetUserAssessment } from "../../core/database/Content";
 import { useAuth } from "@/contexts/hooks/useAuth";
@@ -14,7 +14,7 @@ import dayjs from "dayjs";
 export default function ModuleCard({ module }: { module: OldModule }) {
   let [menuAnchor, setMenuAnchor] = useState<null | HTMLElement>(null);
   const timeToComplete = module.timeToComplete == undefined ? CalculateEstimatedDuration(module) : dayjs.duration(module.timeToComplete, 'seconds');
-  const completionStatus = calculateModuleCompletionStatus(module);
+  const completionStatus = calculateCourseCompletionStatus(module);
   const { user } = useAuth();
   const router = useRouter();
   const completed = completionStatus === CompletionStatus.Completed;

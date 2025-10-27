@@ -9,7 +9,7 @@ type DbContentState = {
   data: string;
 };
 
-export async function populateContentState(user: User, contentUri: string, contentState: ContentState): Promise<void> {
+export async function GetInternalContentState(user: User, contentUri: string): Promise<ContentState | undefined> {
   let db = await loadDatabase();
   let states = await db.select<DbContentState[]>(
     `
@@ -25,11 +25,13 @@ export async function populateContentState(user: User, contentUri: string, conte
     return undefined;
   }
   let state: ContentStateType = JSON.parse(dbState.data);
-  internalizeContentState(state, contentState);
+  return internalizeContentState(state);
 }
 
-export function internalizeContentState(stateType: ContentStateType, targetState: ContentState) {
-  targetState.completionStatus = stateType.completionStatus;
+export function internalizeContentState(stateType: ContentStateType) : ContentState {
+  let contentState = new ContentState();
+  contentState.completionStatus = stateType.completionStatus;
+  return contentState;
 }
 
 export function externalizeContentState(state: ContentState): ContentStateType {

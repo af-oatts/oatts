@@ -1,4 +1,4 @@
-import { CompletionStatus, OldContentItem, OldModule } from "@/core/model/OattsModel";
+import { CompletionStatus, OldContentItem, OldModule, CourseContent, Course } from "@/core/model/OattsModel";
 import dayjs from "dayjs";
 import { Duration } from "dayjs/plugin/duration";
 
@@ -16,22 +16,22 @@ function CalculateContentDuration(content: OldContentItem): Duration {
   return content.metadata.duration ?? dayjs.duration(0);
 }
 
-export function calculateModuleCompletionStatus(module: OldModule): CompletionStatus {
-  return calculateMultiContentCompletionStatus(module.contents);
+export function calculateCourseCompletionStatus(course: Course): CompletionStatus {
+  return calculateMultiContentCompletionStatus(course.contents);
 }
 
-export function calculateMultiContentCompletionStatus(contents: OldContentItem[]): CompletionStatus {
+export function calculateMultiContentCompletionStatus(contents: CourseContent[]): CompletionStatus {
   let statuses = contents.map(CalculateContentCompletionStatus);
   return ReduceCompletionStatus(statuses);
 }
 
-export function checkIfRequirementsAreComplete(modules: OldModule[]): boolean {
-  return modules.every((module) => calculateModuleCompletionStatus(module) === CompletionStatus.Completed);
+export function checkIfRequirementsAreComplete(courses: Course[]): boolean {
+  return courses.every((course) => calculateCourseCompletionStatus(course) === CompletionStatus.Completed);
 }
 
-export function CalculateContentCompletionStatus(content: OldContentItem): CompletionStatus {
-  if (Array.isArray(content.subContents)) {
-    let completionStatuses = content.subContents.map(CalculateContentCompletionStatus);
+export function CalculateContentCompletionStatus(content: CourseContent): CompletionStatus {
+  if (Array.isArray(content.children)) {
+    let completionStatuses = content.children.map(CalculateContentCompletionStatus);
     return ReduceCompletionStatus(completionStatuses);
   }
 

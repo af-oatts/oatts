@@ -1,5 +1,5 @@
 import { UserContextType } from "@/contexts/UserContext";
-import ModuleContext from "@/core/modules/ModuleContext";
+import CoursesContext from "@/core/modules/ContentContext";
 import { IScormApi } from "@/core/scorm/ScormApi";
 import { CssBaseline } from "@mui/material";
 import { createRootRouteWithContext, Outlet } from "@tanstack/react-router";
@@ -9,7 +9,7 @@ import { OldOattsConfig } from "@/core/model/OattsModel";
 
 type RouterContext = {
   authentication: UserContextType;
-  modules: ModuleContext;
+  modules: CoursesContext;
   config: OldOattsConfig;
 };
 
@@ -26,7 +26,7 @@ export const Route = routeWithCtx({
     let config = await LoadConfig();
     if (config === undefined) {
       config = {
-        modules: [],
+        courses: [],
         roles: [],
       };
     }

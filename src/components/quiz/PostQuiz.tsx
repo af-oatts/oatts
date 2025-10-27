@@ -2,11 +2,11 @@ import { Box } from "@mui/material";
 import { useNavigate, useRouteContext } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { CompletionStatus, OldModule } from "@/core/model/OattsModel";
-import { GetModulesWithState } from "../../core/modules/ModuleLoader";
+import { GetCoursesWithState } from "../../core/modules/ModuleLoader";
 import { addUserStatusFlag } from "../../core/authentication/UserStatusFlag";
 import { UserStatusFlag } from "@/core/model/UserModel";
 import ModuleViewer from "../module/ModuleViewer";
-import { calculateModuleCompletionStatus } from "../../core/modules/ModuleUtils";
+import { calculateCourseCompletionStatus } from "../../core/modules/ModuleUtils";
 
 function usePostQuizModule() {
   const [isLoading, setIsLoading] = useState(true);
@@ -21,7 +21,7 @@ function usePostQuizModule() {
   useEffect(() => {
     let mounted = true;
     if (!user || !config) return;
-    GetModulesWithState(user, config)
+    GetCoursesWithState(user, config)
       .then((modules) => {
         if (!mounted)
           return;
@@ -48,7 +48,7 @@ export default function PostQuizPage({ onNext }: { onNext: () => void }) {
 
   useEffect(() => {
     if (!module) return;
-    const completionStatus = calculateModuleCompletionStatus(module);
+    const completionStatus = calculateCourseCompletionStatus(module);
     const isComplete = completionStatus === CompletionStatus.Completed;
     const isLoadedAndNoModule = user && !isLoading && !module;
     const isPostQuizComplete = user && !isLoading && isComplete && module;

@@ -4,6 +4,8 @@ import { Duration } from "dayjs/plugin/duration";
 import { Subject } from "rxjs";
 
 
+
+
 export type OattsManifest = {
   courses: Course[];
   preQuiz?: Course;
@@ -17,7 +19,7 @@ export type Course = {
   id: string,
   name: string,
   roleIds: string[],
-  contents: CourseContents[],
+  contents: CourseContent[],
   img?: string,
   description?: string,
   paNumber?: string,
@@ -25,13 +27,54 @@ export type Course = {
 }
 
 
-export type CourseContents = {
+export type CourseContent = {
   id: string,
   name: string,
   type: CourseContentItemType,
   entrypoint?: string,
   description?: string,
-  children?: CourseContents[]
+  children?: CourseContent[]
+  // ideally we'd just have the ContentState instead of both, but for now we can just have both and slowly
+  // move scorm stuff to our internal state
+  scormState?: ScormModel;
+  state?: ContentState;
+}
+
+
+
+
+
+
+
+// TODO: We may be able to drop the "raw"
+export type RawOattsManifest = {
+  courses: RawCourse[];
+  preQuiz?: RawCourse;
+  postQuiz?: RawCourse;
+  versionNumber?: string;
+  allowDataCollection?: boolean;
+  roles: Role[];
+};
+
+export type RawCourse = {
+  id: string,
+  name: string,
+  roleIds: string[],
+  contents: RawCourseContent[],
+  img?: string,
+  description?: string,
+  paNumber?: string,
+  timeToComplete?: number,
+}
+
+
+export type RawCourseContent = {
+  id: string,
+  name: string,
+  type: CourseContentItemType,
+  entrypoint?: string,
+  description?: string,
+  children?: RawCourseContent[]
 }
 
 // Represents the types a course's contents can be.
@@ -43,6 +86,8 @@ export enum CourseContentItemType {
   UNKNOWN = "UNKNOWN",
 
 }
+
+
 
 
 

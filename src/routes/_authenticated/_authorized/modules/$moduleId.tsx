@@ -8,7 +8,7 @@ export const Route = createFileRoute("/_authenticated/_authorized/modules/$modul
   loader: async ({ params, context }) => {
     if (params.moduleId === undefined) return undefined;
 
-    const module = context.modules.modules?.find((mod) => mod.id == params.moduleId);
+    const module = context.modules.courses?.find((mod) => mod.id == params.moduleId);
     const user = context.authentication.user;
     if (module === undefined || user === undefined) return undefined;
 

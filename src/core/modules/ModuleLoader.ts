@@ -4,68 +4,94 @@ import {
   OldContentType,
   OldContentMetadata,
   ContentState,
-  OldManifestMetadata,
   OldOattsConfig,
   Role,
   QuizContent,
+  RawOattsManifest,
+  RawCourse,
+  Course,
+  CourseContent,
+  CourseContentItemType,
+  RawCourseContent,
   OattsManifest,
 } from "@/core/model/OattsModel";
 import { join } from "@tauri-apps/api/path";
 import { parse } from "yaml";
 import { FetchFile } from "../utils/FileHelper";
-import { PopulateInfoFromScorm } from "../scorm/ScormLoader";
 import User from "@/core/model/UserModel";
 import { loadModel } from "../scorm/ScormHelper";
 import { OATTS_ROOT } from "../utils/Globals";
 import { internalizeCompletionStatus } from "../scorm/ScormInternalizer";
-import { populateContentState } from "../database/Content";
+import { GetInternalContentState } from "../database/Content";
 import { UserContextType } from "../../contexts/UserContext";
-import ModuleContext from "./ModuleContext";
+import CoursesContext from "./ContentContext";
+import { ScormModel } from "../model/ScormModel";
 
-export async function GetModulesWithState(user: User, config: OldOattsConfig): Promise<OldModule[]> {
 
-  const modules = await GetModules(config);
-  await Promise.all(modules.map((mod) => PopulateModuleState(mod, user)));
-  return modules;
+
+export async function GetCoursesWithState(user: User, config: OattsManifest): Promise<Course[]> {
+  let courses = config.courses;
+  await Promise.all(courses.map((course) => StatefulifyRawCourse(course, user)));
+  return courses;
 }
 
-async function PopulateModuleState(module: OldModule, user: User) {
-  for (const content of module.contents) {
-    await PopulateInternalState(content, user);
-    await PopulateScormState(content, user);
+
+// Adds state to a raw course, returning a course.
+async function StatefulifyRawCourse(course: RawCourse, user: User): Promise<Course> {
+  let statefulContents: CourseContent[] = []
+  for (const content of course.contents) {
+    let statefulContent = await StatefulifyRawContent(content, user);
+    statefulContents.push(statefulContent);
+  }
+
+  return {
+    id: course.id,
+    name: course.name,
+    roleIds: course.roleIds,
+    description: course.description,
+    img: course.img,
+    paNumber: course.paNumber,
+    timeToComplete: course.timeToComplete,
+    contents: statefulContents,
   }
 }
 
-async function PopulateInternalState(content: OldContentItem, user: User) {
-  if (content.type === OldContentType.CONTAINER && content.subContents !== undefined) {
-    for (const subContent of content.subContents) {
-      await PopulateInternalState(subContent, user);
+async function StatefulifyRawContent(content: RawCourseContent, user: User): Promise<CourseContent> {
+  // Populate any children.
+  let statefulChildren: CourseContent[] = []
+  if(content.type === CourseContentItemType.SUBMODULE && content.children != null) {
+    for(let child of content.children) {
+      let statefulChild = await StatefulifyRawContent(child, user);
+      statefulChildren.push(statefulChild);
     }
-  } else {
-    await populateContentState(user, content.metadata.id, content.state);
   }
-}
 
-async function PopulateScormState(content: OldContentItem, user: User) {
-  if (content.type === OldContentType.CONTAINER && content.subContents !== undefined) {
-    for (const subContent of content.subContents) {
-      await PopulateScormState(subContent, user);
-    }
-  } else {
-    if (content.type !== OldContentType.SCORM) {
-      return;
-    }
 
-    const stateModel = await loadModel(user, content.metadata.id);
-    content.scormState = stateModel;
-    content.state.completionStatus = internalizeCompletionStatus(stateModel.cmi.completion_status);
+  let internalState = await GetInternalContentState(user, content.id);
+  
+  let scormState: ScormModel | undefined = undefined
+  
+  if(content.type === CourseContentItemType.SCORM) {
+    const stateModel = await loadModel(user, content.id);
+    scormState = stateModel;
+    if(internalState != undefined) {
+      internalState!.completionStatus = internalizeCompletionStatus(stateModel.cmi.completion_status);
+    }
   }
+
+  return {
+    id: content.id,
+    name: content.name,
+    type: content.type,
+    description: content.description,
+    entrypoint: content.entrypoint,
+    children: statefulChildren,
+    state: internalState ?? new ContentState(),
+    scormState: scormState
+  }
+
 }
 
-export async function GetModules(config: OldOattsConfig): Promise<OldModule[]> {
-  let modules = await Promise.all(config.modules.map(async (mod) => await LoadModule(mod, config.roles)));
-  return modules.filter((mod) => mod !== undefined);
-}
 
 function roleIdsToRoles(roleIds: string[], availableRoles: Role[]): Role[] {
   const roles = availableRoles.filter((r) => roleIds.includes(r.id));
@@ -73,42 +99,6 @@ function roleIdsToRoles(roleIds: string[], availableRoles: Role[]): Role[] {
   return roles;
 }
 
-export async function LoadModule(moduleManifestData: OldManifestMetadata, roles: Role[]): Promise<OldModule | undefined> {
-  let metadata = await LoadModuleMetadata(moduleManifestData.name);
-  if (metadata === undefined) {
-    return undefined;
-  }
-
-  // some content may be undefined if there was trouble loading it
-  let allContents = await Promise.all(metadata.contents.map(async (descriptor) => {
-    const path = await join(metadata.path, descriptor.name);
-    return LoadContent(path);
-  }));
-
-  let contents = allContents.filter((c) => c !== undefined);
-  for (const content of contents) {
-    await PopulateInfoFromScorm(content);
-  }
-
-  const moduleRoles = roleIdsToRoles(metadata.roleIds ?? [], roles);
-
-  let module: OldModule = {
-    id: metadata.id ?? metadata.name,
-    description: metadata.description ?? "",
-    paNumber: metadata.paNumber,
-    name: metadata.name,
-    timeToComplete: metadata.timeToComplete,
-    roles: moduleRoles,
-    contents: contents,
-  };
-
-  if (metadata.previewImage != undefined) {
-    let previewImagePath = await join(OATTS_ROOT, moduleManifestData.name, metadata.previewImage);
-    module.previewImage = previewImagePath;
-  }
-
-  return module;
-}
 
 export async function LoadQuiz(oattsCfg: OldOattsConfig, quizId?: string): Promise<QuizContent[] | undefined> {
   if (quizId == undefined)
@@ -206,19 +196,6 @@ async function LoadContentMetadata(path: string): Promise<ContentMetadataFile | 
   let metadata: ContentMetadataFile = parse(metadataString);
   return metadata;
 }
-
-async function LoadModuleMetadata(modName: string): Promise<ModuleMetadataFile | undefined> {
-  let modulePath = await join(OATTS_ROOT, modName);
-  let metadataPath = await join(modulePath, ".oatts");
-  let metadataString = await FetchFile(metadataPath, "text/yaml");
-  if (metadataString === undefined) {
-    console.warn("Unable to find module metadata for", modName, "In path:", metadataPath);
-    return undefined;
-  }
-  let metadata: ModuleMetadataFile = parse(metadataString);
-  metadata.path = modulePath;
-  return metadata;
-}
                             
 type ContentMetadataFile = {
   readonly id: string;
@@ -243,34 +220,36 @@ type Descriptor = {
   readonly name: string; // file name
 }
 
-// The module metadata as provided by the module's yaml file.
-type ModuleMetadataFile = {
-  readonly id?: string;
-  readonly name: string;
-  readonly description?: string;
-  readonly paNumber?: string;
-  readonly previewImage?: string;
-  readonly roleIds?: string[];
-  readonly timeToComplete? : number;
-  readonly contents: Descriptor[];
-  path: string;
-};
 
-export async function loadRequiredAndOptionalCourses({
-  context,
-}: {
-  context: { authentication: UserContextType; modules: ModuleContext; config: OldOattsConfig };
-}) {
+export async function loadRequiredAndOptionalCourses({ context}: { context: { authentication: UserContextType; courses: CoursesContext; config: RawOattsManifest }}) {
   const user = context.authentication.user;
   if (user === undefined) {
     console.error("No user set while attempting to retrieve modules");
     return { required: [], optional: [] };
   }
-  const allModules = await GetModulesWithState(user, context.config);
-  context.modules.modules = allModules;
-  const focusedModules = allModules.filter((module) =>
-    user.roles.some((cat) => module.roles.map(r => r.id).includes(cat)),
-  );
-  const supplementaryModules = allModules.filter((module) => !focusedModules.includes(module));
-  return { required: focusedModules, optional: supplementaryModules };
+
+
+  let courses: Course[] = []
+  // Un-raw? Cook? Statefulify? The raw course.
+  for(let rawCourse of context.config.courses)  {
+    const statefulCourse = await StatefulifyRawCourse(rawCourse, user);
+    courses.push(statefulCourse);
+  }
+
+
+  let focusedCourses: Course[] = [];
+  let supplementaryCourses: Course[] = [];
+
+  // Sort focused and supplementary.
+  for(let course of courses) {
+    for(let role of user.roles) {
+      if(course.roleIds.includes(role)) {
+        focusedCourses.push(course)
+        break;
+      }
+    }
+    supplementaryCourses.push(course)
+  }
+
+  return { required: focusedCourses, optional: supplementaryCourses };
 }
