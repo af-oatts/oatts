@@ -1,12 +1,11 @@
 import {
   ContentState,
-  RawOattsManifest,
-  RawCourse,
+  OattsManifest,
+  StatelessCourse,
   Course,
   CourseContent,
   CourseContentItemType,
-  RawCourseContent,
-  OattsManifest,
+  StatelessCourseContent,
 } from "@/core/model/OattsModel";
 import User from "@/core/model/UserModel";
 import { loadModel } from "../scorm/ScormHelper";
@@ -18,8 +17,7 @@ import { ScormModel } from "../model/ScormModel";
 
 
 
-export async function GetCoursesWithState(user: User, config: OattsManifest): Promise<Course[]> {
-  let courses = config.courses;
+export async function StatefulifyRawCourses(user: User, courses: StatelessCourse[]): Promise<Course[]> {
   let statefulCourses: Course[] = []
   for (let course of courses) {
     let statefulCourse = await StatefulifyRawCourse(course, user);
@@ -30,7 +28,7 @@ export async function GetCoursesWithState(user: User, config: OattsManifest): Pr
 
 
 // Adds state to a raw course, returning a course.
-export async function StatefulifyRawCourse(course: RawCourse, user: User): Promise<Course> {
+export async function StatefulifyRawCourse(course: StatelessCourse, user: User): Promise<Course> {
   let statefulContents: CourseContent[] = []
   for (const content of course.contents) {
     let statefulContent = await StatefulifyRawContent(content, user);
@@ -49,7 +47,7 @@ export async function StatefulifyRawCourse(course: RawCourse, user: User): Promi
   }
 }
 
-async function StatefulifyRawContent(content: RawCourseContent, user: User): Promise<CourseContent> {
+async function StatefulifyRawContent(content: StatelessCourseContent, user: User): Promise<CourseContent> {
   // Populate any children.
   let statefulChildren: CourseContent[] | undefined = undefined
   if (content.type === CourseContentItemType.SUBMODULE && content.children != null) {
@@ -91,7 +89,22 @@ async function StatefulifyRawContent(content: RawCourseContent, user: User): Pro
 }
 
 
-export async function loadRequiredAndOptionalCourses({ context }: { context: { authentication: UserContextType; courses: CoursesContext; config: RawOattsManifest } }) {
+export async function LoadPreQuizzes(user: User, manifest: OattsManifest): Promise<CourseContent[]> {
+  let statefulQuizzes = []
+  if (!manifest.prequizzes) {
+    return [];
+  }
+  for (let quiz of manifest.prequizzes) {
+    if (!quiz.roleIds.some(role => user.roles.includes(role))) {
+      continue; // Not relevant to us.
+    }
+    let statefulQuiz = await StatefulifyRawCourse(quiz, user);
+    statefulQuizzes.push(...statefulQuiz.contents); // TODO: Tbh we could probably just pass the course instead of the coursecontent array...
+  }
+  return statefulQuizzes;
+}
+
+export async function loadRequiredAndOptionalCourses({ context }: { context: { authentication: UserContextType; courses: CoursesContext; config: OattsManifest } }) {
   const user = context.authentication.user;
   if (user === undefined) {
     console.error("No user set while attempting to retrieve modules");

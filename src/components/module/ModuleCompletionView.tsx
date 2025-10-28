@@ -1,11 +1,11 @@
-import { OldModule } from "@/core/model/OattsModel";
+import { Course } from "@/core/model/OattsModel";
 import { Box, Button, Typography } from "@mui/material";
 import { motion, useAnimate } from "motion/react";
 import { useEffect } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 
-export function ModuleCompletionView({ module }: { module: OldModule }) {
+export function ModuleCompletionView({ course }: { course: Course }) {
   const navigate = useNavigate();
   const [scope, animate] = useAnimate();
   const { t } = useTranslation("moduleCompletion");
@@ -37,7 +37,7 @@ export function ModuleCompletionView({ module }: { module: OldModule }) {
       })}
     >
       <Typography variant="h4" style={{textAlign: 'center'}}>
-        {t("header", { moduleName: module.name })}
+        {t("header", { moduleName: course.name })}
       </Typography>
       <div style={{textAlign: 'center'}}>{t("completionMessage")}</div>
       <div style={{ display: "flex", width: "100%", gap: "1rem", justifyContent: "center", marginTop: "2rem" }}>

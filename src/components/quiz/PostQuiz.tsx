@@ -1,8 +1,8 @@
 import { Box } from "@mui/material";
 import { useNavigate, useRouteContext } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { CompletionStatus, Course, OldModule } from "@/core/model/OattsModel";
-import { GetCoursesWithState } from "../../core/modules/ModuleLoader";
+import { CompletionStatus, Course } from "@/core/model/OattsModel";
+import { StatefulifyRawCourses } from "../../core/modules/ModuleLoader";
 import { addUserStatusFlag } from "../../core/authentication/UserStatusFlag";
 import { UserStatusFlag } from "@/core/model/UserModel";
 import ModuleViewer from "../module/ModuleViewer";
@@ -21,12 +21,12 @@ function usePostQuizModule() {
   useEffect(() => {
     let mounted = true;
     if (!user || !config) return;
-    GetCoursesWithState(user, config)
-      .then((modules) => {
+    StatefulifyRawCourses(user, config.courses)
+      .then((statefulCourses) => {
         if (!mounted)
           return;
 
-        setCourse(modules[0]);
+        setCourse(statefulCourses[0]);
       })
       .finally(() => {
         if (!mounted)

@@ -1,4 +1,4 @@
-import { CourseContent, CourseContentItemType, OldContentItem, OldContentType } from "@/core/model/OattsModel";
+import { CourseContent, CourseContentItemType } from "@/core/model/OattsModel";
 import { Box, Collapse, List, ListItemButton, ListItemButtonProps, ListItemText } from "@mui/material";
 
 import { useState } from "react";

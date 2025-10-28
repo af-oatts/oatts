@@ -2,12 +2,13 @@ import { Box, Button, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import { TransitionParams } from "../../theme/TransitionParams";
-import { CompletionStatus, Course, CourseContent } from "@/core/model/OattsModel";
+import { CompletionStatus, ContentState, Course, CourseContent } from "@/core/model/OattsModel";
 import { useRouteContext } from "@tanstack/react-router";
 import { UserStatusFlag } from "@/core/model/UserModel";
 import { addUserStatusFlag } from "../../core/authentication/UserStatusFlag";
 import { useMultiCompletionStatus } from "../../core/modules/hooks/useMultiCompletionStatus";
 import ModuleViewer from "../module/ModuleViewer";
+import { LoadPreQuizzes } from "@/core/modules/ModuleLoader";
 
 export default function PreQuizPage({ onNext }: { onNext: () => void }) {
   let [quizzes, setQuizzes] = useState<CourseContent[] | undefined>(undefined);
@@ -18,18 +19,13 @@ export default function PreQuizPage({ onNext }: { onNext: () => void }) {
   });
   useEffect(() => {
     let mounted = true;
-    if (user == undefined || oattsManifest == undefined) {
+    if (user == undefined || oattsManifest == undefined || oattsManifest.prequizzes == undefined) {
       return;
     }
-    let relevantQuizzes: CourseContent[] = []
-    for (let quizset of oattsManifest.prequizzes) {
-      if(user.roles.some(role => quizset.roleIds.includes(role))) {
-        // TODO: We should probably deep-traverse any submodules instead of assuming no children.
-        relevantQuizzes.push(...quizset.contents);
-      }
-    }
-    setQuizzes(relevantQuizzes);
-    setQuizExists(true);
+    LoadPreQuizzes(user, oattsManifest).then(prequizzes => {
+      setQuizzes(prequizzes);
+      setQuizExists(true);
+    })
     return () => {
       mounted = false;
     }

@@ -1,4 +1,4 @@
-import { Course, OldModule } from "@/core/model/OattsModel";
+import { Course } from "@/core/model/OattsModel";
 import {
   Alert,
   Box,

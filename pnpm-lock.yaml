@@ -59,9 +59,6 @@ importers:
       canvas-confetti:
         specifier: ^1.9.3
         version: 1.9.3
-      dayjs:
-        specifier: ^1.11.13
-        version: 1.11.13
       duration:
         specifier: ^0.2.2
         version: 0.2.2
@@ -1011,9 +1008,6 @@ packages:
   d@1.0.2:
     resolution: {integrity: sha512-MOqHvMWF9/9MX6nza0KgvFH4HpMU0EF5uUDXqX/BtxtU8NfB0QzRtJ8Oe/6SuS4kbhyzVJwjd97EA4PKrzJ8bw==}
     engines: {node: '>=0.12'}
-
-  dayjs@1.11.13:
-    resolution: {integrity: sha512-oaMBel6gjolK862uaPQOVTA7q3TZhuSvuMQAAglQDOWYO9A91IrAOUJEyKVlqJlHE0vq5p5UXxzdPfMH/x6xNg==}
 
   debug@4.4.0:
     resolution: {integrity: sha512-6WTZ/IxCY/T6BALoZHaE4ctp9xm+Z5kY/pzYaCHRFeyVhojxlrm+46y68HA6hr0TcwEssoxNiDEUJQjfPZ/RYA==}
@@ -2637,8 +2631,6 @@ snapshots:
     dependencies:
       es5-ext: 0.10.64
       type: 2.7.3
-
-  dayjs@1.11.13: {}
 
   debug@4.4.0:
     dependencies:

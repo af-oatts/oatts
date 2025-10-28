@@ -1,7 +1,7 @@
 import { ScormModel } from "@/core/model/ScormModel";
 import { Commit, getValue, setValue, updateInternalState } from "./ScormHelper";
 import User from "@/core/model/UserModel";
-import { CourseContent, OldContentItem } from "@/core/model/OattsModel";
+import { CourseContent } from "@/core/model/OattsModel";
 
 export interface IScormApi {
   Initialize(): boolean;
