@@ -3,7 +3,7 @@ import { Box, Button, Divider, List, Typography } from "@mui/material";
 import { motion, useAnimate } from "motion/react";
 import { useEffect, useMemo, useState } from "react";
 import ContentViewer from "./ContentViewer";
-import { FlattenContents } from "../../core/modules/ModuleUtils";
+import { flattenContents } from "../../core/modules/ModuleUtils";
 import { useNavigate } from "@tanstack/react-router";
 import { ContentMenuItem } from "@/components/common/ContentMenu";
 
@@ -33,8 +33,8 @@ function nasNext(contentItems: CourseContent[]): boolean {
   return firstIncomplete(contentItems) !== undefined;
 }
 
-export default function ModuleViewer({ contents, paNumber }: { contents: CourseContent[], paNumber?: string }) {
-  const flattenedContents = useMemo(() => FlattenContents(contents), []);
+export default function ModuleViewer({ contents, paNumber }: { contents: CourseContent[]; paNumber?: string }) {
+  const flattenedContents = useMemo(() => flattenContents(contents), []);
   const [content, setContent] = useState(firstIncompleteOrDefault(flattenedContents));
   const [scope, animate] = useAnimate();
   const [hasNext, setHasNext] = useState(nasNext(flattenedContents));
@@ -86,26 +86,17 @@ export default function ModuleViewer({ contents, paNumber }: { contents: CourseC
       <Box sx={{ overflowY: "auto" }}>
         <List component="nav">
           {contents.map((c) => (
-            <ContentMenuItem
-              key={c.id}
-              contentItem={c}
-              isSelected={(c) => c === content}
-              setContent={setContent}
-            />
+            <ContentMenuItem key={c.id} contentItem={c} isSelected={(c) => c === content} setContent={setContent} />
           ))}
         </List>
       </Box>
       <Divider orientation="vertical" sx={{ gridColumn: "2" }} />
       <Box id="context-box" sx={{ width: "100%", display: "grid", gridTemplateRows: "1fr auto", overflow: "hidden" }}>
-        <div style={{ height: '100%', gridArea: "1 / 1", display: 'flex', flexDirection: 'column' }}>
-          <Box
-            sx={{flex: 1}}
-          >
+        <div style={{ height: "100%", gridArea: "1 / 1", display: "flex", flexDirection: "column" }}>
+          <Box sx={{ flex: 1 }}>
             <ContentViewer content={content} />
           </Box>
-          <Box sx={{ textAlign: "center", flexShrink: 0}}>
-            {paNumber}
-          </Box>
+          <Box sx={{ textAlign: "center", flexShrink: 0 }}>{paNumber}</Box>
         </div>
 
         <Box

@@ -8,7 +8,7 @@ import { UserStatusFlag } from "@/core/model/UserModel";
 import { addUserStatusFlag } from "../../core/authentication/UserStatusFlag";
 import { useMultiCompletionStatus } from "../../core/modules/hooks/useMultiCompletionStatus";
 import ModuleViewer from "../module/ModuleViewer";
-import { LoadPreQuizzes } from "@/core/modules/ModuleLoader";
+import { loadPreQuizzes } from "@/core/modules/ModuleLoader";
 
 export default function PreQuizPage({ onNext }: { onNext: () => void }) {
   let [quizzes, setQuizzes] = useState<CourseContent[] | undefined>(undefined);
@@ -22,19 +22,18 @@ export default function PreQuizPage({ onNext }: { onNext: () => void }) {
     if (user == undefined || oattsManifest == undefined || oattsManifest.prequizzes == undefined) {
       return;
     }
-    LoadPreQuizzes(user, oattsManifest).then(prequizzes => {
+    loadPreQuizzes(user, oattsManifest).then((prequizzes) => {
       setQuizzes(prequizzes);
       setQuizExists(true);
-    })
+    });
     return () => {
       mounted = false;
-    }
+    };
   }, []);
 
   useEffect(() => {
-    if (quizExists === false)
-      onComplete();
-  }, [quizExists])
+    if (quizExists === false) onComplete();
+  }, [quizExists]);
 
   let quizCompletionStatus = useMultiCompletionStatus(quizzes);
 

@@ -5,7 +5,7 @@ import { motion, useAnimate } from "motion/react";
 import { useEffect, useRef } from "react";
 import { loadModel } from "../../core/scorm/ScormHelper";
 import { saveContentState } from "../../core/database/Content";
-import { GetContentURL } from "@/core/modules/ModuleUtils";
+import { getContentURL } from "@/core/modules/ModuleUtils";
 
 export default function ContentViewer({ content }: { content: CourseContent }) {
   const contentFrameRef = useRef<HTMLIFrameElement>(null);
@@ -56,7 +56,7 @@ export default function ContentViewer({ content }: { content: CourseContent }) {
     }
 
     frameAnimate(currentFrameScope, { opacity: 0.4, scale: 0.99 }, { duration: 0.25, ease: "easeIn" }).then(() => {
-      currentFrameRef.src = GetContentURL(content)
+      currentFrameRef.src = getContentURL(content);
     });
   }, [content]);
 
@@ -95,7 +95,7 @@ export default function ContentViewer({ content }: { content: CourseContent }) {
           sx={{ width: "100%", height: "100%" }}
           ref={frameScope}
         >
-          <iframe style={{border: 0}} width="100%" height="100%" ref={contentFrameRef} onLoad={animateScope}></iframe>
+          <iframe style={{ border: 0 }} width="100%" height="100%" ref={contentFrameRef} onLoad={animateScope}></iframe>
         </Box>
       </Box>
     </Box>

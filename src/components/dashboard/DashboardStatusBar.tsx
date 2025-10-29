@@ -11,7 +11,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { CalculateCoursesProgress, checkIfRequirementsAreComplete } from "../../core/modules/ModuleUtils";
+import { calculateCoursesProgress, checkIfRequirementsAreComplete } from "../../core/modules/ModuleUtils";
 import LinearProgressWithLabel from "../common/LinearProgressWithLabel";
 import { ExportUserProgress } from "../../core/utils/DataExporter";
 import { useNavigate, useRouteContext } from "@tanstack/react-router";
@@ -22,7 +22,7 @@ import InformedConsent from "@/components/dashboard/InformedConsent";
 
 export interface StatusTileProps extends CardOwnProps {
   courses: Course[];
-  mayCollectData: boolean
+  mayCollectData: boolean;
 }
 
 function SucceededAlert() {
@@ -50,7 +50,7 @@ export default function DashboardStatusBar(props: StatusTileProps) {
   const [snackOpen, setSnackOpen] = useState(false);
   const [snackContent, setSnackContent] = useState(<Box></Box>);
   const ctx = useRouteContext({ from: "/_authenticated/_authorized" });
-  const modulesProgress = Math.round(CalculateCoursesProgress(modules) * 100);
+  const modulesProgress = Math.round(calculateCoursesProgress(modules) * 100);
   const setOverlay = useSetOverlay();
 
   const isComplete = checkIfRequirementsAreComplete(modules);
@@ -64,20 +64,20 @@ export default function DashboardStatusBar(props: StatusTileProps) {
   }
 
   async function DoExport(user?: User) {
-    setOverlay(<InformedConsent onConsented={async (attestation) => {
-      const result = await ExportUserProgress(user, attestation);
-      if (result.success) {
-        setSnackContent(SucceededAlert());
-      } else {
-        setSnackContent(FailedAlert(result.message));
-      }
-      setSnackOpen(true);
-      setOverlay(null);
-
-
-    }}></InformedConsent>)
-
-
+    setOverlay(
+      <InformedConsent
+        onConsented={async (attestation) => {
+          const result = await ExportUserProgress(user, attestation);
+          if (result.success) {
+            setSnackContent(SucceededAlert());
+          } else {
+            setSnackContent(FailedAlert(result.message));
+          }
+          setSnackOpen(true);
+          setOverlay(null);
+        }}
+      ></InformedConsent>,
+    );
   }
 
   return (
@@ -104,12 +104,13 @@ export default function DashboardStatusBar(props: StatusTileProps) {
               <LinearProgressWithLabel value={modulesProgress} />
             </Box>
           </Box>
-          { props.mayCollectData? 
-          <Button sx={{ gridColumn: "3" }} size="small" onClick={() => DoExport(ctx.authentication.user)}>
-            Export Data
-          </Button>
-          : <></>
-          }
+          {props.mayCollectData ? (
+            <Button sx={{ gridColumn: "3" }} size="small" onClick={() => DoExport(ctx.authentication.user)}>
+              Export Data
+            </Button>
+          ) : (
+            <></>
+          )}
           {isComplete && (
             <Button sx={{ gridColumn: "4" }} size="small" onClick={() => navigate({ to: "/certificate" })}>
               View Certificate
