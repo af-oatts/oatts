@@ -1,7 +1,4 @@
 import { ScormModel } from "./ScormModel";
-// TODO: This is the only spot we use rxjs. Can we remove it?
-import { Subject } from "rxjs";
-
 
 
 export type OattsManifest = {
@@ -93,31 +90,19 @@ export type Role = {
 export type ContentStateType = {
   completionStatus: CompletionStatus;
 };
+export type ContentState = {
+  completionStatus: CompletionStatus
+}
+
+
 
 export enum CompletionStatus {
-  Unknown,
-  NotStarted,
-  Started,
-  Completed,
+  Unknown = 0,
+  NotStarted = 1,
+  Started = 2,
+  Completed = 3,
 }
 
-export class ContentState {
-  private _completionStatus: CompletionStatus = CompletionStatus.NotStarted;
-  private _completionStatusSubject = new Subject<CompletionStatus>();
-
-  set completionStatus(status: CompletionStatus) {
-    this._completionStatus = status;
-    this._completionStatusSubject.next(status);
-  }
-
-  get completionStatus() {
-    return this._completionStatus;
-  }
-
-  get completionStatusObservable() {
-    return this._completionStatusSubject.asObservable();
-  }
-}
 
 export class GenericResult {
   constructor(success: boolean = true, message: string | undefined = undefined) {
@@ -127,4 +112,9 @@ export class GenericResult {
 
   success: boolean;
   message: string | undefined;
+}
+
+
+export const DefaultContentState : ContentState = {
+  completionStatus: CompletionStatus.NotStarted
 }

@@ -1,4 +1,4 @@
-import { ContentState, ContentStateType, CourseContent } from "@/core/model/OattsModel";
+import { ContentState, ContentStateType, CourseContent, DefaultContentState } from "@/core/model/OattsModel";
 import User from "@/core/model/UserModel";
 import loadDatabase from "./DatabaseLoader";
 import { CompletionStatus, ScormDbEntity, ScormModel } from "@/core/model/ScormModel";
@@ -9,7 +9,7 @@ type DbContentState = {
   data: string;
 };
 
-export async function GetInternalContentState(user: User, contentUri: string): Promise<ContentState | undefined> {
+export async function GetContentState(user: User, id: string): Promise<ContentState | undefined> {
   let db = await loadDatabase();
   let states = await db.select<DbContentState[]>(
     `
@@ -17,7 +17,7 @@ export async function GetInternalContentState(user: User, contentUri: string): P
     INNER JOIN users ON users.id = userContentState.userId
     WHERE users.email = $2 AND userContentState.contentUri = $1
     `,
-    [contentUri, user.email],
+    [id, user.email],
   );
 
   let dbState = states.at(0);
@@ -25,14 +25,13 @@ export async function GetInternalContentState(user: User, contentUri: string): P
     return undefined;
   }
   let state: ContentStateType = JSON.parse(dbState.data);
-  let contentState = new ContentState();
+  let contentState = DefaultContentState;
   internalizeContentState(state, contentState);
   return contentState;
 }
 
-export function internalizeContentState(stateType: ContentStateType, contentState: ContentState) : ContentState {
-  contentState.completionStatus = stateType.completionStatus;
-  return contentState;
+export function internalizeContentState(stateType: ContentStateType, contentState: ContentState) {
+  contentState.completionStatus = stateType.completionStatus; // Does this line run?
 }
 
 export function externalizeContentState(state: ContentState): ContentStateType {

@@ -102,7 +102,7 @@ export class ScormApi implements IScormApi {
       .then(() => console.log("Commited to db"))
       .catch((e) => console.error("Problem commiting to db", e));
 
-    updateInternalState(this._model, this._content.state);
+    updateInternalState(this._model, this._content.state); // CULPRIT
     return true;
   }
 

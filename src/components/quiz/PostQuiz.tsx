@@ -7,6 +7,7 @@ import { addUserStatusFlag } from "../../core/authentication/UserStatusFlag";
 import { UserStatusFlag } from "@/core/model/UserModel";
 import ModuleViewer from "../module/ModuleViewer";
 import { calculateCourseCompletionStatus } from "../../core/modules/ModuleUtils";
+import { useCourseContentState, useCourseContentStates } from "@/contexts/hooks/useCourseContentState";
 
 function usePostQuizModule() {
   const [isLoading, setIsLoading] = useState(true);
