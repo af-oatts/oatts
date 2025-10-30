@@ -16,15 +16,6 @@ import CoursesContext from "./ContentContext";
 import { ScormModel } from "../model/ScormModel";
 
 
-// TODO: Delete this! 
-export async function StatefulifyRawCourses(user: User, courses: StatelessCourse[]): Promise<Course[]> {
-  let statefulCourses: Course[] = []
-  for (let course of courses) {
-    let statefulCourse = await StatefulifyRawCourse(course, user);
-    statefulCourses.push(statefulCourse);
-  }
-  return statefulCourses;
-}
 
 
 // TODO: Delete this!
@@ -84,7 +75,7 @@ export async function StatefulifyRawContent(content: StatelessCourseContent, use
     description: content.description,
     entrypoint: content.entrypoint,
     children: statefulChildren,
-    state: internalState ?? {completionStatus: CompletionStatus.NotStarted},
+    state: internalState ?? {completionStatus: CompletionStatus.NotStarted, contentID: content.id},
     scormState: scormState
   }
 

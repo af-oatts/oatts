@@ -137,9 +137,9 @@ export async function Commit(model: ScormModel, contentUri: string, user: User) 
   ]);
 }
 
-export async function updateInternalState(model: ScormModel, contentState: ContentState) {
-  internalizeContentState(internalizeScormState(model), contentState);
-}
+
+
+
 
 export async function loadModel(user: User, contentUri: string): Promise<ScormModel> {
   const userId = await getUserId(user);

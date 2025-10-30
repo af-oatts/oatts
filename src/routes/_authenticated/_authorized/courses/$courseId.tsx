@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 import ModuleNotFound from "@/components/module/ModuleNotFound";
-import ModuleViewer from "@/components/module/ModuleViewer";
+import CourseViewer from "@/components/module/CourseViewer";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_authenticated/_authorized/courses/$courseId")({
@@ -22,5 +22,5 @@ export default function ModulePage(): Readonly<ReactNode> {
   if (course === undefined) {
     return <ModuleNotFound />;
   }
-  return <ModuleViewer contents={course.contents} paNumber={course.paNumber} />;
+  return <CourseViewer contents={course.contents} paNumber={course.paNumber} />;
 }

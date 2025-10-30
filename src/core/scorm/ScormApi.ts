@@ -1,7 +1,7 @@
 import { ScormModel } from "@/core/model/ScormModel";
-import { Commit, getValue, setValue, updateInternalState } from "./ScormHelper";
+import { Commit, getValue, setValue } from "./ScormHelper";
 import User from "@/core/model/UserModel";
-import { CourseContent } from "@/core/model/OattsModel";
+import { StatelessCourseContent } from "@/core/model/OattsModel";
 
 export interface IScormApi {
   Initialize(): boolean;
@@ -14,14 +14,16 @@ export interface IScormApi {
   GetDiagnostic(err: CMIErrorCode): string;
   SetModel(model: ScormModel): void;
   SetUser(user: User): void;
-  SetContent(content: CourseContent): void;
+  SetContent(content: StatelessCourseContent): void;
+  SetUpdateStateCallback(callback: (scormState: ScormModel) => void) : void;
 }
 
 export class ScormApi implements IScormApi {
   private _model: ScormModel | undefined;
   private _user: User | undefined;
-  private _content: CourseContent | undefined;
+  private _content: StatelessCourseContent | undefined;
   private _latestCommit: NodeJS.Timeout | undefined;
+  private _updateState = (_ : ScormModel) => {console.warn('SCORM Api has not been given a callback for updating state. State changes originating from SCORM will not be saved. Call `window.API_1484_11.SetUpdateCallback((state) => { /* Your callback here */});` to save content.')}
 
   constructor() {}
 
@@ -34,7 +36,7 @@ export class ScormApi implements IScormApi {
     this._user = user;
   }
 
-  SetContent(content: CourseContent): void {
+  SetContent(content: StatelessCourseContent): void {
     this._content = content;
   }
 
@@ -102,7 +104,7 @@ export class ScormApi implements IScormApi {
       .then(() => console.log("Commited to db"))
       .catch((e) => console.error("Problem commiting to db", e));
 
-    updateInternalState(this._model, this._content.state); // CULPRIT
+    this._updateState(this._model);
     return true;
   }
 
@@ -118,6 +120,10 @@ export class ScormApi implements IScormApi {
 
   GetDiagnostic(err: CMIErrorCode): string {
     return getSCORMErrorDescription(err);
+  }
+
+  SetUpdateStateCallback(callback: (scormState: ScormModel) => void): void {
+   this._updateState = callback; 
   }
 }
 

@@ -91,9 +91,9 @@ export type ContentStateType = {
   completionStatus: CompletionStatus;
 };
 export type ContentState = {
+  contentID: string,
   completionStatus: CompletionStatus
 }
-
 
 
 export enum CompletionStatus {
@@ -115,6 +115,9 @@ export class GenericResult {
 }
 
 
-export const DefaultContentState : ContentState = {
-  completionStatus: CompletionStatus.NotStarted
+export function CreateDefaultContentState(id: string) : ContentState {
+  return {
+    contentID: id,
+    completionStatus: CompletionStatus.NotStarted,
+  }
 }
