@@ -9,26 +9,6 @@
     "sql:default",
     "sql:allow-execute",
     "fs:default",
-    {
-      "identifier": "fs:scope",
-      "allow": [
-        {
-          "path": "$APPDATA"
-        },
-        {
-          "path": "$APPDATA/**"
-        },
-        {
-          "path": "$DESKTOP"
-        },
-        {
-          "path": "$DOCUMENT"
-        },
-        {
-          "path": "$DOWNLOAD"
-        }
-      ]
-    },
     "dialog:default"
   ]
 }
