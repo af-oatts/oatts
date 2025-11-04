@@ -5,7 +5,7 @@ import ContentViewer from "@/components/module/ContentViewer";
 import { useParams } from "@tanstack/react-router";
 import { ContentNavigationComponent } from "@/components/module/ContentNavigationComponent";
 
-import { CourseController } from "./useCourseContentState";
+import { CourseController } from "./CourseController";
 
 const FILE_ROUTE = "/_authenticated/_authorized/courses/$courseId/content/$contentId";
 

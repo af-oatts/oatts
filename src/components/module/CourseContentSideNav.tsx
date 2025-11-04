@@ -1,7 +1,7 @@
 import { Box, List } from "@mui/material";
 import { ContentMenuItem } from "@/components/common/ContentMenu";
 import { useNavigate, useParams } from "@tanstack/react-router";
-import { CourseController } from "./useCourseContentState";
+import { CourseController } from "./CourseController";
 
 const SHORT_ROUTE = "/courses/$courseId/content/$contentId";
 const FILE_ROUTE = "/_authenticated/_authorized/courses/$courseId/content/$contentId";
