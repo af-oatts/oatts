@@ -6,6 +6,7 @@ import { createRootRouteWithContext, Outlet } from "@tanstack/react-router";
 import AppTheme from "@/theme/AppTheme";
 import LoadConfig from "@/core/utils/ConfigLoader";
 import { OattsManifest } from "@/core/model/OattsModel";
+import { ManifestContextProvider } from "@/contexts/providers/CourseContextProvider";
 
 type RouterContext = {
   authentication: UserContextType;
@@ -24,12 +25,13 @@ export const Route = routeWithCtx({
   component: Root,
   beforeLoad: async () => {
     let config = await LoadConfig();
+    // let config;
     if (config === undefined) {
       config = {
         courses: [],
         roles: [],
         prequizzes: [],
-        postquizzes: []
+        postquizzes: [],
       };
     }
     return { config };
@@ -39,8 +41,10 @@ export const Route = routeWithCtx({
 function Root() {
   return (
     <AppTheme>
-      <CssBaseline />
-      <Outlet />
+      <ManifestContextProvider>
+        <CssBaseline />
+        <Outlet />
+      </ManifestContextProvider>
     </AppTheme>
   );
 }

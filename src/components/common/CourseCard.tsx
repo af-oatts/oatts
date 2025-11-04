@@ -1,11 +1,10 @@
-import { CompletionStatus, Course, StatelessCourse } from "@/core/model/OattsModel";
+import { CompletionStatus, StatelessCourse } from "@/core/model/OattsModel";
 import { Box, Card, CardContent, IconButton, Menu, MenuItem, Typography, useTheme } from "@mui/material";
 import CoursePreviewImage from "../module/ModulePreviewImage";
 import { AnimatePresence, motion } from "motion/react";
-import {calculateCourseCompletionStatus, CompletionStatusToString, GetCourseImageURL } from "../../core/modules/ModuleUtils";
+import { CompletionStatusToString, GetCourseImageURL } from "../../core/modules/ModuleUtils";
 import { SecondsToTimeString } from "../../core/utils/TimeStuff";
-import { resetUserAssessment } from "../../core/database/Content";
-import { useAuth } from "@/contexts/hooks/useAuth";
+
 import { useRouter } from "@tanstack/react-router";
 import { MoreVert } from "@mui/icons-material";
 import { useState } from "react";
@@ -13,18 +12,22 @@ import { useCourseCompletionStatus, useResetCourse } from "@/contexts/hooks/useC
 
 export default function CourseCard({ course }: { course: StatelessCourse }) {
   let [menuAnchor, setMenuAnchor] = useState<null | HTMLElement>(null);
-  const completionStatus = useCourseCompletionStatus();
+  console.log({ course });
+  // TODO FIX
+  const completionStatus = useCourseCompletionStatus(course);
+  // const completionStatus: CompletionStatus = 0;
+  // const completed = false;
   const router = useRouter();
+  // TODO FIX
   const completed = completionStatus === CompletionStatus.Completed;
   const theme = useTheme();
   const resetCourse = useResetCourse();
 
-
   const closeMenu = () => setMenuAnchor(null);
-  const resetProgress = () => resetCourse(course).finally(() => {
-    router.invalidate();
-  });
-
+  const resetProgress = () =>
+    resetCourse(course).finally(() => {
+      router.invalidate();
+    });
 
   return (
     <AnimatePresence>
@@ -58,7 +61,7 @@ export default function CourseCard({ course }: { course: StatelessCourse }) {
           height: "100%",
           overflow: "hidden",
           padding: "0",
-          position: "relative"
+          position: "relative",
         }}
         onClick={(e) => {
           if (menuAnchor != null) {
@@ -68,32 +71,37 @@ export default function CourseCard({ course }: { course: StatelessCourse }) {
         }}
       >
         <div>
-          <IconButton sx={{
-            position: "absolute",
-            zIndex: 76,
-            top: 0,
-            right: 0
-          }} onClick={(event) => {
-            event.stopPropagation();
-            event.preventDefault();
-            setMenuAnchor(event.currentTarget)
-          }}>
+          <IconButton
+            sx={{
+              position: "absolute",
+              zIndex: 76,
+              top: 0,
+              right: 0,
+            }}
+            onClick={(event) => {
+              event.stopPropagation();
+              event.preventDefault();
+              setMenuAnchor(event.currentTarget);
+            }}
+          >
             <MoreVert />
           </IconButton>
 
-          <Menu
-            id="long-menu"
-            anchorEl={menuAnchor}
-            open={menuAnchor != null}
-            onClose={closeMenu}
-          >
-            <MenuItem key="reset" disabled={completionStatus == CompletionStatus.NotStarted} onClick={(e) => { e.stopPropagation(); e.preventDefault(); resetProgress(); closeMenu(); }}>
+          <Menu id="long-menu" anchorEl={menuAnchor} open={menuAnchor != null} onClose={closeMenu}>
+            <MenuItem
+              key="reset"
+              disabled={completionStatus == CompletionStatus.NotStarted}
+              onClick={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                resetProgress();
+                closeMenu();
+              }}
+            >
               Reset Progress
             </MenuItem>
           </Menu>
-
         </div>
-
 
         <CardContent
           sx={{
@@ -103,7 +111,6 @@ export default function CourseCard({ course }: { course: StatelessCourse }) {
             height: "100%",
           }}
         >
-
           <Box
             sx={{
               overflow: "hidden",
@@ -131,13 +138,13 @@ export default function CourseCard({ course }: { course: StatelessCourse }) {
             >
               <Typography variant="h6">{course.name}</Typography>
               <Typography variant="caption">{course.description}</Typography>
-              {course.timeToComplete != undefined ?
+              {course.timeToComplete != undefined ? (
                 <Typography sx={{ alignSelf: "end" }} variant="blended">
                   {SecondsToTimeString(course.timeToComplete)}
                 </Typography>
-                :
+              ) : (
                 <></>
-              }
+              )}
 
               <Typography sx={{ textAlign: "center" }} variant="caption">
                 {CompletionStatusToString(completionStatus)}

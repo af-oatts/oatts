@@ -1,20 +1,20 @@
-import { Role, StatelessCourse, StatelessCourseContent } from "../model/OattsModel";
+import { Course, CourseContent, Role } from "../model/OattsModel";
 
-export function GetFlattenedRoleSpecificQuizzes(courses: StatelessCourse[], roles: Role[]) {
-    const flattenContent = (content: StatelessCourseContent) => {
-        let flat = [content];
-        if(content.children) {
-            content.children.forEach(c => flat.push(...flattenContent(c)));
-        }
-        return flat;
+export function getFlattenedRoleSpecificQuizzes(courses: Course[], roles: Role[]) {
+  const flattenContent = (content: CourseContent) => {
+    let flat = [content];
+    if (content.children) {
+      content.children.forEach((c) => flat.push(...flattenContent(c)));
     }
+    return flat;
+  };
 
-    let contents: StatelessCourseContent[] = []
-    for(let course of courses) {
-        if(!roles.some(role => course.roleIds.includes(role.id))) {
-            continue;
-        }
-        course.contents.forEach(content => contents.push(...flattenContent(content)))
+  let contents: CourseContent[] = [];
+  for (let course of courses) {
+    if (!roles.some((role) => course.roleIds.includes(role.id))) {
+      continue;
     }
-    return contents;
+    course.contents.forEach((content) => contents.push(...flattenContent(content)));
+  }
+  return contents;
 }

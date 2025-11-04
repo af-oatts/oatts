@@ -1,6 +1,5 @@
 import { ScormModel } from "./ScormModel";
 
-
 export type OattsManifest = {
   courses: StatelessCourse[];
   prequizzes?: StatelessCourse[];
@@ -11,56 +10,48 @@ export type OattsManifest = {
 };
 
 export type Course = {
-  id: string,
-  name: string,
-  roleIds: string[],
-  contents: CourseContent[],
-  img?: string,
-  description?: string,
-  paNumber?: string,
-  timeToComplete?: number,
-}
-
-
-export type CourseContent = {
-  id: string,
-  name: string,
-  type: CourseContentItemType,
-  entrypoint?: string,
-  description?: string,
-  children?: CourseContent[]
-  // ideally we'd just have the ContentState instead of both, but for now we can just have both and slowly
-  // move scorm stuff to our internal state
-  scormState?: ScormModel;
-  state: ContentState;
-}
-
-
-
-
-
-
+  id: string;
+  name: string;
+  roleIds: string[];
+  contents: StatelessCourseContent[];
+  img?: string;
+  description?: string;
+  paNumber?: string;
+  timeToComplete?: number;
+};
 
 export type StatelessCourse = {
-  id: string,
-  name: string,
-  roleIds: string[],
-  contents: StatelessCourseContent[],
-  img?: string,
-  description?: string,
-  paNumber?: string,
-  timeToComplete?: number,
-}
+  id: string;
+  name: string;
+  roleIds: string[];
+  contents: StatelessCourseContent[];
+  img?: string;
+  description?: string;
+  paNumber?: string;
+  timeToComplete?: number;
+};
 
+export type CourseContent = {
+  id: string;
+  name: string;
+  type: CourseContentItemType;
+  entrypoint?: string;
+  description?: string;
+  children?: CourseContent[];
+  // ideally we'd just have the ContentState instead of both, but for now we can just have both and slowly
+  // move scorm stuff to our internal state
+  // scormState?: ScormModel;
+  // state: ContentState;
+};
 
 export type StatelessCourseContent = {
-  id: string,
-  name: string,
-  type: CourseContentItemType,
-  entrypoint?: string,
-  description?: string,
-  children?: StatelessCourseContent[]
-}
+  id: string;
+  name: string;
+  type: CourseContentItemType;
+  entrypoint?: string;
+  description?: string;
+  children?: StatelessCourseContent[];
+};
 
 // Represents the types a course's contents can be.
 export enum CourseContentItemType {
@@ -69,19 +60,13 @@ export enum CourseContentItemType {
   PDF = "PDF",
   HTML = "HTML",
   UNKNOWN = "UNKNOWN",
-
 }
-
 
 export type Role = {
   id: string;
   name: string;
   general: boolean;
 };
-
-
-
-
 
 // Holds anything about a module that might change over time
 // Unlike module metadata, for example, the state is meant to change throughout the module's lifecycle.
@@ -91,10 +76,9 @@ export type ContentStateType = {
   completionStatus: CompletionStatus;
 };
 export type ContentState = {
-  contentID: string,
-  completionStatus: CompletionStatus
-}
-
+  contentID: string;
+  completionStatus: CompletionStatus;
+};
 
 export enum CompletionStatus {
   Unknown = 0,
@@ -102,7 +86,6 @@ export enum CompletionStatus {
   Started = 2,
   Completed = 3,
 }
-
 
 export class GenericResult {
   constructor(success: boolean = true, message: string | undefined = undefined) {
@@ -114,10 +97,9 @@ export class GenericResult {
   message: string | undefined;
 }
 
-
-export function CreateDefaultContentState(id: string) : ContentState {
+export function createDefaultContentState(id: string): ContentState {
   return {
     contentID: id,
     completionStatus: CompletionStatus.NotStarted,
-  }
+  };
 }

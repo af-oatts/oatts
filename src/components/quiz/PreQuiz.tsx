@@ -2,12 +2,12 @@ import { Box, Button, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import { TransitionParams } from "../../theme/TransitionParams";
-import { CompletionStatus, ContentState, Course, CourseContent } from "@/core/model/OattsModel";
+import { CompletionStatus, CourseContent } from "@/core/model/OattsModel";
 import { useRouteContext } from "@tanstack/react-router";
 import { UserStatusFlag } from "@/core/model/UserModel";
 import { addUserStatusFlag } from "../../core/authentication/UserStatusFlag";
 import { useMultiCompletionStatus } from "../../core/modules/hooks/useMultiCompletionStatus";
-import CourseViewer from "../module/CourseViewer";
+import CourseViewer from "../module/CourseView";
 import { LoadPreQuizzes } from "@/core/modules/ModuleLoader";
 
 export default function PreQuizPage({ onNext }: { onNext: () => void }) {
@@ -22,19 +22,18 @@ export default function PreQuizPage({ onNext }: { onNext: () => void }) {
     if (user == undefined || oattsManifest == undefined || oattsManifest.prequizzes == undefined) {
       return;
     }
-    LoadPreQuizzes(user, oattsManifest).then(prequizzes => {
+    LoadPreQuizzes(user, oattsManifest).then((prequizzes) => {
       setQuizzes(prequizzes);
       setQuizExists(true);
-    })
+    });
     return () => {
       mounted = false;
-    }
+    };
   }, []);
 
   useEffect(() => {
-    if (quizExists === false)
-      onComplete();
-  }, [quizExists])
+    if (quizExists === false) onComplete();
+  }, [quizExists]);
 
   let quizCompletionStatus = useMultiCompletionStatus(quizzes);
 

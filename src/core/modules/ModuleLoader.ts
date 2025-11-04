@@ -15,13 +15,10 @@ import { UserContextType } from "../../contexts/UserContext";
 import CoursesContext from "./ContentContext";
 import { ScormModel } from "../model/ScormModel";
 
-
-
-
 // TODO: Delete this!
 // Adds state to a raw course, returning a course.
 export async function StatefulifyRawCourse(course: StatelessCourse, user: User): Promise<Course> {
-  let statefulContents: CourseContent[] = []
+  let statefulContents: CourseContent[] = [];
   for (const content of course.contents) {
     let statefulContent = await StatefulifyRawContent(content, user);
     statefulContents.push(statefulContent);
@@ -36,20 +33,19 @@ export async function StatefulifyRawCourse(course: StatelessCourse, user: User):
     paNumber: course.paNumber,
     timeToComplete: course.timeToComplete,
     contents: statefulContents,
-  }
+  };
 }
 
-// TODO: Delete me 
+// TODO: Delete me
 export async function StatefulifyRawContent(content: StatelessCourseContent, user: User): Promise<CourseContent> {
   // Populate any children.
-  let statefulChildren: CourseContent[] | undefined = undefined
+  let statefulChildren: CourseContent[] | undefined = undefined;
   if (content.type === CourseContentItemType.SUBMODULE && content.children != null) {
     for (let child of content.children) {
       let statefulChild = await StatefulifyRawContent(child, user);
       if (statefulChildren == undefined) {
         statefulChildren = [statefulChild];
-      }
-      else {
+      } else {
         statefulChildren.push(statefulChild);
       }
     }
@@ -57,7 +53,7 @@ export async function StatefulifyRawContent(content: StatelessCourseContent, use
 
   let internalState = await GetContentState(user, content.id);
 
-  let scormState: ScormModel | undefined = undefined
+  let scormState: ScormModel | undefined = undefined;
 
   if (content.type === CourseContentItemType.SCORM) {
     const stateModel = await loadModel(user, content.id);
@@ -67,7 +63,6 @@ export async function StatefulifyRawContent(content: StatelessCourseContent, use
     }
   }
 
-
   return {
     id: content.id,
     name: content.name,
@@ -75,20 +70,33 @@ export async function StatefulifyRawContent(content: StatelessCourseContent, use
     description: content.description,
     entrypoint: content.entrypoint,
     children: statefulChildren,
-    state: internalState ?? {completionStatus: CompletionStatus.NotStarted, contentID: content.id},
-    scormState: scormState
-  }
-
+    state: internalState ?? { completionStatus: CompletionStatus.NotStarted, contentID: content.id },
+    scormState: scormState,
+  };
 }
 
+export async function getCourseContentState(user: User, content: CourseContent | StatelessCourseContent) {
+  let internalState = await GetContentState(user, content.id);
+
+  let scormState: ScormModel | undefined = undefined;
+
+  if (content.type === CourseContentItemType.SCORM) {
+    const stateModel = await loadModel(user, content.id);
+    scormState = stateModel;
+    if (internalState != undefined) {
+      internalState!.completionStatus = internalizeCompletionStatus(stateModel.cmi.completion_status);
+    }
+  }
+  return internalState ?? { completionStatus: CompletionStatus.NotStarted, contentID: content.id };
+}
 
 export async function LoadPreQuizzes(user: User, manifest: OattsManifest): Promise<CourseContent[]> {
-  let statefulQuizzes = []
+  let statefulQuizzes = [];
   if (!manifest.prequizzes) {
     return [];
   }
   for (let quiz of manifest.prequizzes) {
-    if (!quiz.roleIds.some(role => user.roles.includes(role))) {
+    if (!quiz.roleIds.some((role) => user.roles.includes(role))) {
       continue; // Not relevant to us.
     }
     let statefulQuiz = await StatefulifyRawCourse(quiz, user);
@@ -98,34 +106,36 @@ export async function LoadPreQuizzes(user: User, manifest: OattsManifest): Promi
 }
 
 // TODO: Delete me!
-export async function loadRequiredAndOptionalCourses({ context }: { context: { authentication: UserContextType; courses: CoursesContext; config: OattsManifest } }) {
+export async function loadRequiredAndOptionalCourses({
+  context,
+}: {
+  context: { authentication: UserContextType; courses: CoursesContext; config: OattsManifest };
+}) {
   const user = context.authentication.user;
   if (user === undefined) {
     console.error("No user set while attempting to retrieve modules");
     return { required: [], optional: [] };
   }
 
+  // debugger;
+  // let courses: Course[] = [];
+  // // Un-raw? Cook? Statefulify? The raw course.
+  // for (let rawCourse of context.config.courses) {
+  //   const statefulCourse = await StatefulifyRawCourse(rawCourse, user);
+  //   courses.push(statefulCourse);
+  // }
 
-  let courses: Course[] = []
-  // Un-raw? Cook? Statefulify? The raw course.
-  for (let rawCourse of context.config.courses) {
-    const statefulCourse = await StatefulifyRawCourse(rawCourse, user);
-    courses.push(statefulCourse);
-  }
+  // context.courses.courses = courses;
 
-  context.courses.courses = courses;
-
-
-  let focusedCourses: Course[] = [];
-  let supplementaryCourses: Course[] = [];
+  let focusedCourses: StatelessCourse[] = [];
+  let supplementaryCourses: StatelessCourse[] = [];
 
   // Sort focused and supplementary.
-  for (let course of courses) {
-    if (user.roles.some(role => course.roleIds.includes(role))) {
-      focusedCourses.push(course)
-    }
-    else {
-      supplementaryCourses.push(course)
+  for (let course of context.config.courses) {
+    if (user.roles.some((role) => course.roleIds.includes(role))) {
+      focusedCourses.push(course);
+    } else {
+      supplementaryCourses.push(course);
     }
   }
 
