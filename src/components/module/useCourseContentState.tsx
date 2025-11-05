@@ -45,7 +45,7 @@ export function useCourseContentStates(content: CourseContent[] | undefined): [C
 
 export function useContentController(): CourseController {
   const { courseId } = useParams({
-    from: `/_authenticated/_authorized/courses/$courseId/content/$contentId`,
+    from: `/_authenticated/_authorized/courses/$courseId`,
   });
   const [course] = useCourse(courseId);
   const [states, statesIsLoading] = useCourseContentStates(course?.contents);
