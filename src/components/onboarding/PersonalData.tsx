@@ -7,10 +7,14 @@ type FormError = {
   email?: string;
 };
 
-export default function PersonalData({ onComplete }: { onComplete(firstName: string, lastName: string, email: string, accessionLocation: string): void }) {
+export default function PersonalData({
+  onComplete,
+}: {
+  onComplete(firstName: string, lastName: string, email: string, accessionLocation: string): void;
+}) {
   const [error, setError] = useState<FormError>({});
   const { t } = useTranslation("welcome");
-  const centers = t("accessionCenters").split(",");
+  const centers = t("accessionCenters", { returnObjects: true }) as string[];
 
   return (
     <>
