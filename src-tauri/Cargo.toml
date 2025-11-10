@@ -36,6 +36,7 @@ pkcs8 = "0.10"
 rand = "0.8"
 sha2 = "0.10.9"
 base64 = "0.22"
+sanitise-file-name = "1.0.0"
 
 [dependencies.tauri-plugin-sql]
 git = "https://github.com/tauri-apps/plugins-workspace"
