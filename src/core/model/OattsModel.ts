@@ -1,9 +1,7 @@
-import { ScormModel } from "./ScormModel";
-
 export type OattsManifest = {
-  courses: StatelessCourse[];
-  prequizzes?: StatelessCourse[];
-  postquizzes?: StatelessCourse[];
+  courses: Course[];
+  prequizzes?: Course[];
+  postquizzes?: Course[];
   versionNumber?: string;
   allowDataCollection?: boolean;
   roles: Role[];
@@ -13,18 +11,7 @@ export type Course = {
   id: string;
   name: string;
   roleIds: string[];
-  contents: StatelessCourseContent[];
-  img?: string;
-  description?: string;
-  paNumber?: string;
-  timeToComplete?: number;
-};
-
-export type StatelessCourse = {
-  id: string;
-  name: string;
-  roleIds: string[];
-  contents: StatelessCourseContent[];
+  contents: CourseContent[];
   img?: string;
   description?: string;
   paNumber?: string;
@@ -38,19 +25,6 @@ export type CourseContent = {
   entrypoint?: string;
   description?: string;
   children?: CourseContent[];
-  // ideally we'd just have the ContentState instead of both, but for now we can just have both and slowly
-  // move scorm stuff to our internal state
-  // scormState?: ScormModel;
-  // state: ContentState;
-};
-
-export type StatelessCourseContent = {
-  id: string;
-  name: string;
-  type: CourseContentItemType;
-  entrypoint?: string;
-  description?: string;
-  children?: StatelessCourseContent[];
 };
 
 // Represents the types a course's contents can be.

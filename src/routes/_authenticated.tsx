@@ -21,7 +21,7 @@ function Layout() {
   const { user } = ctx.authentication;
 
   return (
-    <ContentStatesProvider user={user}>
+    <ContentStatesProvider>
       <ScormInitializer user={user}>
         <div style={{ display: "grid", width: "100%", height: "100%" }}>
           <Overlay />

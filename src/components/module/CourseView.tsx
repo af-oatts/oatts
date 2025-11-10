@@ -3,7 +3,7 @@ import { motion } from "motion/react";
 
 import { CourseContentView } from "./CourseContentView";
 import { CourseContentSideNav } from "./CourseContentSideNav";
-import { CourseController } from "./CourseController";
+import { CourseController } from "../../contexts/models/CourseController";
 
 export default function CourseView({ controller }: { controller: CourseController }) {
   return (

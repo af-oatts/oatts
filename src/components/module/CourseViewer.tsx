@@ -1,4 +1,4 @@
-// import { CompletionStatus, ContentState, CourseContent, StatelessCourseContent } from "@/core/model/OattsModel";
+// import { CompletionStatus, ContentState, CourseContent, CourseContent } from "@/core/model/OattsModel";
 // import { Box, Button, Divider, List, Typography } from "@mui/material";
 // import { motion, useAnimate } from "motion/react";
 // import { useEffect, useMemo, useState } from "react";
@@ -19,7 +19,7 @@
 //   paNumber,
 //   onEverythingCompleted,
 // }: {
-//   contents: StatelessCourseContent[];
+//   contents: CourseContent[];
 //   paNumber?: string;
 //   onEverythingCompleted?: () => void;
 // }) {
@@ -27,7 +27,7 @@
 //   const { states, isLoading } = useCourseContentStates(flattenedContents.map((c) => c.id));
 
 //   // TODO: It would probably be better to have a single object that holds contents AND state. A lot of edge cases would be resolved if we do that.
-//   const [content, setContent] = useState<StatelessCourseContent | undefined>(undefined);
+//   const [content, setContent] = useState<CourseContent | undefined>(undefined);
 //   const [state, setState] = useState<ContentState | undefined>(undefined);
 //   const [scope, animate] = useAnimate();
 //   const [hasNext, setHasNext] = useState(false);

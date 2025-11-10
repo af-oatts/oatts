@@ -36,10 +36,10 @@ export function CoursesView({
       })}
     >
       <Box sx={{ margin: "5px" }}>
-        {/* <DashboardStatusBar sx={{ height: "100%" }} courses={required} mayCollectData={mayCollectData} /> */}
+        <DashboardStatusBar sx={{ height: "100%" }} courses={required} mayCollectData={mayCollectData} />
       </Box>
       <CoursesRack label="Focused Modules" courses={required} />
-      {/* <CoursesRack label="Supplemental Modules" courses={optional} /> */}
+      <CoursesRack label="Supplemental Modules" courses={optional} />
       <Snackbar
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
         open={showUpdatePopup}

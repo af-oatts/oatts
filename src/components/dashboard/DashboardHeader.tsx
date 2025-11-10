@@ -23,7 +23,7 @@ export default function DashboardHeader() {
   const [menuAnchor, setMenuAnchor] = React.useState<HTMLElement | undefined>(undefined);
   const menuOpen = Boolean(menuAnchor);
   const userContext = React.useContext(UserContext);
-  const initials = `${userContext.user?.firstName[0].toUpperCase() ?? "?"}${userContext.user?.lastName[0].toUpperCase() ?? "?"}`;
+  const initials = `${userContext.user?.firstName[0]?.toUpperCase() ?? "?"}${userContext.user?.lastName[0]?.toUpperCase() ?? "?"}`;
   const email = userContext.user?.email ?? "unknown@email.com";
   const fullName = `${userContext.user?.firstName ?? "Unknown"} ${userContext.user?.lastName ?? "Unknown"}`;
   function handleLogout(_: React.MouseEvent<HTMLLIElement, MouseEvent>): void {
@@ -51,7 +51,7 @@ export default function DashboardHeader() {
       }}
     >
       <IconButtonLink size="small" color="default" to="/dashboard" sx={{ gridColumn: "1", width: "80px" }}>
-        <Home sx={{width: "100%", height:'100%'}}/>
+        <Home sx={{ width: "100%", height: "100%" }} />
       </IconButtonLink>
       <Box
         sx={{
@@ -83,7 +83,6 @@ export default function DashboardHeader() {
             anchorEl={menuAnchor}
             component={motion.ul}
             onClose={handleMenuClose}
-
             sx={{
               zIndex: "99999",
               p: 1,
@@ -107,10 +106,14 @@ export default function DashboardHeader() {
               </Box>
             </MenuItem>
             <Divider />
-            <MenuItem onClick={() => {setOverlay(<About/>); handleMenuClose();}}>
+            <MenuItem
+              onClick={() => {
+                setOverlay(<About />);
+                handleMenuClose();
+              }}
+            >
               <div style={{ paddingRight: "5px" }}>
                 <HelpRoundedIcon />
-
               </div>
               About
             </MenuItem>

@@ -5,7 +5,7 @@ export const Route = createFileRoute("/_authenticated/_authorized")({
   component: Layout,
   beforeLoad: ({ context }) => {
     if (context.authentication.user === undefined || !IsUserAuthorized(context.authentication.user)) {
-      throw redirect({ to: "/onboarding" });
+      throw redirect({ to: "/onboarding/intro" });
     }
   },
 });

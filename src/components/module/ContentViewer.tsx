@@ -1,4 +1,4 @@
-import { CompletionStatus, ContentState, CourseContentItemType, StatelessCourseContent } from "@/core/model/OattsModel";
+import { CompletionStatus, ContentState, CourseContentItemType, CourseContent } from "@/core/model/OattsModel";
 import { Box } from "@mui/material";
 import { useRouteContext } from "@tanstack/react-router";
 import { motion, useAnimate } from "motion/react";
@@ -6,9 +6,9 @@ import { useEffect, useRef } from "react";
 import { loadModel } from "../../core/scorm/ScormHelper";
 import { GetContentURL } from "@/core/modules/ModuleUtils";
 import { ScormStateToInternalState } from "@/core/scorm/ScormInternalizer";
-import { useSetContentState } from "@/contexts/hooks/useCourseContentState";
+import { useSetContentState } from "@/contexts/hooks/useSetContentState";
 
-export default function ContentViewer({ content, state }: { content: StatelessCourseContent, state: ContentState }) {
+export default function ContentViewer({ content, state }: { content: CourseContent; state: ContentState }) {
   const contentFrameRef = useRef<HTMLIFrameElement>(null);
   const [frameScope, frameAnimate] = useAnimate();
   const setContentState = useSetContentState();
@@ -43,7 +43,7 @@ export default function ContentViewer({ content, state }: { content: StatelessCo
         window.API_1484_11.SetUpdateStateCallback((scormState) => {
           let newState = ScormStateToInternalState(scormState, content.id);
           setContentState(content.id, newState);
-        })
+        });
       });
     }
   }, [content]);
@@ -62,7 +62,7 @@ export default function ContentViewer({ content, state }: { content: StatelessCo
     }
 
     frameAnimate(currentFrameScope, { opacity: 0.4, scale: 0.99 }, { duration: 0.25, ease: "easeIn" }).then(() => {
-      currentFrameRef.src = GetContentURL(content)
+      currentFrameRef.src = GetContentURL(content);
     });
   }, [content]);
 
@@ -76,14 +76,13 @@ export default function ContentViewer({ content, state }: { content: StatelessCo
     frameAnimate(currentFrameScope, { opacity: 1, scale: 1 }, { duration: 0.25, ease: "easeOut" });
   }
 
-
   // Wait a second then show next button if not scorm.
   useEffect(() => {
     if (content.type === CourseContentItemType.SCORM) {
       return;
     }
     const timeout = setTimeout(() => {
-      setContentState(content.id, {...state, completionStatus: CompletionStatus.Completed});
+      setContentState(content.id, { ...state, completionStatus: CompletionStatus.Completed });
     }, 1000);
     return () => clearTimeout(timeout);
   }, [content]);
@@ -102,7 +101,7 @@ export default function ContentViewer({ content, state }: { content: StatelessCo
           sx={{ width: "100%", height: "100%" }}
           ref={frameScope}
         >
-          <iframe style={{border: 0}} width="100%" height="100%" ref={contentFrameRef} onLoad={animateScope}></iframe>
+          <iframe style={{ border: 0 }} width="100%" height="100%" ref={contentFrameRef} onLoad={animateScope}></iframe>
         </Box>
       </Box>
     </Box>

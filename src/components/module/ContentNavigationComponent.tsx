@@ -1,7 +1,8 @@
 import { Button, Typography } from "@mui/material";
 
 import { useNavigate, useParams } from "@tanstack/react-router";
-import { ContentType } from "./ContentType";
+import { ContentType } from "../../contexts/models/ContentType";
+import { getFileRoute, getShortFileRoute } from "./getFileRoute";
 
 export function ContentNavigationComponent({
   next,
@@ -12,7 +13,9 @@ export function ContentNavigationComponent({
   contentName?: string;
   contentType?: ContentType;
 }) {
-  const { courseId } = useParams({ from: `/_authenticated/_authorized/courses/$courseId/${contentType}/$contentId` });
+  const FILE_ROUTE = getFileRoute(contentType);
+  const SHORT_FILE_ROUTE = getShortFileRoute(contentType);
+  const { courseId } = useParams({ from: FILE_ROUTE });
   const navigate = useNavigate();
 
   function toDashboard() {
@@ -21,7 +24,7 @@ export function ContentNavigationComponent({
 
   function nextItem() {
     if (next) {
-      navigate({ to: `/courses/$courseId/${contentType}/$contentId`, params: { courseId, contentId: next } });
+      navigate({ to: SHORT_FILE_ROUTE, params: { courseId, contentId: next } });
     }
   }
 
@@ -31,6 +34,21 @@ export function ContentNavigationComponent({
         <Typography variant="h6">{contentName} Complete</Typography>
         <Button sx={{ width: "10em", justifySelf: "end" }} variant="contained" onClick={nextItem}>
           Next
+        </Button>
+      </>
+    );
+  }
+
+  if (contentType === "prequiz") {
+    return (
+      <>
+        <Typography variant="h6">PreQuiz Complete</Typography>
+        <Button
+          sx={{ width: "10em", justifySelf: "end" }}
+          variant="contained"
+          onClick={() => navigate({ to: "/onboarding/preQuizComplete" })}
+        >
+          Continue
         </Button>
       </>
     );

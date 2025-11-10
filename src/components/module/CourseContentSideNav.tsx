@@ -1,12 +1,12 @@
 import { Box, List } from "@mui/material";
 import { ContentMenuItem } from "@/components/common/ContentMenu";
 import { useNavigate, useParams } from "@tanstack/react-router";
-import { CourseController } from "./CourseController";
-
-const SHORT_ROUTE = "/courses/$courseId/content/$contentId";
-const FILE_ROUTE = "/_authenticated/_authorized/courses/$courseId/content/$contentId";
+import { CourseController } from "../../contexts/models/CourseController";
+import { getFileRoute, getShortFileRoute } from "./getFileRoute";
 
 export function CourseContentSideNav({ controller }: { controller: CourseController }) {
+  const FILE_ROUTE = getFileRoute(controller.contentType);
+  const SHORT_ROUTE = getShortFileRoute(controller.contentType);
   const { courseId, contentId } = useParams({ from: FILE_ROUTE });
   const navigate = useNavigate({ from: SHORT_ROUTE });
 

@@ -1,7 +1,6 @@
-import { Course, CourseContent, OattsManifest, StatelessCourseContent } from "@/core/model/OattsModel";
+import { Course, CourseContent, OattsManifest } from "@/core/model/OattsModel";
 import LoadConfig from "@/core/utils/ConfigLoader";
 import { getFlattenedRoleSpecificQuizzes } from "@/core/utils/QuizUtils";
-import { useUser } from "@/routes/_authenticated/_authorized/dashboard";
 import { createContext, useContext, useEffect, useState } from "react";
 
 type ManifestContextType = {
@@ -62,7 +61,7 @@ export function useCourse(courseId: string): [Course | undefined, boolean] {
   return [course, manifestContext.isLoading];
 }
 
-export function useCourseContent(courseId: string, contentId: string): [StatelessCourseContent | undefined, boolean] {
+export function useCourseContent(courseId: string, contentId: string): [CourseContent | undefined, boolean] {
   const manifestContext = useManifestContext();
 
   const course = manifestContext.config.courses.find((x) => x.id == courseId);

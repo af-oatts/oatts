@@ -1,4 +1,4 @@
-import { CompletionStatus, StatelessCourse } from "@/core/model/OattsModel";
+import { CompletionStatus, Course } from "@/core/model/OattsModel";
 import { Box, Card, CardContent, IconButton, Menu, MenuItem, Typography, useTheme } from "@mui/material";
 import CoursePreviewImage from "../module/ModulePreviewImage";
 import { AnimatePresence, motion } from "motion/react";
@@ -8,20 +8,17 @@ import { SecondsToTimeString } from "../../core/utils/TimeStuff";
 import { useRouter } from "@tanstack/react-router";
 import { MoreVert } from "@mui/icons-material";
 import { useState } from "react";
-import { useCourseCompletionStatus, useResetCourse } from "@/contexts/hooks/useCourseContentState";
+import { useCourseCompletionStatus } from "@/contexts/hooks/useCourseCompletionStatus";
+import { useResetCourse } from "@/contexts/hooks/useResetCourse";
 
-export default function CourseCard({ course }: { course: StatelessCourse }) {
+export default function CourseCard({ course }: { course: Course }) {
   let [menuAnchor, setMenuAnchor] = useState<null | HTMLElement>(null);
-  console.log({ course });
-  // TODO FIX
-  const completionStatus = useCourseCompletionStatus(course);
-  // const completionStatus: CompletionStatus = 0;
-  // const completed = false;
+  const [completionStatus, _] = useCourseCompletionStatus(course);
   const router = useRouter();
-  // TODO FIX
-  const completed = completionStatus === CompletionStatus.Completed;
   const theme = useTheme();
   const resetCourse = useResetCourse();
+
+  const isCompleted = completionStatus === CompletionStatus.Completed;
 
   const closeMenu = () => setMenuAnchor(null);
   const resetProgress = () =>
@@ -118,7 +115,7 @@ export default function CourseCard({ course }: { course: StatelessCourse }) {
               backgroundColor: "inherit",
             }}
           >
-            <CoursePreviewImage completed={completed} src={GetCourseImageURL(course)} name={course.name} />
+            <CoursePreviewImage completed={isCompleted} src={GetCourseImageURL(course)} name={course.name} />
           </Box>
           <Box
             sx={{

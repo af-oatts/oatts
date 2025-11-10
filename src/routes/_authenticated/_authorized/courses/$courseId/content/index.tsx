@@ -1,5 +1,5 @@
 import { createFileRoute, Navigate, useParams } from "@tanstack/react-router";
-import { useContentController } from "@/components/module/useCourseContentState";
+import { useContentController } from "@/contexts/hooks/useContentController";
 
 export const Route = createFileRoute("/_authenticated/_authorized/courses/$courseId/content/")({
   component: RouteComponent,
