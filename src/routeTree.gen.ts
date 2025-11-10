@@ -30,7 +30,6 @@ import { Route as AuthenticatedAuthorizedCoursesCourseIdImport } from './routes/
 import { Route as AuthenticatedOnboardingCourseIdPrequizIndexImport } from './routes/_authenticated/onboarding/$courseId/prequiz/index'
 import { Route as AuthenticatedOnboardingCourseIdPrequizContentIdImport } from './routes/_authenticated/onboarding/$courseId/prequiz/$contentId'
 import { Route as AuthenticatedAuthorizedCoursesCourseIdContentIndexImport } from './routes/_authenticated/_authorized/courses/$courseId/content/index'
-import { Route as AuthenticatedAuthorizedCoursesCourseIdPrequizContentIdImport } from './routes/_authenticated/_authorized/courses/$courseId/prequiz/$contentId'
 import { Route as AuthenticatedAuthorizedCoursesCourseIdPostquizContentIdImport } from './routes/_authenticated/_authorized/courses/$courseId/postquiz/$contentId'
 import { Route as AuthenticatedAuthorizedCoursesCourseIdContentContentIdImport } from './routes/_authenticated/_authorized/courses/$courseId/content/$contentId'
 
@@ -156,13 +155,6 @@ const AuthenticatedAuthorizedCoursesCourseIdContentIndexRoute =
   AuthenticatedAuthorizedCoursesCourseIdContentIndexImport.update({
     id: '/content/',
     path: '/content/',
-    getParentRoute: () => AuthenticatedAuthorizedCoursesCourseIdRoute,
-  } as any)
-
-const AuthenticatedAuthorizedCoursesCourseIdPrequizContentIdRoute =
-  AuthenticatedAuthorizedCoursesCourseIdPrequizContentIdImport.update({
-    id: '/prequiz/$contentId',
-    path: '/prequiz/$contentId',
     getParentRoute: () => AuthenticatedAuthorizedCoursesCourseIdRoute,
   } as any)
 
@@ -324,13 +316,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAuthorizedCoursesCourseIdPostquizContentIdImport
       parentRoute: typeof AuthenticatedAuthorizedCoursesCourseIdImport
     }
-    '/_authenticated/_authorized/courses/$courseId/prequiz/$contentId': {
-      id: '/_authenticated/_authorized/courses/$courseId/prequiz/$contentId'
-      path: '/prequiz/$contentId'
-      fullPath: '/courses/$courseId/prequiz/$contentId'
-      preLoaderRoute: typeof AuthenticatedAuthorizedCoursesCourseIdPrequizContentIdImport
-      parentRoute: typeof AuthenticatedAuthorizedCoursesCourseIdImport
-    }
     '/_authenticated/_authorized/courses/$courseId/content/': {
       id: '/_authenticated/_authorized/courses/$courseId/content/'
       path: '/content'
@@ -346,7 +331,6 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedAuthorizedCoursesCourseIdRouteChildren {
   AuthenticatedAuthorizedCoursesCourseIdContentContentIdRoute: typeof AuthenticatedAuthorizedCoursesCourseIdContentContentIdRoute
   AuthenticatedAuthorizedCoursesCourseIdPostquizContentIdRoute: typeof AuthenticatedAuthorizedCoursesCourseIdPostquizContentIdRoute
-  AuthenticatedAuthorizedCoursesCourseIdPrequizContentIdRoute: typeof AuthenticatedAuthorizedCoursesCourseIdPrequizContentIdRoute
   AuthenticatedAuthorizedCoursesCourseIdContentIndexRoute: typeof AuthenticatedAuthorizedCoursesCourseIdContentIndexRoute
 }
 
@@ -356,8 +340,6 @@ const AuthenticatedAuthorizedCoursesCourseIdRouteChildren: AuthenticatedAuthoriz
       AuthenticatedAuthorizedCoursesCourseIdContentContentIdRoute,
     AuthenticatedAuthorizedCoursesCourseIdPostquizContentIdRoute:
       AuthenticatedAuthorizedCoursesCourseIdPostquizContentIdRoute,
-    AuthenticatedAuthorizedCoursesCourseIdPrequizContentIdRoute:
-      AuthenticatedAuthorizedCoursesCourseIdPrequizContentIdRoute,
     AuthenticatedAuthorizedCoursesCourseIdContentIndexRoute:
       AuthenticatedAuthorizedCoursesCourseIdContentIndexRoute,
   }
@@ -481,7 +463,6 @@ export interface FileRoutesByFullPath {
   '/onboarding/$courseId/prequiz': typeof AuthenticatedOnboardingCourseIdPrequizIndexRoute
   '/courses/$courseId/content/$contentId': typeof AuthenticatedAuthorizedCoursesCourseIdContentContentIdRoute
   '/courses/$courseId/postquiz/$contentId': typeof AuthenticatedAuthorizedCoursesCourseIdPostquizContentIdRoute
-  '/courses/$courseId/prequiz/$contentId': typeof AuthenticatedAuthorizedCoursesCourseIdPrequizContentIdRoute
   '/courses/$courseId/content': typeof AuthenticatedAuthorizedCoursesCourseIdContentIndexRoute
 }
 
@@ -504,7 +485,6 @@ export interface FileRoutesByTo {
   '/onboarding/$courseId/prequiz': typeof AuthenticatedOnboardingCourseIdPrequizIndexRoute
   '/courses/$courseId/content/$contentId': typeof AuthenticatedAuthorizedCoursesCourseIdContentContentIdRoute
   '/courses/$courseId/postquiz/$contentId': typeof AuthenticatedAuthorizedCoursesCourseIdPostquizContentIdRoute
-  '/courses/$courseId/prequiz/$contentId': typeof AuthenticatedAuthorizedCoursesCourseIdPrequizContentIdRoute
   '/courses/$courseId/content': typeof AuthenticatedAuthorizedCoursesCourseIdContentIndexRoute
 }
 
@@ -530,7 +510,6 @@ export interface FileRoutesById {
   '/_authenticated/onboarding/$courseId/prequiz/': typeof AuthenticatedOnboardingCourseIdPrequizIndexRoute
   '/_authenticated/_authorized/courses/$courseId/content/$contentId': typeof AuthenticatedAuthorizedCoursesCourseIdContentContentIdRoute
   '/_authenticated/_authorized/courses/$courseId/postquiz/$contentId': typeof AuthenticatedAuthorizedCoursesCourseIdPostquizContentIdRoute
-  '/_authenticated/_authorized/courses/$courseId/prequiz/$contentId': typeof AuthenticatedAuthorizedCoursesCourseIdPrequizContentIdRoute
   '/_authenticated/_authorized/courses/$courseId/content/': typeof AuthenticatedAuthorizedCoursesCourseIdContentIndexRoute
 }
 
@@ -555,7 +534,6 @@ export interface FileRouteTypes {
     | '/onboarding/$courseId/prequiz'
     | '/courses/$courseId/content/$contentId'
     | '/courses/$courseId/postquiz/$contentId'
-    | '/courses/$courseId/prequiz/$contentId'
     | '/courses/$courseId/content'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -577,7 +555,6 @@ export interface FileRouteTypes {
     | '/onboarding/$courseId/prequiz'
     | '/courses/$courseId/content/$contentId'
     | '/courses/$courseId/postquiz/$contentId'
-    | '/courses/$courseId/prequiz/$contentId'
     | '/courses/$courseId/content'
   id:
     | '__root__'
@@ -601,7 +578,6 @@ export interface FileRouteTypes {
     | '/_authenticated/onboarding/$courseId/prequiz/'
     | '/_authenticated/_authorized/courses/$courseId/content/$contentId'
     | '/_authenticated/_authorized/courses/$courseId/postquiz/$contentId'
-    | '/_authenticated/_authorized/courses/$courseId/prequiz/$contentId'
     | '/_authenticated/_authorized/courses/$courseId/content/'
   fileRoutesById: FileRoutesById
 }
@@ -721,7 +697,6 @@ export const routeTree = rootRoute
       "children": [
         "/_authenticated/_authorized/courses/$courseId/content/$contentId",
         "/_authenticated/_authorized/courses/$courseId/postquiz/$contentId",
-        "/_authenticated/_authorized/courses/$courseId/prequiz/$contentId",
         "/_authenticated/_authorized/courses/$courseId/content/"
       ]
     },
@@ -739,10 +714,6 @@ export const routeTree = rootRoute
     },
     "/_authenticated/_authorized/courses/$courseId/postquiz/$contentId": {
       "filePath": "_authenticated/_authorized/courses/$courseId/postquiz/$contentId.tsx",
-      "parent": "/_authenticated/_authorized/courses/$courseId"
-    },
-    "/_authenticated/_authorized/courses/$courseId/prequiz/$contentId": {
-      "filePath": "_authenticated/_authorized/courses/$courseId/prequiz/$contentId.tsx",
       "parent": "/_authenticated/_authorized/courses/$courseId"
     },
     "/_authenticated/_authorized/courses/$courseId/content/": {
