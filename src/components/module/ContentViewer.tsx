@@ -5,6 +5,7 @@ import { motion, useAnimate } from "motion/react";
 import { useEffect, useRef } from "react";
 import { loadModel } from "../../core/scorm/ScormHelper";
 import { saveContentState } from "../../core/database/Content";
+import { setupCSPViolationReporting } from "../../utils/CSPHelper";
 
 export default function ContentViewer({ content }: { content: ContentItem }) {
   const contentFrameRef = useRef<HTMLIFrameElement>(null);
@@ -25,6 +26,8 @@ export default function ContentViewer({ content }: { content: ContentItem }) {
   }
   useEffect(() => {
     preventUnsavedChangesPopup();
+    // Setup CSP violation reporting for security monitoring
+    setupCSPViolationReporting();
   }, [content]);
 
   useEffect(() => {
@@ -55,7 +58,16 @@ export default function ContentViewer({ content }: { content: ContentItem }) {
     }
 
     frameAnimate(currentFrameScope, { opacity: 0.4, scale: 0.99 }, { duration: 0.25, ease: "easeIn" }).then(() => {
-      currentFrameRef.src = content.content ?? "";
+      // Security: Set iframe src with additional security attributes
+      const contentUrl = content.content ?? "";
+      currentFrameRef.src = contentUrl;
+
+      // Apply security attributes to iframe
+      currentFrameRef.setAttribute("sandbox", "allow-scripts allow-same-origin allow-forms allow-popups allow-modals");
+      currentFrameRef.setAttribute("referrerpolicy", "strict-origin-when-cross-origin");
+
+      // Log content loading for security monitoring
+      console.log(`Loading SCORM content: ${contentUrl.substring(0, 100)}...`);
     });
   }, [content]);
 
@@ -94,7 +106,16 @@ export default function ContentViewer({ content }: { content: ContentItem }) {
           sx={{ width: "100%", height: "100%" }}
           ref={frameScope}
         >
-          <iframe style={{border: 0}} width="100%" height="100%" ref={contentFrameRef} onLoad={animateScope}></iframe>
+          <iframe
+            style={{ border: 0 }}
+            width="100%"
+            height="100%"
+            ref={contentFrameRef}
+            onLoad={animateScope}
+            sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-modals"
+            referrerPolicy="strict-origin-when-cross-origin"
+            title="SCORM Content Viewer"
+          ></iframe>
         </Box>
       </Box>
     </Box>
