@@ -1,32 +1,24 @@
 import {
-  ContentState,
   OattsManifest,
   StatelessCourse,
   Course,
   CourseContent,
   CourseContentItemType,
   StatelessCourseContent,
+  CompletionStatus,
 } from "@/core/model/OattsModel";
 import User from "@/core/model/UserModel";
 import { loadModel } from "../scorm/ScormHelper";
 import { internalizeCompletionStatus } from "../scorm/ScormInternalizer";
-import { GetInternalContentState } from "../database/Content";
+import { GetContentState } from "../database/Content";
 import { UserContextType } from "../../contexts/UserContext";
 import CoursesContext from "./ContentContext";
 import { ScormModel } from "../model/ScormModel";
 
 
 
-export async function StatefulifyRawCourses(user: User, courses: StatelessCourse[]): Promise<Course[]> {
-  let statefulCourses: Course[] = []
-  for (let course of courses) {
-    let statefulCourse = await StatefulifyRawCourse(course, user);
-    statefulCourses.push(statefulCourse);
-  }
-  return statefulCourses;
-}
 
-
+// TODO: Delete this!
 // Adds state to a raw course, returning a course.
 export async function StatefulifyRawCourse(course: StatelessCourse, user: User): Promise<Course> {
   let statefulContents: CourseContent[] = []
@@ -47,7 +39,8 @@ export async function StatefulifyRawCourse(course: StatelessCourse, user: User):
   }
 }
 
-async function StatefulifyRawContent(content: StatelessCourseContent, user: User): Promise<CourseContent> {
+// TODO: Delete me 
+export async function StatefulifyRawContent(content: StatelessCourseContent, user: User): Promise<CourseContent> {
   // Populate any children.
   let statefulChildren: CourseContent[] | undefined = undefined
   if (content.type === CourseContentItemType.SUBMODULE && content.children != null) {
@@ -62,8 +55,7 @@ async function StatefulifyRawContent(content: StatelessCourseContent, user: User
     }
   }
 
-
-  let internalState = await GetInternalContentState(user, content.id);
+  let internalState = await GetContentState(user, content.id);
 
   let scormState: ScormModel | undefined = undefined
 
@@ -75,6 +67,7 @@ async function StatefulifyRawContent(content: StatelessCourseContent, user: User
     }
   }
 
+
   return {
     id: content.id,
     name: content.name,
@@ -82,7 +75,7 @@ async function StatefulifyRawContent(content: StatelessCourseContent, user: User
     description: content.description,
     entrypoint: content.entrypoint,
     children: statefulChildren,
-    state: internalState ?? new ContentState(),
+    state: internalState ?? {completionStatus: CompletionStatus.NotStarted, contentID: content.id},
     scormState: scormState
   }
 
@@ -104,6 +97,7 @@ export async function LoadPreQuizzes(user: User, manifest: OattsManifest): Promi
   return statefulQuizzes;
 }
 
+// TODO: Delete me!
 export async function loadRequiredAndOptionalCourses({ context }: { context: { authentication: UserContextType; courses: CoursesContext; config: OattsManifest } }) {
   const user = context.authentication.user;
   if (user === undefined) {

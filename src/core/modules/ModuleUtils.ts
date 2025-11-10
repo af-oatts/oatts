@@ -1,15 +1,17 @@
-import { CompletionStatus, CourseContent, Course } from "@/core/model/OattsModel";
+import { CompletionStatus, CourseContent, Course, StatelessCourseContent, StatelessCourse } from "@/core/model/OattsModel";
 import { OATTS_ROOT } from "../utils/Globals";
 
-export function calculateCourseCompletionStatus(course: Course): CompletionStatus {
+
+
+export function calculateCourseCompletionStatus(course: StatelessCourse): CompletionStatus {
   return calculateMultiContentCompletionStatus(course.contents);
 }
-
+// TODO: Delete me.
 export function calculateMultiContentCompletionStatus(contents: CourseContent[]): CompletionStatus {
   let statuses = contents.map(CalculateContentCompletionStatus);
   return ReduceCompletionStatus(statuses);
 }
-
+// TODO: deleteme 
 export function checkIfRequirementsAreComplete(courses: Course[]): boolean {
   return courses.every((course) => calculateCourseCompletionStatus(course) === CompletionStatus.Completed);
 }
@@ -73,12 +75,14 @@ function FlattenContentStatuses(content: CourseContent): CompletionStatus[] {
   return statuses;
 }
 
-export function FlattenContents(contents: CourseContent[]): CourseContent[] {
+
+
+export function FlattenContents(contents: StatelessCourseContent[]): StatelessCourseContent[] {
   const flattenedContents = contents.flatMap(FlattenContentItem);
   return flattenedContents;
 }
 
-function FlattenContentItem(content: CourseContent): CourseContent[] {
+function FlattenContentItem(content: StatelessCourseContent): StatelessCourseContent[] {
   if (Array.isArray(content.children)) {
     return content.children.flatMap(FlattenContentItem);
   }
@@ -87,7 +91,7 @@ function FlattenContentItem(content: CourseContent): CourseContent[] {
 }
 
 
-export function GetContentURL(content: CourseContent) {
+export function GetContentURL(content: StatelessCourseContent) {
   return `${OATTS_ROOT}/content/${content.id}/${content.entrypoint}`
 }
 

@@ -1,15 +1,17 @@
-import { CompletionStatus, CourseContent, CourseContentItemType } from "@/core/model/OattsModel";
+import { CompletionStatus, ContentState, CourseContentItemType, StatelessCourseContent } from "@/core/model/OattsModel";
 import { Box } from "@mui/material";
 import { useRouteContext } from "@tanstack/react-router";
 import { motion, useAnimate } from "motion/react";
 import { useEffect, useRef } from "react";
 import { loadModel } from "../../core/scorm/ScormHelper";
-import { saveContentState } from "../../core/database/Content";
 import { GetContentURL } from "@/core/modules/ModuleUtils";
+import { ScormStateToInternalState } from "@/core/scorm/ScormInternalizer";
+import { useSetContentState } from "@/contexts/hooks/useCourseContentState";
 
-export default function ContentViewer({ content }: { content: CourseContent }) {
+export default function ContentViewer({ content, state }: { content: StatelessCourseContent, state: ContentState }) {
   const contentFrameRef = useRef<HTMLIFrameElement>(null);
   const [frameScope, frameAnimate] = useAnimate();
+  const setContentState = useSetContentState();
 
   let user = useRouteContext({
     from: "/_authenticated",
@@ -38,6 +40,10 @@ export default function ContentViewer({ content }: { content: CourseContent }) {
       loadModel(user, content.id).then((model) => {
         window.API_1484_11.SetModel(model);
         window.API_1484_11.SetContent(content);
+        window.API_1484_11.SetUpdateStateCallback((scormState) => {
+          let newState = ScormStateToInternalState(scormState, content.id);
+          setContentState(content.id, newState);
+        })
       });
     }
   }, [content]);
@@ -70,13 +76,14 @@ export default function ContentViewer({ content }: { content: CourseContent }) {
     frameAnimate(currentFrameScope, { opacity: 1, scale: 1 }, { duration: 0.25, ease: "easeOut" });
   }
 
+
+  // Wait a second then show next button if not scorm.
   useEffect(() => {
     if (content.type === CourseContentItemType.SCORM) {
       return;
     }
     const timeout = setTimeout(() => {
-      content.state.completionStatus = CompletionStatus.Completed;
-      saveContentState(user!, content);
+      setContentState(content.id, {...state, completionStatus: CompletionStatus.Completed});
     }, 1000);
     return () => clearTimeout(timeout);
   }, [content]);

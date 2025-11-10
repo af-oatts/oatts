@@ -1,4 +1,4 @@
-import { CompletionStatus, Course } from "@/core/model/OattsModel";
+import { CompletionStatus, Course, StatelessCourse } from "@/core/model/OattsModel";
 import { Box, Card, CardContent, IconButton, Menu, MenuItem, Typography, useTheme } from "@mui/material";
 import CoursePreviewImage from "../module/ModulePreviewImage";
 import { AnimatePresence, motion } from "motion/react";
@@ -9,24 +9,19 @@ import { useAuth } from "@/contexts/hooks/useAuth";
 import { useRouter } from "@tanstack/react-router";
 import { MoreVert } from "@mui/icons-material";
 import { useState } from "react";
+import { useCourseCompletionStatus, useResetCourse } from "@/contexts/hooks/useCourseContentState";
 
-export default function CourseCard({ course }: { course: Course }) {
+export default function CourseCard({ course }: { course: StatelessCourse }) {
   let [menuAnchor, setMenuAnchor] = useState<null | HTMLElement>(null);
-  const completionStatus = calculateCourseCompletionStatus(course);
-  const { user } = useAuth();
+  const completionStatus = useCourseCompletionStatus();
   const router = useRouter();
   const completed = completionStatus === CompletionStatus.Completed;
   const theme = useTheme();
+  const resetCourse = useResetCourse();
 
 
   const closeMenu = () => setMenuAnchor(null);
-  const resetProgress = () => Promise.all(
-    course.contents
-      .map((x) => x.id)
-      .map((id) => {
-        user && resetUserAssessment(user, id);
-      }),
-  ).finally(() => {
+  const resetProgress = () => resetCourse(course).finally(() => {
     router.invalidate();
   });
 

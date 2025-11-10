@@ -7,7 +7,7 @@ import { useRouteContext } from "@tanstack/react-router";
 import { UserStatusFlag } from "@/core/model/UserModel";
 import { addUserStatusFlag } from "../../core/authentication/UserStatusFlag";
 import { useMultiCompletionStatus } from "../../core/modules/hooks/useMultiCompletionStatus";
-import ModuleViewer from "../module/ModuleViewer";
+import CourseViewer from "../module/CourseViewer";
 import { LoadPreQuizzes } from "@/core/modules/ModuleLoader";
 
 export default function PreQuizPage({ onNext }: { onNext: () => void }) {
@@ -72,7 +72,7 @@ export default function PreQuizPage({ onNext }: { onNext: () => void }) {
   return (
     <>
       <Box width="100%" height="100%">
-        <ModuleViewer contents={quizzes}></ModuleViewer>
+        <CourseViewer contents={quizzes}></CourseViewer>
       </Box>
     </>
   );
