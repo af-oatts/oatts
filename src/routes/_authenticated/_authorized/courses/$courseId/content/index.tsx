@@ -16,5 +16,10 @@ function RouteComponent() {
     return <Navigate to="/courses/$courseId/content/$contentId" params={{ courseId, contentId }} />;
   }
 
+  const fallback = controller.course?.contents[0]?.id;
+  if (fallback) {
+    return <Navigate to="/courses/$courseId/content/$contentId" params={{ courseId, contentId: fallback }} />;
+  }
+
   return <></>;
 }
