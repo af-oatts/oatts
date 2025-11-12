@@ -16,13 +16,9 @@ function isCourseStarted(course: Course, states: ContentStateMap) {
 
 export function useCourseCompletionStatus(course: Course): [CompletionStatus, boolean] {
   const [states, isLoading] = useCourseContentStates(course.contents);
-  const [status, setStatus] = useState<CompletionStatus>(CompletionStatus.Unknown);
 
-  useEffect(() => {
-    if (isCourseComplete(course, states || {})) setStatus(CompletionStatus.Completed);
-    else if (isCourseStarted(course, states || {})) setStatus(CompletionStatus.Started);
-    else setStatus(CompletionStatus.NotStarted);
-  }, [course, states]);
-
-  return [status, isLoading];
+  if (isLoading) return [CompletionStatus.Unknown, isLoading];
+  else if (isCourseComplete(course, states || {})) return [CompletionStatus.Completed, isLoading];
+  else if (isCourseStarted(course, states || {})) return [CompletionStatus.Started, isLoading];
+  else return [CompletionStatus.NotStarted, isLoading];
 }
