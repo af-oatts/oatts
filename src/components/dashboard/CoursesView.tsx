@@ -1,13 +1,21 @@
 import { Alert, Box, Button, Snackbar, Stack, Typography } from "@mui/material";
 import { Link } from "@tanstack/react-router";
 
-import CourseCard from "@/components/common/ModuleCard";
+import CourseCard from "@/components/common/CourseCard";
 import DashboardStatusBar from "@/components/dashboard/DashboardStatusBar";
 import { Course } from "@/core/model/OattsModel";
 import CheckForUpdates from "@/core/modules/UpdateChecker";
 import { useEffect, useState } from "react";
 
-export function CoursesView({ required, optional, mayCollectData}: { required: Course[]; optional: Course[], mayCollectData: boolean}) {
+export function CoursesView({
+  required,
+  optional,
+  mayCollectData,
+}: {
+  required: Course[];
+  optional: Course[];
+  mayCollectData: boolean;
+}) {
   const [showUpdatePopup, setShowUpdatePopup] = useState(false);
   useEffect(() => {
     CheckForUpdates().then((u) => {
@@ -15,7 +23,7 @@ export function CoursesView({ required, optional, mayCollectData}: { required: C
         setShowUpdatePopup(true);
       }
     });
-  }, [])
+  }, []);
   return (
     <Box
       sx={(theme) => ({
@@ -38,10 +46,20 @@ export function CoursesView({ required, optional, mayCollectData}: { required: C
         onClose={() => setShowUpdatePopup(false)}
       >
         <Alert severity="info" variant="filled" sx={{ width: "100%" }}>
-          <Typography fontWeight='bold'>A new version of OATTS is available</Typography>
-          <Stack direction='row' gap={1} p={1} >
-            <Button variant="contained" size="small" sx={{width: '70%'}} href={"https://af-oatts.github.io/" }target="_blank">Update</Button>
-            <Button variant="contained" color="success"  size="small" onClick={() => setShowUpdatePopup(false)}>Ignore</Button>
+          <Typography fontWeight="bold">A new version of OATTS is available</Typography>
+          <Stack direction="row" gap={1} p={1}>
+            <Button
+              variant="contained"
+              size="small"
+              sx={{ width: "70%" }}
+              href={"https://af-oatts.github.io/"}
+              target="_blank"
+            >
+              Update
+            </Button>
+            <Button variant="contained" color="success" size="small" onClick={() => setShowUpdatePopup(false)}>
+              Ignore
+            </Button>
           </Stack>
         </Alert>
       </Snackbar>
@@ -80,7 +98,7 @@ export function CoursesRack({ label, courses }: { label: string; courses: Course
       >
         {courses.map((course, idx) => (
           <Box key={idx} sx={{ height: "100%" }}>
-            <Link to={`/courses/$courseId`} style={{ textDecoration: 'none' }} params={{ courseId: course.id }}>
+            <Link to={`/courses/$courseId/content`} style={{ textDecoration: "none" }} params={{ courseId: course.id }}>
               <CourseCard course={course} />
             </Link>
           </Box>

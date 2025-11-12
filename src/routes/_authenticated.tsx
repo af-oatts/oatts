@@ -20,13 +20,10 @@ function Layout() {
 
   const { user } = ctx.authentication;
 
-
   return (
-    <ContentStatesProvider manifest={ctx.manifest} user={user}>
+    <ContentStatesProvider>
       <ScormInitializer user={user}>
-
         <div style={{ display: "grid", width: "100%", height: "100%" }}>
-
           <Overlay />
           <div style={{ gridArea: "1/1", zIndex: 0 }}>
             <Stack sx={{ height: "100%", width: "100%", position: "relative", overflow: "hidden" }}>
@@ -41,32 +38,32 @@ function Layout() {
   );
 }
 
-// ScormApi calls useSetContentState, which means it must be UNDER contentstatesprovider. 
-const ScormInitializer = ({ user, children }: { user: User | undefined, children: React.ReactNode }) => {
+// ScormApi calls useSetContentState, which means it must be UNDER contentstatesprovider.
+const ScormInitializer = ({ user, children }: { user: User | undefined; children: React.ReactNode }) => {
   let [api, _] = useState<IScormApi>(new ScormApi());
   window.API_1484_11 = api;
   if (user !== undefined) {
     api.SetUser(user);
   }
-  return <>
-    {children}
-  </>
-}
-
-
+  return <>{children}</>;
+};
 
 const Overlay = () => {
   const content = useOverlayContent();
   if (content == null) {
-    return <></>
+    return <></>;
   }
-  return (<div style={{
-    gridArea: "1/1",
-    zIndex: 999,
-    width: "100vw",
-    height: "100vh",
-    backgroundColor: "transparent"
-  }}>
-    {content}
-  </div>)
-}
+  return (
+    <div
+      style={{
+        gridArea: "1/1",
+        zIndex: 999,
+        width: "100vw",
+        height: "100vh",
+        backgroundColor: "transparent",
+      }}
+    >
+      {content}
+    </div>
+  );
+};

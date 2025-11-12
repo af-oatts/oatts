@@ -3,9 +3,8 @@ import { useNavigate, useRouteContext } from "@tanstack/react-router";
 import { useMemo } from "react";
 import { addUserStatusFlag } from "../../core/authentication/UserStatusFlag";
 import { UserStatusFlag } from "@/core/model/UserModel";
-import CourseViewer from "../module/CourseViewer";
-import { GetFlattenedRoleSpecificQuizzes } from "@/core/utils/QuizUtils";
-
+// import CourseViewer from "../module/CourseViewer";
+import { getFlattenedRoleSpecificQuizzes } from "@/core/utils/QuizUtils";
 
 export default function PostQuizPage({ onNext }: { onNext: () => void }) {
   const navigate = useNavigate();
@@ -18,28 +17,26 @@ export default function PostQuizPage({ onNext }: { onNext: () => void }) {
 
   const quizzes = useMemo(() => {
     if (!config || !config.postquizzes) return [];
-    return GetFlattenedRoleSpecificQuizzes(config.postquizzes, config.roles);
+    return getFlattenedRoleSpecificQuizzes(config.postquizzes, config.roles);
   }, [config]);
 
-
-
   const onComplete = () => {
-    if(!user) {
-      console.error('Cannot mark user as postquizzed. User is undefined! (Honestly how did this even happen...)');
+    if (!user) {
+      console.error("Cannot mark user as postquizzed. User is undefined! (Honestly how did this even happen...)");
       navigate({ to: "/" });
       return;
     }
-    
+
     addUserStatusFlag(user, UserStatusFlag.PostQuizzed).then(() => {
       onNext();
     });
     navigate({ to: "/" });
     return;
-  }
+  };
 
   return (
     <Box width="100%" height="100%">
-      <CourseViewer contents={quizzes} onEverythingCompleted={onComplete} />
+      {/* <CourseViewer contents={quizzes} onEverythingCompleted={onComplete} /> */}
     </Box>
   );
 }

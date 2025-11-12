@@ -1,4 +1,4 @@
-import { ContentState, ContentStateType, CourseContent, CreateDefaultContentState } from "@/core/model/OattsModel";
+import { ContentState, ContentStateType, CourseContent, createDefaultContentState } from "@/core/model/OattsModel";
 import User from "@/core/model/UserModel";
 import loadDatabase from "./DatabaseLoader";
 import { CompletionStatus, ScormDbEntity, ScormModel } from "@/core/model/ScormModel";
@@ -25,13 +25,10 @@ export async function GetContentState(user: User, id: string): Promise<ContentSt
     return undefined;
   }
   let state: ContentStateType = JSON.parse(dbState.data);
-  let contentState = CreateDefaultContentState(id);
+  let contentState = createDefaultContentState(id);
   internalizeContentState(state, contentState);
   return contentState;
 }
-
-
-
 
 export function internalizeContentState(stateType: ContentStateType, contentState: ContentState) {
   contentState.completionStatus = stateType.completionStatus; // Does this line run?
@@ -102,7 +99,6 @@ export function deleteUserScorm(user: User, contentUri: string) {
     ]),
   );
 }
-
 
 export async function resetUserAssessment(user: User, contentUri: string) {
   await resetUserContentState(user, contentUri);

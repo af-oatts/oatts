@@ -1,26 +1,21 @@
 import { ReactNode } from "react";
 import ModuleNotFound from "@/components/module/ModuleNotFound";
-import CourseViewer from "@/components/module/CourseViewer";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Outlet, useParams } from "@tanstack/react-router";
+import { useCourse } from "@/contexts/hooks/useCourse";
 
-export const Route = createFileRoute("/_authenticated/_authorized/courses/$courseId")({
+const FILE_ROUTE = "/_authenticated/_authorized/courses/$courseId";
+
+export const Route = createFileRoute(FILE_ROUTE)({
   component: ModulePage,
-  loader: async ({ params, context }) => {
-    if (params.courseId === undefined) return undefined;
-
-    const course = context.courses.courses?.find((mod) => mod.id == params.courseId);
-    const user = context.authentication.user;
-    if (course === undefined || user === undefined) return undefined;
-
-    return course;
-  },
 });
 
 export default function ModulePage(): Readonly<ReactNode> {
-  const course = Route.useLoaderData();
+  const { courseId } = useParams({ from: FILE_ROUTE });
+  const course = useCourse(courseId);
 
   if (course === undefined) {
     return <ModuleNotFound />;
   }
-  return <CourseViewer contents={course.contents} paNumber={course.paNumber} />;
+
+  return <Outlet />;
 }

@@ -1,4 +1,4 @@
-import { ContentState, CourseContentItemType, StatelessCourseContent } from "@/core/model/OattsModel";
+import { ContentState, CourseContentItemType, CourseContent } from "@/core/model/OattsModel";
 import { Box, Collapse, List, ListItemButton, ListItemButtonProps, ListItemText } from "@mui/material";
 
 import { useState } from "react";
@@ -35,15 +35,14 @@ function CollapsibleMenuItem(props: ContentMenuItemProps) {
 }
 
 interface ContentMenuItemProps extends ListItemButtonProps {
-  contentItem: StatelessCourseContent;
-  state: ContentState | undefined,
+  contentItem: CourseContent;
+  state: ContentState | undefined;
   setContent: (id: string) => void;
   isSelected: (id: string) => boolean;
 }
 
 export function ContentMenuItem(props: ContentMenuItemProps) {
   const { contentItem, state, onClick, setContent, isSelected, ...rest } = props;
-
 
   if (contentItem.type == CourseContentItemType.SUBMODULE) {
     return <CollapsibleMenuItem {...props} />;

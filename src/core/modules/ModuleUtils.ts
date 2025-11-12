@@ -1,28 +1,11 @@
-import { CompletionStatus, CourseContent, Course, StatelessCourseContent, StatelessCourse } from "@/core/model/OattsModel";
+import { CompletionStatus, Course, CourseContent } from "@/core/model/OattsModel";
 import { OATTS_ROOT } from "../utils/Globals";
+import { ContentStateMap } from "@/contexts/models/ContentStateMap";
 
-
-
-export function calculateCourseCompletionStatus(course: StatelessCourse): CompletionStatus {
-  return calculateMultiContentCompletionStatus(course.contents);
-}
-// TODO: Delete me.
-export function calculateMultiContentCompletionStatus(contents: CourseContent[]): CompletionStatus {
-  let statuses = contents.map(CalculateContentCompletionStatus);
-  return ReduceCompletionStatus(statuses);
-}
-// TODO: deleteme 
-export function checkIfRequirementsAreComplete(courses: Course[]): boolean {
-  return courses.every((course) => calculateCourseCompletionStatus(course) === CompletionStatus.Completed);
-}
-
-export function CalculateContentCompletionStatus(content: CourseContent): CompletionStatus {
-  if (Array.isArray(content.children)) {
-    let completionStatuses = content.children.map(CalculateContentCompletionStatus);
-    return ReduceCompletionStatus(completionStatuses);
-  }
-
-  return content.state.completionStatus;
+export function checkIfRequirementsAreComplete(courses: Course[], states: ContentStateMap): boolean {
+  return courses.every((course) =>
+    course.contents.map((x) => states[x.id]?.completionStatus === CompletionStatus.Completed),
+  );
 }
 
 export function ReduceCompletionStatus(statuses: CompletionStatus[]): CompletionStatus {
@@ -52,49 +35,40 @@ export function CompletionStatusToString(status: CompletionStatus): string {
   }
 }
 
-export function CalculateCoursesProgress(modules: Course[]): number {
+export function calculateCoursesProgress(modules: Course[], states: ContentStateMap | undefined): number {
   return (
-    modules.map((m) => CalculateCourseProgress(m)).reduce((accumulator, val) => accumulator + val, 0) / modules.length
+    modules.map((m) => calculateCourseProgress(m, states)).reduce((accumulator, val) => accumulator + val, 0) /
+    modules.length
   );
 }
 
-function CalculateCourseProgress(course: Course): number {
-  const statuses = course.contents.flatMap(FlattenContentStatuses);
-  const total = statuses.length;
-  const completed = statuses.filter((s) => s === CompletionStatus.Completed).length;
-  const inProgress = statuses.filter((s) => s === CompletionStatus.Started).length;
+function calculateCourseProgress(course: Course, states: ContentStateMap | undefined): number {
+  if (!states) return 0;
+  const contents = course.contents.flatMap(FlattenContentItem);
+  const total = contents.length;
+  const completed = contents.filter((x) => states[x.id].completionStatus === CompletionStatus.Completed).length;
+  const inProgress = contents.filter((x) => states[x.id].completionStatus === CompletionStatus.Started).length;
 
   return (completed + inProgress * 0.5) / total;
 }
 
-function FlattenContentStatuses(content: CourseContent): CompletionStatus[] {
-  const contents = FlattenContentItem(content);
-
-  const statuses = contents.map((c) => c.state.completionStatus);
-
-  return statuses;
-}
-
-
-
-export function FlattenContents(contents: StatelessCourseContent[]): StatelessCourseContent[] {
+export function FlattenContents(contents: CourseContent[]): CourseContent[] {
   const flattenedContents = contents.flatMap(FlattenContentItem);
   return flattenedContents;
 }
 
-function FlattenContentItem(content: StatelessCourseContent): StatelessCourseContent[] {
+function FlattenContentItem(content: CourseContent): CourseContent[] {
   if (Array.isArray(content.children)) {
     return content.children.flatMap(FlattenContentItem);
   }
-  
+
   return [content];
 }
 
-
-export function GetContentURL(content: StatelessCourseContent) {
-  return `${OATTS_ROOT}/content/${content.id}/${content.entrypoint}`
+export function GetContentURL(content: CourseContent) {
+  return `${OATTS_ROOT}/content/${content.id}/${content.entrypoint}`;
 }
 
 export function GetCourseImageURL(course: Course) {
-  return `${OATTS_ROOT}/assets/${course.img}`
+  return `${OATTS_ROOT}/assets/${course.img}`;
 }
