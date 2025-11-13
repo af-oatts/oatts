@@ -3,9 +3,9 @@ import { getCourseContentState } from "@/core/modules/getCourseContentState";
 import { useUser } from "@/contexts/hooks/useUser";
 import { useContext, useState, useEffect } from "react";
 import { ContentStatesContext } from "../ContentStatesContext";
-import { ContentStateMap } from "./useCourseContentState";
+import { ContentStateMap } from "../models/ContentStateMap";
 
-export function useCourseContentStates(content: CourseContent[] | undefined): [ContentStateMap | undefined, boolean] {
+export function useCourseContentStates(content: CourseContent[] | undefined): [ContentStateMap, boolean] {
   const { user } = useUser();
   const { states, setStates } = useContext(ContentStatesContext);
   const [isLoading, setIsLoading] = useState(true);

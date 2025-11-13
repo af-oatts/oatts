@@ -4,7 +4,7 @@ import { ContentStateMap } from "@/contexts/models/ContentStateMap";
 
 export function checkIfRequirementsAreComplete(courses: Course[], states: ContentStateMap): boolean {
   return courses.every((course) =>
-    course.contents.map((x) => states[x.id]?.completionStatus === CompletionStatus.Completed),
+    course.contents.every((x) => states[x.id]?.completionStatus === CompletionStatus.Completed),
   );
 }
 
