@@ -35,7 +35,7 @@ export class CourseController implements ControllerReturnType {
 
   getNext() {
     const incomplete = this.contents?.find(
-      (x) => !this.isLoading && this.states && this.states[x.id].completionStatus !== CompletionStatus.Completed,
+      (x) => !this.isLoading && this.states && this.states[x.id]?.completionStatus !== CompletionStatus.Completed,
     );
     return incomplete?.id || "";
   }

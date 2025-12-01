@@ -5,6 +5,7 @@ import { useCourseContentStates } from "./useCourseContentStates";
 export function usePostquizController() {
   const [course, contents, isLoading] = usePostquizContents();
   const [states, statesIsLoading] = useCourseContentStates(contents);
+
   return new CourseController({
     course,
     contents,

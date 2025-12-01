@@ -24,6 +24,7 @@ import { Route as AuthenticatedOnboardingPreQuizImport } from './routes/_authent
 import { Route as AuthenticatedOnboardingIntroImport } from './routes/_authenticated/onboarding/intro'
 import { Route as AuthenticatedOnboardingInterestsImport } from './routes/_authenticated/onboarding/interests'
 import { Route as AuthenticatedOnboardingCourseIdImport } from './routes/_authenticated/onboarding/$courseId'
+import { Route as AuthenticatedAuthorizedPostquizImport } from './routes/_authenticated/_authorized/postquiz'
 import { Route as AuthenticatedAuthorizedDashboardImport } from './routes/_authenticated/_authorized/dashboard'
 import { Route as AuthenticatedAuthorizedCertificateImport } from './routes/_authenticated/_authorized/certificate'
 import { Route as AuthenticatedAuthorizedCoursesCourseIdImport } from './routes/_authenticated/_authorized/courses/$courseId'
@@ -114,6 +115,13 @@ const AuthenticatedOnboardingCourseIdRoute =
     id: '/$courseId',
     path: '/$courseId',
     getParentRoute: () => AuthenticatedOnboardingRoute,
+  } as any)
+
+const AuthenticatedAuthorizedPostquizRoute =
+  AuthenticatedAuthorizedPostquizImport.update({
+    id: '/postquiz',
+    path: '/postquiz',
+    getParentRoute: () => AuthenticatedAuthorizedRoute,
   } as any)
 
 const AuthenticatedAuthorizedDashboardRoute =
@@ -239,6 +247,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAuthorizedDashboardImport
       parentRoute: typeof AuthenticatedAuthorizedImport
     }
+    '/_authenticated/_authorized/postquiz': {
+      id: '/_authenticated/_authorized/postquiz'
+      path: '/postquiz'
+      fullPath: '/postquiz'
+      preLoaderRoute: typeof AuthenticatedAuthorizedPostquizImport
+      parentRoute: typeof AuthenticatedAuthorizedImport
+    }
     '/_authenticated/onboarding/$courseId': {
       id: '/_authenticated/onboarding/$courseId'
       path: '/$courseId'
@@ -352,6 +367,7 @@ const AuthenticatedAuthorizedCoursesCourseIdRouteWithChildren =
 interface AuthenticatedAuthorizedRouteChildren {
   AuthenticatedAuthorizedCertificateRoute: typeof AuthenticatedAuthorizedCertificateRoute
   AuthenticatedAuthorizedDashboardRoute: typeof AuthenticatedAuthorizedDashboardRoute
+  AuthenticatedAuthorizedPostquizRoute: typeof AuthenticatedAuthorizedPostquizRoute
   AuthenticatedAuthorizedCoursesCourseIdRoute: typeof AuthenticatedAuthorizedCoursesCourseIdRouteWithChildren
 }
 
@@ -361,6 +377,7 @@ const AuthenticatedAuthorizedRouteChildren: AuthenticatedAuthorizedRouteChildren
       AuthenticatedAuthorizedCertificateRoute,
     AuthenticatedAuthorizedDashboardRoute:
       AuthenticatedAuthorizedDashboardRoute,
+    AuthenticatedAuthorizedPostquizRoute: AuthenticatedAuthorizedPostquizRoute,
     AuthenticatedAuthorizedCoursesCourseIdRoute:
       AuthenticatedAuthorizedCoursesCourseIdRouteWithChildren,
   }
@@ -452,6 +469,7 @@ export interface FileRoutesByFullPath {
   '/register': typeof AuthenticationRegisterRoute
   '/certificate': typeof AuthenticatedAuthorizedCertificateRoute
   '/dashboard': typeof AuthenticatedAuthorizedDashboardRoute
+  '/postquiz': typeof AuthenticatedAuthorizedPostquizRoute
   '/onboarding/$courseId': typeof AuthenticatedOnboardingCourseIdRouteWithChildren
   '/onboarding/interests': typeof AuthenticatedOnboardingInterestsRoute
   '/onboarding/intro': typeof AuthenticatedOnboardingIntroRoute
@@ -474,6 +492,7 @@ export interface FileRoutesByTo {
   '/register': typeof AuthenticationRegisterRoute
   '/certificate': typeof AuthenticatedAuthorizedCertificateRoute
   '/dashboard': typeof AuthenticatedAuthorizedDashboardRoute
+  '/postquiz': typeof AuthenticatedAuthorizedPostquizRoute
   '/onboarding/$courseId': typeof AuthenticatedOnboardingCourseIdRouteWithChildren
   '/onboarding/interests': typeof AuthenticatedOnboardingInterestsRoute
   '/onboarding/intro': typeof AuthenticatedOnboardingIntroRoute
@@ -499,6 +518,7 @@ export interface FileRoutesById {
   '/_authentication/register': typeof AuthenticationRegisterRoute
   '/_authenticated/_authorized/certificate': typeof AuthenticatedAuthorizedCertificateRoute
   '/_authenticated/_authorized/dashboard': typeof AuthenticatedAuthorizedDashboardRoute
+  '/_authenticated/_authorized/postquiz': typeof AuthenticatedAuthorizedPostquizRoute
   '/_authenticated/onboarding/$courseId': typeof AuthenticatedOnboardingCourseIdRouteWithChildren
   '/_authenticated/onboarding/interests': typeof AuthenticatedOnboardingInterestsRoute
   '/_authenticated/onboarding/intro': typeof AuthenticatedOnboardingIntroRoute
@@ -523,6 +543,7 @@ export interface FileRouteTypes {
     | '/register'
     | '/certificate'
     | '/dashboard'
+    | '/postquiz'
     | '/onboarding/$courseId'
     | '/onboarding/interests'
     | '/onboarding/intro'
@@ -544,6 +565,7 @@ export interface FileRouteTypes {
     | '/register'
     | '/certificate'
     | '/dashboard'
+    | '/postquiz'
     | '/onboarding/$courseId'
     | '/onboarding/interests'
     | '/onboarding/intro'
@@ -567,6 +589,7 @@ export interface FileRouteTypes {
     | '/_authentication/register'
     | '/_authenticated/_authorized/certificate'
     | '/_authenticated/_authorized/dashboard'
+    | '/_authenticated/_authorized/postquiz'
     | '/_authenticated/onboarding/$courseId'
     | '/_authenticated/onboarding/interests'
     | '/_authenticated/onboarding/intro'
@@ -632,6 +655,7 @@ export const routeTree = rootRoute
       "children": [
         "/_authenticated/_authorized/certificate",
         "/_authenticated/_authorized/dashboard",
+        "/_authenticated/_authorized/postquiz",
         "/_authenticated/_authorized/courses/$courseId"
       ]
     },
@@ -661,6 +685,10 @@ export const routeTree = rootRoute
     },
     "/_authenticated/_authorized/dashboard": {
       "filePath": "_authenticated/_authorized/dashboard.tsx",
+      "parent": "/_authenticated/_authorized"
+    },
+    "/_authenticated/_authorized/postquiz": {
+      "filePath": "_authenticated/_authorized/postquiz.tsx",
       "parent": "/_authenticated/_authorized"
     },
     "/_authenticated/onboarding/$courseId": {
