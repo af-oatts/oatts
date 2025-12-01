@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, CircularProgress } from "@mui/material";
 import { motion, useAnimate } from "motion/react";
 import ContentViewer from "@/components/module/ContentViewer";
 
@@ -27,8 +27,8 @@ export function CourseContentView({ controller }: { controller: CourseController
     }
   }, [controller, state, scope]);
 
-  if (controller.isLoading) return <Box id="context-box" sx={{ width: "100%", height: "100%" }} />;
-  if (!(controller.course && content && state)) return <Box id="context-box" sx={{ width: "100%", height: "100%" }} />;
+  if (controller.isLoading) return <Box id="context-box" sx={{ width: "100%", height: "100%" }} ><CircularProgress/></Box>;
+  if (!(controller.course && content && state)) return <Box id="context-box" sx={{ width: "100%", height: "100%" }} ></Box>;
 
   return (
     <Box id="context-box" sx={{ width: "100%", display: "grid", gridTemplateRows: "1fr auto", overflow: "hidden" }}>
