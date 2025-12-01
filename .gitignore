@@ -23,4 +23,7 @@ dist-ssr
 *.sln
 *.sw?
 
+target
+public/oatts
+
 !public/**/dist
