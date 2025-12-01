@@ -46,8 +46,8 @@ function calculateCourseProgress(course: Course, states: ContentStateMap | undef
   if (!states) return 0;
   const contents = course.contents.flatMap(FlattenContentItem);
   const total = contents.length;
-  const completed = contents.filter((x) => states[x.id].completionStatus === CompletionStatus.Completed).length;
-  const inProgress = contents.filter((x) => states[x.id].completionStatus === CompletionStatus.Started).length;
+  const completed = contents.filter((x) => states[x.id]?.completionStatus === CompletionStatus.Completed).length;
+  const inProgress = contents.filter((x) => states[x.id]?.completionStatus === CompletionStatus.Started).length;
 
   return (completed + inProgress * 0.5) / total;
 }

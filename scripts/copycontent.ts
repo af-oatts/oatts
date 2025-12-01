@@ -32,7 +32,7 @@ async function copyAndExtractContent() {
     fs.cpSync(sourceDir, destDir, { recursive: true });
     console.log('✓ Content copied successfully');
 
-    // Extract all zip files in the subfolder
+    // Extract all zip files and remove the zip copies
     const zipsDir = path.join(destDir, 'content');
     if (fs.existsSync(zipsDir)) {
       console.log('\nExtracting zip files...');
@@ -46,12 +46,15 @@ async function copyAndExtractContent() {
         console.log(`  Extracting ${zipFile}...`);
         const zip = new AdmZip(zipPath);
         zip.extractAllTo(extractPath, true);
-        console.log(`  ✓ Extracted to ${path.basename(extractPath)}/`);
+        
+        // Remove the zip file after extraction
+        fs.unlinkSync(zipPath);
+        console.log(`  ✓ Extracted to ${path.basename(extractPath)}/ (zip removed)`);
       }
 
       console.log('\n✓ All zip files extracted successfully');
     } else {
-      console.log('No zips folder found, skipping extraction');
+      console.log('No zips found, skipping extraction');
     }
 
   } catch (error) {
