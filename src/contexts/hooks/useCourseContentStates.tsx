@@ -5,15 +5,23 @@ import { useContext, useState, useEffect } from "react";
 import { ContentStatesContext } from "../ContentStatesContext";
 import { ContentStateMap } from "../models/ContentStateMap";
 
-export function useCourseContentStates(content: CourseContent[] | undefined): [ContentStateMap, boolean] {
+export function useCourseContentStates(contents: CourseContent[] | undefined): [ContentStateMap, boolean] {
   const { user } = useUser();
   const { states, setStates } = useContext(ContentStatesContext);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (!user || !content) return;
+    if (!user || !contents) return;
+    const flatten = (contents : CourseContent[]) => {
+      let flatContents : CourseContent[] = []
+      contents.forEach(c => flatContents = c.children? [...flatContents, c, ...flatten(c.children)] : [...flatContents, c]);
+      return flatContents;
+    }
 
-    Promise.all(content.map((x) => getCourseContentState(user, x)))
+    const flatContents = flatten(contents);
+
+      
+    Promise.all(flatContents.map((x) => getCourseContentState(user, x)))
       .then((result) => {
         const next = result.reduce((acc, x) => Object.assign(acc, { [x.contentID]: x }), {} as ContentStateMap);
         setStates(next);
