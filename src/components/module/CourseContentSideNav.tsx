@@ -18,9 +18,9 @@ export function CourseContentSideNav({ controller }: { controller: CourseControl
         {(controller.contents || []).map((c) => (
           <ContentMenuItem
             key={c.id}
-            state={controller.getState(c.id)}
+            getState={(id) => controller.getState(id)}
             contentItem={c}
-            isSelected={() => contentId === c.id}
+            isSelected={(id) => contentId === id}
             setContent={(id) => 
               navigate({ to: SHORT_ROUTE, params: { courseId, contentId: id } })
             }
