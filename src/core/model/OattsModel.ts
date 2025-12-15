@@ -5,6 +5,7 @@ export type OattsManifest = {
   versionNumber?: string;
   allowDataCollection?: boolean;
   roles: Role[];
+  goals?: Goal[];
 };
 
 export type Course = {
@@ -41,6 +42,12 @@ export type Role = {
   name: string;
   general: boolean;
 };
+
+export type Goal = {
+  id: string;
+  name: string;
+  roleIDs: string[]
+}
 
 // Holds anything about a module that might change over time
 // Unlike module metadata, for example, the state is meant to change throughout the module's lifecycle.

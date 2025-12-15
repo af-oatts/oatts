@@ -36,6 +36,9 @@ export function CompletionStatusToString(status: CompletionStatus): string {
 }
 
 export function calculateCoursesProgress(modules: Course[], states: ContentStateMap | undefined): number {
+  if(modules.length == 0) {
+    return 1
+  }
   return (
     modules.map((m) => calculateCourseProgress(m, states)).reduce((accumulator, val) => accumulator + val, 0) /
     modules.length

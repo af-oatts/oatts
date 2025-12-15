@@ -7,6 +7,9 @@ import AdmZip from 'adm-zip';
 const sourceDir = path.join(process.cwd(), 'content');
 const destDir = path.join(process.cwd(), 'public', 'oatts');
 
+// Check for verbose flag
+const verbose = process.argv.includes('--verbose') || process.argv.includes('-v');
+
 interface FileHash {
   path: string;
   hash: string;
@@ -42,7 +45,9 @@ function loadExistingCache(): Map<string, string> | null {
     
     return cacheMap;
   } catch (error) {
-    console.warn('Warning: Could not parse existing cache file, will do full copy');
+    if (verbose) {
+      console.warn('Warning: Could not parse existing cache file, will do full copy');
+    }
     return null;
   }
 }
@@ -70,16 +75,22 @@ function copyFileSelectively(
   if (existingCache && fs.existsSync(destPath)) {
     const cachedHash = existingCache.get(relativePath);
     if (cachedHash === sourceHash) {
-      console.log(`  ✓ Skipping (unchanged): ${relativePath}`);
+      if (verbose) {
+        console.log(`  ✓ Skipping (unchanged): ${relativePath}`);
+      }
       return false; // Skip, file unchanged
     } else {
-      console.log(`  → Copying (modified): ${relativePath}`);
+      if (verbose) {
+        console.log(`  → Copying (modified): ${relativePath}`);
+      }
     }
   } else {
-    if (existingCache) {
-      console.log(`  → Copying (new): ${relativePath}`);
-    } else {
-      console.log(`  → Copying (no cache): ${relativePath}`);
+    if (verbose) {
+      if (existingCache) {
+        console.log(`  → Copying (new): ${relativePath}`);
+      } else {
+        console.log(`  → Copying (no cache): ${relativePath}`);
+      }
     }
   }
   
@@ -172,7 +183,9 @@ function removeDeletedFiles(existingCache: Map<string, string>, currentFiles: Se
       if (fs.existsSync(fullPath)) {
         fs.unlinkSync(fullPath);
         deletedCount++;
-        console.log(`  Removed deleted file: ${cachedPath}`);
+        if (verbose) {
+          console.log(`  Removed deleted file: ${cachedPath}`);
+        }
       }
     }
   }
@@ -182,7 +195,13 @@ function removeDeletedFiles(existingCache: Map<string, string>, currentFiles: Se
 
 async function copyAndExtractContent() {
   try {
-    console.log('Checking for existing content cache...');
+    if (!verbose) {
+      console.log('Copying content...');
+    }
+    
+    if (verbose) {
+      console.log('Checking for existing content cache...');
+    }
     
     // Check if source exists
     if (!fs.existsSync(sourceDir)) {
@@ -199,10 +218,12 @@ async function copyAndExtractContent() {
     // Load existing cache if available
     const existingCache = loadExistingCache();
     
-    if (existingCache) {
-      console.log(`✓ Found existing cache with ${existingCache.size} files`);
-    } else {
-      console.log('No existing cache found, will copy all files');
+    if (verbose) {
+      if (existingCache) {
+        console.log(`✓ Found existing cache with ${existingCache.size} files`);
+      } else {
+        console.log('No existing cache found, will copy all files');
+      }
     }
 
     // Ensure destination directory exists
@@ -211,7 +232,9 @@ async function copyAndExtractContent() {
     }
 
     // Copy files selectively
-    console.log('\nCopying content folder...');
+    if (verbose) {
+      console.log('\nCopying content folder...');
+    }
     const stats = { copied: 0, skipped: 0, deleted: 0 };
     
     copyDirectorySelectively(sourceDir, destDir, sourceDir, destDir, existingCache, stats);
@@ -237,15 +260,20 @@ async function copyAndExtractContent() {
       stats.deleted = removeDeletedFiles(existingCache, currentSourceFiles);
     }
     
-    console.log(`✓ Copy complete: ${stats.copied} copied, ${stats.skipped} skipped, ${stats.deleted} deleted`);
+    if (verbose) {
+      console.log(`✓ Copy complete: ${stats.copied} copied, ${stats.skipped} skipped, ${stats.deleted} deleted`);
+    }
 
     // Process zip files - hash them in SOURCE first, only copy and extract if changed
     const allZipHashes: FileHash[] = [];
     const extractedDirs = new Set<string>(); // Track directories that are zip extractions
+    let zipStats = { extracted: 0, skipped: 0 };
     
     const sourceZipsDir = path.join(sourceDir, 'content');
     if (fs.existsSync(sourceZipsDir)) {
-      console.log('\nProcessing zip files...');
+      if (verbose) {
+        console.log('\nProcessing zip files...');
+      }
       const sourceFiles = fs.readdirSync(sourceZipsDir);
       const sourceZipFiles = sourceFiles.filter(file => file.endsWith('.zip'));
 
@@ -274,14 +302,19 @@ async function copyAndExtractContent() {
         const cachedHash = existingCache?.get(relativeZipPath);
         
         if (cachedHash === sourceZipHash) {
-          console.log(`  ✓ Skipping (unchanged): ${zipFile}`);
+          if (verbose) {
+            console.log(`  ✓ Skipping (unchanged): ${zipFile}`);
+          }
+          zipStats.skipped++;
         } else {
-          if (cachedHash) {
-            console.log(`  → Extracting (modified): ${zipFile}`);
-          } else if (existingCache) {
-            console.log(`  → Extracting (new): ${zipFile}`);
-          } else {
-            console.log(`  → Extracting (no cache): ${zipFile}`);
+          if (verbose) {
+            if (cachedHash) {
+              console.log(`  → Extracting (modified): ${zipFile}`);
+            } else if (existingCache) {
+              console.log(`  → Extracting (new): ${zipFile}`);
+            } else {
+              console.log(`  → Extracting (no cache): ${zipFile}`);
+            }
           }
           
           // Copy zip to destination temporarily
@@ -304,17 +337,22 @@ async function copyAndExtractContent() {
           // Remove the zip file after extraction
           fs.unlinkSync(destZipPath);
           
-          console.log(`  ✓ Extracted to ${extractDirName}/`);
+          if (verbose) {
+            console.log(`  ✓ Extracted to ${extractDirName}/`);
+          }
+          zipStats.extracted++;
         }
       }
 
-      if (sourceZipFiles.length > 0) {
+      if (verbose && sourceZipFiles.length > 0) {
         console.log('\n✓ All zip files processed');
       }
     }
 
     // Generate content cache - ONLY include zip hashes and non-extracted files
-    console.log('\nGenerating content cache...');
+    if (verbose) {
+      console.log('\nGenerating content cache...');
+    }
     
     const nonZipFileHashes = collectFileHashes(destDir, destDir, extractedDirs);
     
@@ -329,8 +367,15 @@ async function copyAndExtractContent() {
     const cacheFilePath = path.join(destDir, '.contentcache');
     fs.writeFileSync(cacheFilePath, JSON.stringify(cacheData, null, 2));
     
-    console.log(`✓ Content cache created with ${allHashes.length} files (${allZipHashes.length} zips, ${nonZipFileHashes.length} other files)`);
-    console.log(`  Cache file: ${cacheFilePath}`);
+    if (verbose) {
+      console.log(`✓ Content cache created with ${allHashes.length} files (${allZipHashes.length} zips, ${nonZipFileHashes.length} other files)`);
+      console.log(`  Cache file: ${cacheFilePath}`);
+    }
+    
+    // Print summary when not verbose
+    if (!verbose) {
+      console.log(`Summary: ${stats.copied} files copied, ${stats.skipped} files skipped, ${stats.deleted} files deleted, ${zipStats.extracted} zips extracted, ${zipStats.skipped} zips skipped`);
+    }
 
   } catch (error) {
     console.error('Error:', error);

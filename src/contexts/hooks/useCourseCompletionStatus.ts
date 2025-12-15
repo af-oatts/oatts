@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { CompletionStatus, Course } from "@/core/model/OattsModel";
 import { ContentStateMap } from "@/contexts/models/ContentStateMap";
 import { useCourseContentStates } from "./useCourseContentStates";

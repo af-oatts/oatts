@@ -14,10 +14,8 @@ import { FetchFile } from "@/core/utils/FileHelper";
 import { ScormMetadata } from "@/core/model/ScormMetadata";
 import { ParserOptions, parseStringPromise } from "xml2js";
 import { internalizeScormState } from "./ScormInternalizer";
-import { ContentState } from "@/core/model/OattsModel";
 import {
   getUserId,
-  internalizeContentState,
   loadScormModel,
   saveContentStateType,
   saveScormModel,

@@ -56,7 +56,7 @@ describe("CertificatePage Component", () => {
         optional: [],
       });
 
-      vi.spyOn(useCourseContentStatesModule, "useCourseContentStates").mockReturnValue([undefined, true]);
+      vi.spyOn(useCourseContentStatesModule, "useCourseContentStates").mockReturnValue([{}, true]);
 
       render(<CertificatePage />);
 
@@ -70,7 +70,7 @@ describe("CertificatePage Component", () => {
         optional: [],
       });
 
-      vi.spyOn(useCourseContentStatesModule, "useCourseContentStates").mockReturnValue([undefined, true]);
+      vi.spyOn(useCourseContentStatesModule, "useCourseContentStates").mockReturnValue([{}, true]);
 
       render(<CertificatePage />);
 
@@ -181,7 +181,7 @@ describe("CertificatePage Component", () => {
         optional: [],
       });
 
-      vi.spyOn(useCourseContentStatesModule, "useCourseContentStates").mockReturnValue([undefined, false]);
+      vi.spyOn(useCourseContentStatesModule, "useCourseContentStates").mockReturnValue([{}, false]);
 
       vi.spyOn(ModuleUtilsModule, "checkIfRequirementsAreComplete").mockReturnValue(false);
 
