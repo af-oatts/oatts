@@ -10,6 +10,10 @@ type ControllerReturnType = {
   isLoading: boolean;
 };
 
+
+/**
+ * This REALLY needs a better name...
+ */
 export class CourseController implements ControllerReturnType {
   course: Course | undefined;
   contents: CourseContent[] | undefined;
