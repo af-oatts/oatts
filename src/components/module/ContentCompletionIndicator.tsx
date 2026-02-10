@@ -1,9 +1,10 @@
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import PendingIcon from "@mui/icons-material/Pending";
+import WarningIcon from "@mui/icons-material/Warning";
 import { CompletionStatus } from "@/core/model/OattsModel";
 import { motion } from "motion/react";
 
-export function ContentCompletionIndicator({ completion }: { completion: CompletionStatus }) {
+export function ContentCompletionIndicator({ completion }: { completion: CompletionStatus | undefined }) {
   switch (completion) {
     case CompletionStatus.Completed:
       return (
@@ -26,6 +27,11 @@ export function ContentCompletionIndicator({ completion }: { completion: Complet
     case CompletionStatus.NotStarted:
       return <></>;
     default:
-      return <></>;
+      return <WarningIcon
+        component={motion.svg}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        sx={(theme) => ({ color: theme.palette.progress.inProgress })}
+      />
   }
 }

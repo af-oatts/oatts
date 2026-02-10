@@ -1,4 +1,4 @@
-import { ContentItem, ContentState, ContentStateType } from "@/core/model/OattsModel";
+import { ContentState, ContentStateType, CourseContent, createDefaultContentState } from "@/core/model/OattsModel";
 import User from "@/core/model/UserModel";
 import loadDatabase from "./DatabaseLoader";
 import { CompletionStatus, ScormDbEntity, ScormModel } from "@/core/model/ScormModel";
@@ -9,7 +9,7 @@ type DbContentState = {
   data: string;
 };
 
-export async function populateContentState(user: User, contentUri: string, contentState: ContentState): Promise<void> {
+export async function GetContentState(user: User, id: string): Promise<ContentState | undefined> {
   let db = await loadDatabase();
   let states = await db.select<DbContentState[]>(
     `
@@ -17,7 +17,7 @@ export async function populateContentState(user: User, contentUri: string, conte
     INNER JOIN users ON users.id = userContentState.userId
     WHERE users.email = $2 AND userContentState.contentUri = $1
     `,
-    [contentUri, user.email],
+    [id, user.email],
   );
 
   let dbState = states.at(0);
@@ -25,11 +25,13 @@ export async function populateContentState(user: User, contentUri: string, conte
     return undefined;
   }
   let state: ContentStateType = JSON.parse(dbState.data);
+  let contentState = createDefaultContentState(id);
   internalizeContentState(state, contentState);
+  return contentState;
 }
 
-export function internalizeContentState(stateType: ContentStateType, targetState: ContentState) {
-  targetState.completionStatus = stateType.completionStatus;
+export function internalizeContentState(stateType: ContentStateType, contentState: ContentState) {
+  contentState.completionStatus = stateType.completionStatus; // Does this line run?
 }
 
 export function externalizeContentState(state: ContentState): ContentStateType {
@@ -67,7 +69,7 @@ export async function getUserId(user: User) {
   return dbUser[0]?.id;
 }
 
-export async function saveContentStateType(user: User, contentUri: string, state: ContentStateType) {
+export async function saveContentStateType(user: User, id: string, state: ContentStateType) {
   let db = await loadDatabase();
   await db.execute(
     `
@@ -76,7 +78,7 @@ export async function saveContentStateType(user: User, contentUri: string, state
     FROM users
     WHERE users.email = $3
   `,
-    [contentUri, JSON.stringify(state), user.email],
+    [id, JSON.stringify(state), user.email],
   );
 }
 
@@ -101,9 +103,4 @@ export function deleteUserScorm(user: User, contentUri: string) {
 export async function resetUserAssessment(user: User, contentUri: string) {
   await resetUserContentState(user, contentUri);
   await deleteUserScorm(user, contentUri);
-}
-
-export function saveContentState(user: User, content: ContentItem) {
-  let stateType = externalizeContentState(content.state);
-  return saveContentStateType(user, content.metadata.id, stateType);
 }

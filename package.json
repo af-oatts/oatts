@@ -7,7 +7,10 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "tauri": "tauri"
+    "tauri": "tauri",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:run": "vitest run"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -24,7 +27,6 @@
     "@types/canvas-confetti": "^1.9.0",
     "@types/xml2js": "^0.4.14",
     "canvas-confetti": "^1.9.3",
-    "dayjs": "^1.11.13",
     "duration": "^0.2.2",
     "events": "^3.3.0",
     "i18next": "^24.2.3",
@@ -34,7 +36,6 @@
     "react-dom": "^19.0.0",
     "react-i18next": "^15.4.1",
     "react-markdown": "^10.1.0",
-    "rxjs": "^7.8.2",
     "uuid": "^11.1.0",
     "xml2js": "^0.6.2",
     "yaml": "^2.7.0"
@@ -43,10 +44,15 @@
     "@tanstack/router-devtools": "^1.114.21",
     "@tanstack/router-plugin": "^1.114.17",
     "@tauri-apps/cli": "^2.3.1",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.0",
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",
     "@vitejs/plugin-react": "^4.3.4",
+    "@vitest/ui": "^4.0.4",
+    "jsdom": "^27.0.1",
     "typescript": "^5.8.2",
-    "vite": "^7.1.11"
+    "vite": "^7.1.11",
+    "vitest": "^4.0.4"
   }
 }

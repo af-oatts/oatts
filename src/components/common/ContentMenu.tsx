@@ -1,18 +1,16 @@
-import { ContentItem, ContentType } from "@/core/model/OattsModel";
+import { ContentState, CourseContentItemType, CourseContent } from "@/core/model/OattsModel";
 import { Box, Collapse, List, ListItemButton, ListItemButtonProps, ListItemText } from "@mui/material";
 
 import { useState } from "react";
 
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
-import useCompletionStatus from "../../core/modules/hooks/useCompletionStatus";
 
 import { ContentCompletionIndicator } from "@/components/module/ContentCompletionIndicator";
 
 function CollapsibleMenuItem(props: ContentMenuItemProps) {
   const [open, setOpen] = useState(false);
-  const { contentItem, ...rest } = props;
-  const status = useCompletionStatus(contentItem);
+  const { contentItem, state, ...rest } = props;
 
   function handleClick() {
     setOpen(!open);
@@ -23,13 +21,13 @@ function CollapsibleMenuItem(props: ContentMenuItemProps) {
       <ListItemButton onClick={handleClick}>
         <Box width="100%" display="grid" gridTemplateColumns="30px 1fr auto" alignItems="center">
           {open ? <ExpandLess /> : <ExpandMore />}
-          <ListItemText primary={contentItem.metadata.name} />
-          <ContentCompletionIndicator completion={status} />
+          <ListItemText primary={contentItem.name} />
+          <ContentCompletionIndicator completion={state?.completionStatus} />
         </Box>
       </ListItemButton>
       <Collapse in={open} timeout="auto" unmountOnExit>
         <List component="div" disablePadding sx={{ paddingRight: 0 }}>
-          {contentItem.subContents?.map((c) => <ContentMenuItem key={c.metadata.id} contentItem={c} {...rest} />)}
+          {contentItem.children?.map((c) => <ContentMenuItem key={c.id} state={state} contentItem={c} {...rest} />)}
         </List>
       </Collapse>
     </>
@@ -37,26 +35,25 @@ function CollapsibleMenuItem(props: ContentMenuItemProps) {
 }
 
 interface ContentMenuItemProps extends ListItemButtonProps {
-  contentItem: ContentItem;
-  setContent: (contentItem: ContentItem) => void;
-  isSelected: (contentItem: ContentItem) => boolean;
+  contentItem: CourseContent;
+  state: ContentState | undefined;
+  setContent: (id: string) => void;
+  isSelected: (id: string) => boolean;
 }
 
 export function ContentMenuItem(props: ContentMenuItemProps) {
-  const { contentItem, onClick, setContent, isSelected, ...rest } = props;
+  const { contentItem, state, onClick, setContent, isSelected, ...rest } = props;
 
-  const status = useCompletionStatus(contentItem);
-
-  if (contentItem.type == ContentType.CONTAINER) {
+  if (contentItem.type == CourseContentItemType.SUBMODULE) {
     return <CollapsibleMenuItem {...props} />;
   }
 
   return (
     <>
-      <ListItemButton {...rest} onClick={(_) => setContent(contentItem)} selected={isSelected(contentItem)}>
+      <ListItemButton {...rest} onClick={(_) => setContent(contentItem.id)} selected={isSelected(contentItem.id)}>
         <Box width="100%" display="grid" gridTemplateColumns="1fr auto" alignItems="center">
-          <ListItemText primary={contentItem.metadata.name} />
-          <ContentCompletionIndicator completion={status} />
+          <ListItemText primary={contentItem.name} />
+          <ContentCompletionIndicator completion={state?.completionStatus} />
         </Box>
       </ListItemButton>
     </>

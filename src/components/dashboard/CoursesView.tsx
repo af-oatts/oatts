@@ -1,13 +1,21 @@
 import { Alert, Box, Button, Snackbar, Stack, Typography } from "@mui/material";
 import { Link } from "@tanstack/react-router";
 
-import ModuleCard from "@/components/common/ModuleCard";
+import CourseCard from "@/components/common/CourseCard";
 import DashboardStatusBar from "@/components/dashboard/DashboardStatusBar";
-import { Module } from "@/core/model/OattsModel";
+import { Course } from "@/core/model/OattsModel";
 import CheckForUpdates from "@/core/modules/UpdateChecker";
 import { useEffect, useState } from "react";
 
-export function ModulesView({ required, optional, mayCollectData}: { required: Module[]; optional: Module[], mayCollectData: boolean}) {
+export function CoursesView({
+  required,
+  optional,
+  mayCollectData,
+}: {
+  required: Course[];
+  optional: Course[];
+  mayCollectData: boolean;
+}) {
   const [showUpdatePopup, setShowUpdatePopup] = useState(false);
   useEffect(() => {
     CheckForUpdates().then((u) => {
@@ -15,7 +23,7 @@ export function ModulesView({ required, optional, mayCollectData}: { required: M
         setShowUpdatePopup(true);
       }
     });
-  }, [])
+  }, []);
   return (
     <Box
       sx={(theme) => ({
@@ -28,20 +36,30 @@ export function ModulesView({ required, optional, mayCollectData}: { required: M
       })}
     >
       <Box sx={{ margin: "5px" }}>
-        <DashboardStatusBar sx={{ height: "100%" }} modules={required} mayCollectData={mayCollectData} />
+        <DashboardStatusBar sx={{ height: "100%" }} courses={required} mayCollectData={mayCollectData} />
       </Box>
-      <ModulesRack label="Focused Modules" modules={required} />
-      <ModulesRack label="Supplemental Modules" modules={optional} />
+      <CoursesRack label="Focused Modules" courses={required} />
+      <CoursesRack label="Supplemental Modules" courses={optional} />
       <Snackbar
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
         open={showUpdatePopup}
         onClose={() => setShowUpdatePopup(false)}
       >
         <Alert severity="info" variant="filled" sx={{ width: "100%" }}>
-          <Typography fontWeight='bold'>A new version of OATTS is available</Typography>
-          <Stack direction='row' gap={1} p={1} >
-            <Button variant="contained" size="small" sx={{width: '70%'}} href={"https://af-oatts.github.io/" }target="_blank">Update</Button>
-            <Button variant="contained" color="success"  size="small" onClick={() => setShowUpdatePopup(false)}>Ignore</Button>
+          <Typography fontWeight="bold">A new version of OATTS is available</Typography>
+          <Stack direction="row" gap={1} p={1}>
+            <Button
+              variant="contained"
+              size="small"
+              sx={{ width: "70%" }}
+              href={"https://af-oatts.github.io/"}
+              target="_blank"
+            >
+              Update
+            </Button>
+            <Button variant="contained" color="success" size="small" onClick={() => setShowUpdatePopup(false)}>
+              Ignore
+            </Button>
           </Stack>
         </Alert>
       </Snackbar>
@@ -49,7 +67,7 @@ export function ModulesView({ required, optional, mayCollectData}: { required: M
   );
 }
 
-export function ModulesRack({ label, modules }: { label: string; modules: Module[] }) {
+export function CoursesRack({ label, courses }: { label: string; courses: Course[] }) {
   return (
     <>
       <Box sx={{ display: "flex", flexDirection: "column" }}>
@@ -78,10 +96,10 @@ export function ModulesRack({ label, modules }: { label: string; modules: Module
           padding: "5px",
         }}
       >
-        {modules.map((mod, idx) => (
+        {courses.map((course, idx) => (
           <Box key={idx} sx={{ height: "100%" }}>
-            <Link to={`/modules/$moduleId`} style={{ textDecoration: 'none' }} params={{ moduleId: mod.id }}>
-              <ModuleCard module={mod} />
+            <Link to={`/courses/$courseId/content`} style={{ textDecoration: "none" }} params={{ courseId: course.id }}>
+              <CourseCard course={course} />
             </Link>
           </Box>
         ))}

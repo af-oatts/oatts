@@ -1,38 +1,36 @@
-import { createFileRoute, useRouteContext } from "@tanstack/react-router";
-import { loadRequiredAndOptionalModules } from "@/core/modules/ModuleLoader";
-import { ModulesView } from "@/components/dashboard/ModulesView";
+import { createFileRoute, Navigate } from "@tanstack/react-router";
+import { useRequiredAndOptionalCourses } from "@/contexts/hooks/useRequiredAndOptionalCourses";
+import { CoursesView } from "@/components/dashboard/CoursesView";
 import { BigLoadingScreen } from "@/components/common/BigLoadingScreen";
 import { checkIfRequirementsAreComplete } from "@/core/modules/ModuleUtils";
+import { useCourseContentStates } from "@/contexts/hooks/useCourseContentStates";
+import { useUser } from "@/contexts/hooks/useUser";
 import { UserStatusFlag } from "@/core/model/UserModel";
-import PostQuizPage from "@/components/quiz/PostQuiz";
-
 
 export const Route = createFileRoute("/_authenticated/_authorized/dashboard")({
   component: DashboardPage,
-  pendingComponent: () => <BigLoadingScreen name="modules"/>,
-  loader: loadRequiredAndOptionalModules,
+  pendingComponent: () => <BigLoadingScreen name="modules" />,
   gcTime: 0,
   // Only reload the route when the user navigates to it or when deps change
   shouldReload: false,
 });
 
-export function useUser() {
-  return useRouteContext({
-    from: "/_authenticated",
-    select: (ctx) => ({ user: ctx.authentication.user }),
-  });
-}
-
 export default function DashboardPage() {
-  const { required, optional } = Route.useLoaderData();
+  const { required, optional } = useRequiredAndOptionalCourses();
   const context = Route.useRouteContext();
   const { user } = useUser();
-  const isEachRequirementComplete = checkIfRequirementsAreComplete(required);
+  const [states, isLoading] = useCourseContentStates(required.flatMap((x) => x.contents));
+
+  if (isLoading) return <BigLoadingScreen name="modules"></BigLoadingScreen>;
+
+  const isEachRequirementComplete = checkIfRequirementsAreComplete(required, states);
   const isPostQuizComplete = !!user?.statusFlags.find((flag) => flag === UserStatusFlag.PostQuizzed);
 
-  if (isEachRequirementComplete && !isPostQuizComplete) {
-    return <PostQuizPage onNext={() => {}} />;
+  if (!isLoading && isEachRequirementComplete && !isPostQuizComplete) {
+    return <Navigate to={"/postquiz"} />;
   }
 
-  return <ModulesView {...{ required, optional, }} mayCollectData={context.config.allowDataCollection?? false} />;
+  return (
+    <CoursesView required={required} optional={optional} mayCollectData={context.config.allowDataCollection ?? false} />
+  );
 }

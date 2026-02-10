@@ -1,41 +1,11 @@
-import { CompletionStatus, ContentItem, Module } from "@/core/model/OattsModel";
-import dayjs from "dayjs";
-import { Duration } from "dayjs/plugin/duration";
+import { CompletionStatus, Course, CourseContent } from "@/core/model/OattsModel";
+import { OATTS_ROOT } from "../utils/Globals";
+import { ContentStateMap } from "@/contexts/models/ContentStateMap";
 
-export function CalculateEstimatedDuration(module: Module): Duration {
-  let duration = module.contents.map(CalculateContentDuration).reduce((prev, curr) => prev.add(curr));
-  return duration;
-}
-
-function CalculateContentDuration(content: ContentItem): Duration {
-  if (Array.isArray(content.subContents)) {
-    let subContentsDuration = content.subContents.map(CalculateContentDuration);
-    return subContentsDuration.reduce((prev, curr) => prev.add(curr));
-  }
-
-  return content.metadata.duration ?? dayjs.duration(0);
-}
-
-export function calculateModuleCompletionStatus(module: Module): CompletionStatus {
-  return calculateMultiContentCompletionStatus(module.contents);
-}
-
-export function calculateMultiContentCompletionStatus(contents: ContentItem[]): CompletionStatus {
-  let statuses = contents.map(CalculateContentCompletionStatus);
-  return ReduceCompletionStatus(statuses);
-}
-
-export function checkIfRequirementsAreComplete(modules: Module[]): boolean {
-  return modules.every((module) => calculateModuleCompletionStatus(module) === CompletionStatus.Completed);
-}
-
-export function CalculateContentCompletionStatus(content: ContentItem): CompletionStatus {
-  if (Array.isArray(content.subContents)) {
-    let completionStatuses = content.subContents.map(CalculateContentCompletionStatus);
-    return ReduceCompletionStatus(completionStatuses);
-  }
-
-  return content.state.completionStatus;
+export function checkIfRequirementsAreComplete(courses: Course[], states: ContentStateMap): boolean {
+  return courses.every((course) =>
+    course.contents.every((x) => states[x.id]?.completionStatus === CompletionStatus.Completed),
+  );
 }
 
 export function ReduceCompletionStatus(statuses: CompletionStatus[]): CompletionStatus {
@@ -65,38 +35,40 @@ export function CompletionStatusToString(status: CompletionStatus): string {
   }
 }
 
-export function CalculateModulesProgress(modules: Module[]): number {
+export function calculateCoursesProgress(modules: Course[], states: ContentStateMap | undefined): number {
   return (
-    modules.map((m) => CalculateModuleProgress(m)).reduce((accumulator, val) => accumulator + val, 0) / modules.length
+    modules.map((m) => calculateCourseProgress(m, states)).reduce((accumulator, val) => accumulator + val, 0) /
+    modules.length
   );
 }
 
-function CalculateModuleProgress(module: Module): number {
-  const statuses = module.contents.flatMap(FlattenContentStatuses);
-  const total = statuses.length;
-  const completed = statuses.filter((s) => s === CompletionStatus.Completed).length;
-  const inProgress = statuses.filter((s) => s === CompletionStatus.Started).length;
+function calculateCourseProgress(course: Course, states: ContentStateMap | undefined): number {
+  if (!states) return 0;
+  const contents = course.contents.flatMap(FlattenContentItem);
+  const total = contents.length;
+  const completed = contents.filter((x) => states[x.id].completionStatus === CompletionStatus.Completed).length;
+  const inProgress = contents.filter((x) => states[x.id].completionStatus === CompletionStatus.Started).length;
 
   return (completed + inProgress * 0.5) / total;
 }
 
-function FlattenContentStatuses(content: ContentItem): CompletionStatus[] {
-  const contents = FlattenContentItem(content);
-
-  const statuses = contents.map((c) => c.state.completionStatus);
-
-  return statuses;
-}
-
-export function FlattenContents(contents: ContentItem[]): ContentItem[] {
+export function FlattenContents(contents: CourseContent[]): CourseContent[] {
   const flattenedContents = contents.flatMap(FlattenContentItem);
   return flattenedContents;
 }
 
-function FlattenContentItem(content: ContentItem): ContentItem[] {
-  if (Array.isArray(content.subContents)) {
-    return content.subContents.flatMap(FlattenContentItem);
+function FlattenContentItem(content: CourseContent): CourseContent[] {
+  if (Array.isArray(content.children)) {
+    return content.children.flatMap(FlattenContentItem);
   }
 
   return [content];
+}
+
+export function GetContentURL(content: CourseContent) {
+  return `${OATTS_ROOT}/content/${content.id}/${content.entrypoint}`;
+}
+
+export function GetCourseImageURL(course: Course) {
+  return `${OATTS_ROOT}/assets/${course.img}`;
 }

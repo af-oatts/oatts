@@ -1,37 +1,30 @@
-import { CompletionStatus, Module } from "@/core/model/OattsModel";
+import { CompletionStatus, Course } from "@/core/model/OattsModel";
 import { Box, Card, CardContent, IconButton, Menu, MenuItem, Typography, useTheme } from "@mui/material";
-import ModulePreviewImage from "../module/ModulePreviewImage";
+import CoursePreviewImage from "../module/ModulePreviewImage";
 import { AnimatePresence, motion } from "motion/react";
-import { CalculateEstimatedDuration, calculateModuleCompletionStatus, CompletionStatusToString } from "../../core/modules/ModuleUtils";
-import { DurationToString } from "../../core/utils/TimeStuff";
-import { resetUserAssessment } from "../../core/database/Content";
-import { useAuth } from "@/contexts/hooks/useAuth";
+import { CompletionStatusToString, GetCourseImageURL } from "../../core/modules/ModuleUtils";
+import { SecondsToTimeString } from "../../core/utils/TimeStuff";
+
 import { useRouter } from "@tanstack/react-router";
 import { MoreVert } from "@mui/icons-material";
 import { useState } from "react";
-import dayjs from "dayjs";
+import { useCourseCompletionStatus } from "@/contexts/hooks/useCourseCompletionStatus";
+import { useResetCourse } from "@/contexts/hooks/useResetCourse";
 
-export default function ModuleCard({ module }: { module: Module }) {
+export default function CourseCard({ course }: { course: Course }) {
   let [menuAnchor, setMenuAnchor] = useState<null | HTMLElement>(null);
-  const timeToComplete = module.timeToComplete == undefined ? CalculateEstimatedDuration(module) : dayjs.duration(module.timeToComplete, 'seconds');
-  const completionStatus = calculateModuleCompletionStatus(module);
-  const { user } = useAuth();
+  const [completionStatus, _] = useCourseCompletionStatus(course);
   const router = useRouter();
-  const completed = completionStatus === CompletionStatus.Completed;
   const theme = useTheme();
+  const resetCourse = useResetCourse();
 
+  const isCompleted = completionStatus === CompletionStatus.Completed;
 
   const closeMenu = () => setMenuAnchor(null);
-  const resetProgress = () => Promise.all(
-    module.contents
-      .map((x) => x.metadata.id)
-      .map((id) => {
-        user && resetUserAssessment(user, id);
-      }),
-  ).finally(() => {
-    router.invalidate();
-  });
-
+  const resetProgress = () =>
+    resetCourse(course).finally(() => {
+      router.invalidate();
+    });
 
   return (
     <AnimatePresence>
@@ -65,7 +58,7 @@ export default function ModuleCard({ module }: { module: Module }) {
           height: "100%",
           overflow: "hidden",
           padding: "0",
-          position: "relative"
+          position: "relative",
         }}
         onClick={(e) => {
           if (menuAnchor != null) {
@@ -75,32 +68,37 @@ export default function ModuleCard({ module }: { module: Module }) {
         }}
       >
         <div>
-          <IconButton sx={{
-            position: "absolute",
-            zIndex: 76,
-            top: 0,
-            right: 0
-          }} onClick={(event) => {
-            event.stopPropagation();
-            event.preventDefault();
-            setMenuAnchor(event.currentTarget)
-          }}>
+          <IconButton
+            sx={{
+              position: "absolute",
+              zIndex: 76,
+              top: 0,
+              right: 0,
+            }}
+            onClick={(event) => {
+              event.stopPropagation();
+              event.preventDefault();
+              setMenuAnchor(event.currentTarget);
+            }}
+          >
             <MoreVert />
           </IconButton>
 
-          <Menu
-            id="long-menu"
-            anchorEl={menuAnchor}
-            open={menuAnchor != null}
-            onClose={closeMenu}
-          >
-            <MenuItem key="reset" disabled={completionStatus == CompletionStatus.NotStarted} onClick={(e) => { e.stopPropagation(); e.preventDefault(); resetProgress(); closeMenu(); }}>
+          <Menu id="long-menu" anchorEl={menuAnchor} open={menuAnchor != null} onClose={closeMenu}>
+            <MenuItem
+              key="reset"
+              disabled={completionStatus == CompletionStatus.NotStarted}
+              onClick={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                resetProgress();
+                closeMenu();
+              }}
+            >
               Reset Progress
             </MenuItem>
           </Menu>
-
         </div>
-
 
         <CardContent
           sx={{
@@ -110,7 +108,6 @@ export default function ModuleCard({ module }: { module: Module }) {
             height: "100%",
           }}
         >
-
           <Box
             sx={{
               overflow: "hidden",
@@ -118,7 +115,7 @@ export default function ModuleCard({ module }: { module: Module }) {
               backgroundColor: "inherit",
             }}
           >
-            <ModulePreviewImage completed={completed} src={module.previewImage} name={module.name} />
+            <CoursePreviewImage completed={isCompleted} src={GetCourseImageURL(course)} name={course.name} />
           </Box>
           <Box
             sx={{
@@ -136,11 +133,16 @@ export default function ModuleCard({ module }: { module: Module }) {
                 gridTemplateRows: "auto 1fr 0.5fr 0.5fr",
               }}
             >
-              <Typography variant="h6">{module.name}</Typography>
-              <Typography variant="caption">{module.description}</Typography>
-              <Typography sx={{ alignSelf: "end" }} variant="blended">
-                {DurationToString(timeToComplete)}
-              </Typography>
+              <Typography variant="h6">{course.name}</Typography>
+              <Typography variant="caption">{course.description}</Typography>
+              {course.timeToComplete != undefined ? (
+                <Typography sx={{ alignSelf: "end" }} variant="blended">
+                  {SecondsToTimeString(course.timeToComplete)}
+                </Typography>
+              ) : (
+                <></>
+              )}
+
               <Typography sx={{ textAlign: "center" }} variant="caption">
                 {CompletionStatusToString(completionStatus)}
               </Typography>

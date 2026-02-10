@@ -1,15 +1,19 @@
-import { CompletionStatus, ContentItem, ContentType } from "@/core/model/OattsModel";
+import { CompletionStatus, ContentState, CourseContentItemType, CourseContent } from "@/core/model/OattsModel";
 import { Box } from "@mui/material";
 import { useRouteContext } from "@tanstack/react-router";
 import { motion, useAnimate } from "motion/react";
 import { useEffect, useRef } from "react";
 import { loadModel } from "../../core/scorm/ScormHelper";
-import { saveContentState } from "../../core/database/Content";
+import { GetContentURL } from "@/core/modules/ModuleUtils";
+import { ScormStateToInternalState } from "@/core/scorm/ScormInternalizer";
+import { useSetContentState } from "@/contexts/hooks/useSetContentState";
+
 import { setupCSPViolationReporting } from "../../utils/CSPHelper";
 
-export default function ContentViewer({ content }: { content: ContentItem }) {
+export default function ContentViewer({ content, state }: { content: CourseContent; state: ContentState }) {
   const contentFrameRef = useRef<HTMLIFrameElement>(null);
   const [frameScope, frameAnimate] = useAnimate();
+  const setContentState = useSetContentState();
 
   let user = useRouteContext({
     from: "/_authenticated",
@@ -31,15 +35,19 @@ export default function ContentViewer({ content }: { content: ContentItem }) {
   }, [content]);
 
   useEffect(() => {
-    if (content.type !== ContentType.SCORM) {
+    if (content.type !== CourseContentItemType.SCORM) {
       // No point in setting up scorm API if the content isn't scorm
       return;
     }
 
     if (user !== undefined) {
-      loadModel(user, content.metadata.id).then((model) => {
+      loadModel(user, content.id).then((model) => {
         window.API_1484_11.SetModel(model);
         window.API_1484_11.SetContent(content);
+        window.API_1484_11.SetUpdateStateCallback((scormState) => {
+          let newState = ScormStateToInternalState(scormState, content.id);
+          setContentState(content.id, newState);
+        });
       });
     }
   }, [content]);
@@ -59,7 +67,7 @@ export default function ContentViewer({ content }: { content: ContentItem }) {
 
     frameAnimate(currentFrameScope, { opacity: 0.4, scale: 0.99 }, { duration: 0.25, ease: "easeIn" }).then(() => {
       // Security: Set iframe src with additional security attributes
-      const contentUrl = content.content ?? "";
+      const contentUrl = GetContentURL(content);
       currentFrameRef.src = contentUrl;
 
       // Apply security attributes to iframe
@@ -81,13 +89,13 @@ export default function ContentViewer({ content }: { content: ContentItem }) {
     frameAnimate(currentFrameScope, { opacity: 1, scale: 1 }, { duration: 0.25, ease: "easeOut" });
   }
 
+  // Wait a second then show next button if not scorm.
   useEffect(() => {
-    if (content.type === ContentType.SCORM) {
+    if (content.type === CourseContentItemType.SCORM) {
       return;
     }
     const timeout = setTimeout(() => {
-      content.state.completionStatus = CompletionStatus.Completed;
-      saveContentState(user!, content);
+      setContentState(content.id, { ...state, completionStatus: CompletionStatus.Completed });
     }, 1000);
     return () => clearTimeout(timeout);
   }, [content]);

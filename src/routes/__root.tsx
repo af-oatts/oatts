@@ -1,16 +1,17 @@
 import { UserContextType } from "@/contexts/UserContext";
-import ModuleContext from "@/core/modules/ModuleContext";
+import CoursesContext from "@/core/modules/ContentContext";
 import { IScormApi } from "@/core/scorm/ScormApi";
 import { CssBaseline } from "@mui/material";
 import { createRootRouteWithContext, Outlet } from "@tanstack/react-router";
 import AppTheme from "@/theme/AppTheme";
 import LoadConfig from "@/core/utils/ConfigLoader";
-import { OattsConfig } from "@/core/model/OattsModel";
+import { OattsManifest } from "@/core/model/OattsModel";
+import { ManifestContextProvider } from "@/contexts/providers/CourseContextProvider";
 
 type RouterContext = {
   authentication: UserContextType;
-  modules: ModuleContext;
-  config: OattsConfig;
+  courses: CoursesContext;
+  manifest: OattsManifest;
 };
 
 declare global {
@@ -24,10 +25,13 @@ export const Route = routeWithCtx({
   component: Root,
   beforeLoad: async () => {
     let config = await LoadConfig();
+    // let config;
     if (config === undefined) {
       config = {
-        modules: [],
+        courses: [],
         roles: [],
+        prequizzes: [],
+        postquizzes: [],
       };
     }
     return { config };
@@ -37,8 +41,10 @@ export const Route = routeWithCtx({
 function Root() {
   return (
     <AppTheme>
-      <CssBaseline />
-      <Outlet />
+      <ManifestContextProvider>
+        <CssBaseline />
+        <Outlet />
+      </ManifestContextProvider>
     </AppTheme>
   );
 }

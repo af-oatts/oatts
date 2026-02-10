@@ -1,81 +1,35 @@
-import { ScormModel } from "./ScormModel";
-import { Duration } from "dayjs/plugin/duration";
-// TODO: This is the only spot we use rxjs. Can we remove it?
-import { Subject } from "rxjs";
-
-// The learning module with one or more content items
-export type Module = {
-  id: string;
-  name: string;
-  description: string;
-  previewImage?: string;
-  paNumber?: string;
-  timeToComplete? : number;
-  roles: Role[];
-  contents: ContentItem[];
-};
-
-export type ContentItem = {
-  metadata: ContentMetadata;
-  type: ContentType;
-  workingDir: string;
-  content?: string;
-  subContents?: ContentItem[];
-  // ideally we'd just have the ContentState instead of both, but for now we can just have both and slowly
-  // move scorm stuff to our internal state
-  scormState?: ScormModel;
-  state: ContentState;
-};
-
-export type ContentMetadata = {
-  id: string;
-  name: string;
-  description?: string;
-  duration?: Duration;
-};
-
-export type QuizName = {
-  name: string;
-};
-export type PreQuiz = QuizName;
-export type PostQuiz = QuizName;
-
-// Basic config values for OATTS. Can be parsed from yaml
-export type OattsConfig = {
-  modules: ManifestMetadata[];
-  preQuiz?: ManifestMetadata;
-  postQuiz?: ManifestMetadata;
+export type OattsManifest = {
+  courses: Course[];
+  prequizzes?: Course[];
+  postquizzes?: Course[];
   versionNumber?: string;
   allowDataCollection?: boolean;
   roles: Role[];
 };
 
-export type PostQuizConfig = {
-  content: ManifestMetadata[];
-};
-
-export type PostQuizModule = {
-  postQuizzes: PostQuizContent[];
-}
-
-export type PostQuizContent = {
-  roleIds: string[];
-  content: ContentItem;
-};
-
-export type QuizContent = {
-  content: ContentItem;
-  roles: Role[];
-};
-
-export type ManifestMetadata = {
+export type Course = {
+  id: string;
   name: string;
+  roleIds: string[];
+  contents: CourseContent[];
+  img?: string;
+  description?: string;
+  paNumber?: string;
+  timeToComplete?: number;
 };
 
-export enum ContentType {
-  CONTAINER = "CONTAINER",
-  MODULE = "MODULE",
-  ROOT = "ROOT",
+export type CourseContent = {
+  id: string;
+  name: string;
+  type: CourseContentItemType;
+  entrypoint?: string;
+  description?: string;
+  children?: CourseContent[];
+};
+
+// Represents the types a course's contents can be.
+export enum CourseContentItemType {
+  SUBMODULE = "SUBMODULE",
   SCORM = "SCORM",
   PDF = "PDF",
   HTML = "HTML",
@@ -88,7 +42,6 @@ export type Role = {
   general: boolean;
 };
 
-
 // Holds anything about a module that might change over time
 // Unlike module metadata, for example, the state is meant to change throughout the module's lifecycle.
 // Like the completion status, that is not really information about the module, but it does indicate
@@ -96,30 +49,16 @@ export type Role = {
 export type ContentStateType = {
   completionStatus: CompletionStatus;
 };
+export type ContentState = {
+  contentID: string;
+  completionStatus: CompletionStatus;
+};
 
 export enum CompletionStatus {
-  Unknown,
-  NotStarted,
-  Started,
-  Completed,
-}
-
-export class ContentState {
-  private _completionStatus: CompletionStatus = CompletionStatus.NotStarted;
-  private _completionStatusSubject = new Subject<CompletionStatus>();
-
-  set completionStatus(status: CompletionStatus) {
-    this._completionStatus = status;
-    this._completionStatusSubject.next(status);
-  }
-
-  get completionStatus() {
-    return this._completionStatus;
-  }
-
-  get completionStatusObservable() {
-    return this._completionStatusSubject.asObservable();
-  }
+  Unknown = 0,
+  NotStarted = 1,
+  Started = 2,
+  Completed = 3,
 }
 
 export class GenericResult {
@@ -130,4 +69,11 @@ export class GenericResult {
 
   success: boolean;
   message: string | undefined;
+}
+
+export function createDefaultContentState(id: string): ContentState {
+  return {
+    contentID: id,
+    completionStatus: CompletionStatus.NotStarted,
+  };
 }
