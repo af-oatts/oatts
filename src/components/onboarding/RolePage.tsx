@@ -1,30 +1,20 @@
-import { Box, Checkbox, FormControlLabel, Radio, RadioGroup, Typography } from "@mui/material";
-import { AnimatePresence, motion } from "motion/react";
+import { Box, Checkbox, CircularProgress, FormControlLabel, FormGroup, Typography } from "@mui/material";
+import { motion } from "motion/react";
 import { TransitionParams } from "../../theme/TransitionParams";
-import { useEffect, useState } from "react";
+import { useMemo, useState } from "react";
 import { useRouteContext } from "@tanstack/react-router";
 import { AddUserCategories, ClearUserCategories as ClearUserRoles } from "../../core/authentication/Authenticator";
 import { NextButton, PreviousButton } from "./OnboardNavButtons";
+import { useGoals } from "@/contexts/providers/CourseContextProvider";
+import { Goal } from "@/core/model/OattsModel";
 
 export default function RolePage({ onNext, onPrevious }: { onNext: () => void; onPrevious: () => void }) {
-  let [canProceed, setCanProceed] = useState(false);
-  let ctx = useRouteContext({ from: "/_authenticated" });
-  let roles = ctx.config.roles;
-  let user = ctx.authentication.user;
-  const [selectedScenario, setSelectedScenario] = useState<UserScenario>(UserScenario.GENERAL);
-  const [selectedRoles, setSelectedRoles] = useState<Record<string, boolean>>({});
-  let handleRoleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSelectedRoles({
-      ...selectedRoles,
-      [event.target.value]: event.target.checked,
-    });
-  };
 
-  useEffect(() => {
-    let proceed = Object.keys(selectedRoles).filter((key) => selectedRoles[key]).length > 0;
-    let generalScenario = selectedScenario == UserScenario.GENERAL;
-    setCanProceed(proceed || generalScenario);
-  }, [selectedRoles, selectedScenario]);
+  let ctx = useRouteContext({ from: "/_authenticated" });
+  let user = ctx.authentication.user;
+  const [goals, isLoading] = useGoals();
+  const [selectedGoals, setSelectedGoals] = useState<Goal[]>([]);
+  const mayProceed = useMemo(() => selectedGoals.length != 0, [selectedGoals]);
 
   async function updateAndProceed() {
     if (user === undefined) {
@@ -32,22 +22,18 @@ export default function RolePage({ onNext, onPrevious }: { onNext: () => void; o
     }
 
     await ClearUserRoles(user.email);
-    const roles = getRoles();
-    await AddUserCategories(user.email, roles);
-    user.roles = roles;
+    let roleIds = new Set<string>();
+    for (let goal of selectedGoals) {
+      goal.roleIDs.forEach(rid => roleIds.add(rid))
+    }
+    let roleIdsArr = [...roleIds]
+    await AddUserCategories(user.email, roleIdsArr);
+    user.roles = roleIdsArr;
     onNext();
   }
 
-  function getRoles() {
-    if (selectedScenario == UserScenario.IMPROVE) {
-      return Object.keys(selectedRoles).filter((key) => selectedRoles[key]);
-    }
-
-    if (selectedScenario == UserScenario.GENERAL) {
-      return roles.filter(r => r.general).map(r => r.id);
-    }
-
-    return [];
+  if (isLoading) {
+    return <CircularProgress />
   }
 
   return (
@@ -82,7 +68,7 @@ export default function RolePage({ onNext, onPrevious }: { onNext: () => void; o
               {...TransitionParams({ delay: 0.25 })}
               variant="body1"
             >
-              Please select your primary goal
+              Please select all that apply
             </Typography>
             <Box
               component={motion.div}
@@ -92,29 +78,27 @@ export default function RolePage({ onNext, onPrevious }: { onNext: () => void; o
               }}
               {...TransitionParams({ delay: 0.5 })}
             >
-              <RadioGroup value={selectedScenario} onChange={(e) => setSelectedScenario(e.target.value as UserScenario)}>
-                <FormControlLabel value={UserScenario.GENERAL} label="General AFOQT preparation" control={<Radio />} />
-                <FormControlLabel value={UserScenario.IMPROVE} label="Improve my AFOQT scores" control={<Radio />} />
-              </RadioGroup>
-              <AnimatePresence>
-                {selectedScenario == UserScenario.IMPROVE ?
-                  <motion.div key="role-expander" transition={{ ease: "easeOut", duration: 0.5 }} initial={{ height: "0px", opacity: 0 }} animate={{ height: "100%", opacity: 1 }} exit={{ height: "10px", opacity: 0 }} style={{ display: "flex", flexDirection: "column", overflow: "auto" }}>
-                    {roles.map((role) => {
-                      return (
-                        <FormControlLabel
-                          key={role.id}
-                          control={<Checkbox onChange={handleRoleChange} value={role.id} />}
-                          label={role.name}
-                          sx={{
-                            padding: "0px",
-                            marginLeft: "10px"
-                          }}
-                        />
-                      );
-                    })}
-                  </motion.div> : <></>
-                }
-              </AnimatePresence>
+              <FormGroup>
+                {goals?.map(goal => (
+                  <FormControlLabel
+                    key={goal.id}
+                    control={
+                      <Checkbox
+                        checked={selectedGoals.some(g => g.id === goal.id)}
+                        onChange={(e) => {
+                          if (e.target.checked) {
+                            setSelectedGoals([...selectedGoals, goal]);
+                          } else {
+                            setSelectedGoals(selectedGoals.filter(g => g.id !== goal.id));
+                          }
+                        }}
+                      />
+                    }
+                    label={goal.name}
+                  />
+                ))}
+              </FormGroup>
+
             </Box>
           </Box>
         </Box>
@@ -122,15 +106,10 @@ export default function RolePage({ onNext, onPrevious }: { onNext: () => void; o
         <PreviousButton onClick={onPrevious}>
           Previous
         </PreviousButton>
-        <NextButton disabled={!canProceed} onClick={updateAndProceed}>
+        <NextButton disabled={!mayProceed} onClick={updateAndProceed}>
           Next
         </NextButton>
       </Box>
     </>
   );
-}
-
-enum UserScenario {
-  GENERAL = "general",
-  IMPROVE = "improve"
 }

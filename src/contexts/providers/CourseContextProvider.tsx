@@ -1,4 +1,4 @@
-import { Course, CourseContent, OattsManifest } from "@/core/model/OattsModel";
+import { Course, CourseContent, Goal, OattsManifest } from "@/core/model/OattsModel";
 import LoadConfig from "@/core/utils/ConfigLoader";
 import { getFlattenedRoleSpecificQuizzes } from "@/core/utils/QuizUtils";
 import { createContext, useContext, useEffect, useState } from "react";
@@ -88,3 +88,9 @@ export function usePostquizContents(): [Course | undefined, CourseContent[] | un
 
   return [(postquizzes || [])[0], contents, manifestContext.isLoading];
 }
+
+export function useGoals() : [Goal[] | undefined, boolean] {
+  const manifestCtx = useManifestContext();
+  return [manifestCtx.config.goals, manifestCtx.isLoading];
+
+} 

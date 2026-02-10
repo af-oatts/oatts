@@ -109,7 +109,7 @@ export default function DashboardStatusBar(props: StatusTileProps) {
           </Box>
           {props.mayCollectData ? (
             <Button sx={{ gridColumn: "3" }} size="small" onClick={() => DoExport(ctx.authentication.user)}>
-              Export Data
+              Export Data to Participate Research
             </Button>
           ) : (
             <></>

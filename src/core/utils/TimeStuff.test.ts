@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { FromIsoTimespan, SecondsToTimeString, type Timespan } from "./TimeStuff";
+import { FromIsoTimespan, SecondsToTimeString } from "./TimeStuff";
 
 describe("TimeStuff utilities", () => {
   describe("FromIsoTimespan", () => {

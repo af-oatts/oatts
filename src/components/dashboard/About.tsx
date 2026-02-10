@@ -1,15 +1,14 @@
 import { useSetOverlay } from "@/contexts/hooks/useOverlay"
 import { Paper } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ConfettiButton } from "../common/Confetti";
 import getOattsVersion from "@/core/utils/Version";
+
 export default function About() {
     const setOverlay = useSetOverlay();
     const [appVersion, setAppVersion] = useState<string | undefined>();
     const [contentVersion, setContentVersion] = useState<string | undefined>();
-    const onClickAway = () => {
-        setOverlay(null);
-    }
+    const paperRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
         getOattsVersion().then(v => {
@@ -18,9 +17,25 @@ export default function About() {
         })
     }, []);
 
-    return <div style={{ width: "100%", height: "100%", justifyContent: "center", alignContent: "center", textAlign: "center", backgroundColor: 'rgba(170, 170, 170, .4)' }} onClick={() => onClickAway()} onContextMenu={(e) => { e.preventDefault(); e.stopPropagation(); onClickAway(); }}>
+    // Close overlay only when the user clicks outside the Paper
+    useEffect(() => {
+        function onDocMouseDown(e: MouseEvent) {
+            if (!paperRef.current) return;
+            const target = e.target as Node | null;
+            if (!target) return;
+            if (!paperRef.current.contains(target)) {
+                setOverlay(null);
+            }
+        }
+        document.addEventListener("mousedown", onDocMouseDown);
+        return () => document.removeEventListener("mousedown", onDocMouseDown);
+    }, [setOverlay]);
+
+    return <div style={{ width: "100%", height: "100%", justifyContent: "center", alignContent: "center", textAlign: "center", backgroundColor: 'rgba(170, 170, 170, .4)' }}>
 
         <Paper
+            component="div"
+            ref={paperRef}
             sx={{
                 position: "relative",
                 overflowX: "clip",
@@ -35,8 +50,7 @@ export default function About() {
                 boxShadow: "md",
             }}
             variant="outlined"
-            onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
-            onContextMenu={(e) => { e.stopPropagation(); }}
+            onContextMenu={(e) => { e.stopPropagation(); }} // this is ok
         >
             <div>
                 <div style={{ fontSize: "50px", display: "flex", textAlign: "center", width: "100%", alignContent: "center", justifyContent: "center" }}>
@@ -55,14 +69,12 @@ export default function About() {
             <div>
                 <hr></hr>
                 <div style={{ display: "flex", textAlign: "center", width: "100%", alignContent: "center", justifyContent: "center", gap: "10px" }}>
-                    <a href="https://raw.githubusercontent.com/af-oatts/oatts/refs/heads/main/THIRD_PARTY_LICENSES">Licenses</a>
-                    <a href="https://raw.githubusercontent.com/af-oatts/oatts/refs/heads/main/CREDITS">Credits</a>
-                    <a href="https://raw.githubusercontent.com/af-oatts/oatts/refs/heads/main/TERMS_AND_CONDITIONS">Terms & Conditions</a>
-                    <a href="https://raw.githubusercontent.com/af-oatts/oatts/refs/heads/main/PRIVACY_POLICY">Privacy Policy</a>
+                    <a href="https://af-oatts.github.io/legal/license" target="_blank">License</a>
+                    <a href="https://af-oatts.github.io/legal/third-party" target="_blank">Third Party Licenses</a>
+                    <a href="https://af-oatts.github.io/legal/credits" target="_blank">Credits</a>
+                    <a href="https://af-oatts.github.io/legal/terms-conditions" target="_blank">Terms & Conditions</a>
                 </div>
             </div>
-
-
         </Paper>
     </div>
 }

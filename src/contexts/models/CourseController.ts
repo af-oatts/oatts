@@ -10,9 +10,14 @@ type ControllerReturnType = {
   isLoading: boolean;
 };
 
+
+/**
+ * This REALLY needs a better name...
+ */
 export class CourseController implements ControllerReturnType {
   course: Course | undefined;
   contents: CourseContent[] | undefined;
+  flatContents: CourseContent[] | undefined;
   contentType: ContentType;
   states: ContentStateMap | undefined;
   isLoading: boolean;
@@ -23,10 +28,17 @@ export class CourseController implements ControllerReturnType {
     this.contentType = data.contentType;
     this.states = data.states;
     this.isLoading = data.isLoading;
+
+    const flatten = (contents : CourseContent[]) => {
+      let flatContents : CourseContent[] = []
+      contents.forEach(c => flatContents = c.children? [...flatContents, c, ...flatten(c.children)] : [...flatContents, c]);
+      return flatContents;
+    }
+    this.flatContents = data.contents? flatten(data.contents) : [];
   }
 
-  getContent(id: string) {
-    return this.contents?.find((x) => x.id === id);
+  getContent(id: string) {1
+    return this.flatContents?.find(c => c.id === id);
   }
 
   getState(id: string) {
@@ -34,14 +46,14 @@ export class CourseController implements ControllerReturnType {
   }
 
   getNext() {
-    const incomplete = this.contents?.find(
+    const incomplete = this.flatContents?.find(
       (x) => !this.isLoading && this.states && this.states[x.id]?.completionStatus !== CompletionStatus.Completed,
     );
     return incomplete?.id || "";
   }
 
   checkIsComplete() {
-    return this.contents?.every(
+    return this.flatContents?.every(
       (x) => !this.isLoading && this.states && this.states[x.id]?.completionStatus === CompletionStatus.Completed,
     );
   }

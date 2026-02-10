@@ -9,6 +9,7 @@ function RouteComponent() {
   const controller = usePrequizController();
 
   if (controller.isLoading) return <></>;
+  
 
   return (
     <Navigate

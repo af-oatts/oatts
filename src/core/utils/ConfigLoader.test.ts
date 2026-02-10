@@ -2,7 +2,6 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { parse } from "yaml";
 import LoadConfig, { CONFIG_LOCATION } from "./ConfigLoader";
 import { FetchFile } from "./FileHelper";
-import { OATTS_ROOT } from "./Globals";
 import type { OattsManifest, CourseContentItemType } from "@/core/model/OattsModel";
 
 // Mock the dependencies

@@ -1,4 +1,4 @@
-import { ContentState, ContentStateType, CourseContent, createDefaultContentState } from "@/core/model/OattsModel";
+import { ContentState, ContentStateType, createDefaultContentState } from "@/core/model/OattsModel";
 import User from "@/core/model/UserModel";
 import loadDatabase from "./DatabaseLoader";
 import { CompletionStatus, ScormDbEntity, ScormModel } from "@/core/model/ScormModel";

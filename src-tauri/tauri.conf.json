@@ -5,9 +5,9 @@
   "identifier": "com.oatts-authors.oatts",
 
   "build": {
-    "beforeDevCommand": "pnpm dev",
+    "beforeDevCommand": "pnpm prebuild && pnpm dev",
     "devUrl": "http://localhost:1420",
-    "beforeBuildCommand": "pnpm build",
+    "beforeBuildCommand": "pnpm prebuild && pnpm build",
     "frontendDist": "../dist"
   },
   "app": {
