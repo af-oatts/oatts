@@ -3,7 +3,6 @@
   "productName": "OATTS",
   "version": "1.0.0",
   "identifier": "com.oatts-authors.oatts",
-
   "build": {
     "beforeDevCommand": "pnpm prebuild && pnpm dev",
     "devUrl": "http://localhost:1420",
@@ -19,14 +18,19 @@
       }
     ],
     "security": {
-      "csp": null
-    }
+"csp": "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' http://oatts.localhost https://oatts.localhost; style-src 'self' 'unsafe-inline' http://oatts.localhost https://oatts.localhost; img-src 'self' data: blob: https: http://oatts.localhost https://oatts.localhost; font-src 'self' data: http://oatts.localhost https://oatts.localhost; connect-src 'self' http://oatts.localhost https://oatts.localhost http://tauri.localhost ws://localhost:* wss://localhost:*; media-src 'self' data: blob: http://oatts.localhost https://oatts.localhost; object-src 'none'; frame-src 'self' http://oatts.localhost https://oatts.localhost; child-src 'self' http://oatts.localhost https://oatts.localhost;"    }
   },
   "bundle": {
     "active": true,
     "targets": "all",
     "category": "Education",
-    "icon": ["icons/32x32.png", "icons/128x128.png", "icons/128x128@2x.png", "icons/icon.icns", "icons/icon.ico"],
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ],
     "macOS": {
       "signingIdentity": "-",
       "dmg": {
