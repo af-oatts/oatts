@@ -69,7 +69,7 @@ function FlattenContentItem(content: CourseContent): CourseContent[] {
 }
 
 export function GetContentURL(content: CourseContent) {
-  return `${OATTS_ROOT}/content/${content.id}/${content.entrypoint}`;
+  return `/oatts/content/${content.id}/${content.entrypoint}`;
 }
 
 export function GetCourseImageURL(course: Course) {
