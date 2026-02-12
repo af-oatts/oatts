@@ -8,6 +8,7 @@ import type { ZipStats } from './types';
 interface ZipProcessResult {
   zipHashes: FileHash[];
   extractedDirs: Set<string>;
+  actuallyExtractedDirs: Set<string>
   zipStats: ZipStats;
 }
 
@@ -104,19 +105,20 @@ export function processZipFiles(
 ): ZipProcessResult {
   const allZipHashes: FileHash[] = [];
   const extractedDirs = new Set<string>();
+  const actuallyExtractedDirs = new Set<string>();
   const zipStats: ZipStats = { extracted: 0, skipped: 0 };
 
   const sourceZipsDir = path.join(sourceDir, 'content');
   
   if (!fs.existsSync(sourceZipsDir)) {
-    return { zipHashes: allZipHashes, extractedDirs, zipStats };
+    return { zipHashes: allZipHashes, extractedDirs, actuallyExtractedDirs, zipStats };
   }
 
   const sourceFiles = fs.readdirSync(sourceZipsDir);
   const sourceZipFiles = sourceFiles.filter(file => file.endsWith('.zip'));
 
   if (sourceZipFiles.length === 0) {
-    return { zipHashes: allZipHashes, extractedDirs, zipStats };
+    return { zipHashes: allZipHashes, extractedDirs, actuallyExtractedDirs, zipStats };
   }
 
   for (const zipFile of sourceZipFiles) {
@@ -127,6 +129,7 @@ export function processZipFiles(
 
     if (result.extracted) {
       zipStats.extracted++;
+      actuallyExtractedDirs.add(result.extractedDir);
     } else {
       zipStats.skipped++;
     }
@@ -134,5 +137,5 @@ export function processZipFiles(
 
   verboseLog('\n✓ All zip files processed');
 
-  return { zipHashes: allZipHashes, extractedDirs, zipStats };
+  return { zipHashes: allZipHashes, extractedDirs, actuallyExtractedDirs, zipStats };
 }

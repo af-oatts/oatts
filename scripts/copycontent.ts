@@ -25,7 +25,7 @@ function ensureDirectoriesExist(sourceDir: string, destDir: string) {
   }
 }
 
-export function copyAndExtractContent(sourceDir: string, destDir: string) : {created: string[], deleted: string[]} {
+export function copyAndExtractContent(sourceDir: string, destDir: string) : string[] {
   try {
     console.log('Copying content...');
     verboseLog('Checking for existing content cache...');
@@ -53,7 +53,7 @@ export function copyAndExtractContent(sourceDir: string, destDir: string) : {cre
     verboseLog(`✓ Copy complete: ${stats.copied} copied, ${stats.skipped} skipped, ${stats.deleted} deleted`);
 
     verboseLog('\nProcessing zip files...');
-    const { zipHashes, extractedDirs, zipStats } = processZipFiles(
+    const { zipHashes, extractedDirs, actuallyExtractedDirs, zipStats } = processZipFiles(
       sourceDir,
       destDir,
       existingCache
@@ -68,7 +68,7 @@ export function copyAndExtractContent(sourceDir: string, destDir: string) : {cre
       `${stats.deleted} files deleted, ${zipStats.extracted} zips extracted, ${zipStats.skipped} zips skipped`
     );
 
-    return {created: [...extractedDirs], deleted};
+    return [...actuallyExtractedDirs]
 
   } catch (error) {
     console.error('Error:', error);

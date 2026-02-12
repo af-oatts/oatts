@@ -7,6 +7,7 @@ import type { CopyStats } from './types';
 function shouldSkipFile(filePath: string): boolean {
   const basename = path.basename(filePath);
   if (basename === '.contentcache') return true;
+  
   if (filePath.endsWith('.zip')) return true;
   return false;
 }
@@ -110,6 +111,7 @@ export function removeDeletedFiles(
 
   for (const cachedPath of existingCache.keys()) {
     if (currentFiles.has(cachedPath)) continue;
+    if (cachedPath.startsWith('repo/')) continue;
 
     const fullPath = path.join(destDir, cachedPath);
     if (!fs.existsSync(fullPath)) continue;

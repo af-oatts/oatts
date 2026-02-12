@@ -6,7 +6,7 @@ const BASE_URL_TEMPLATE = 'http://oatts.localhost/oatts/content/';
 function processHtml(filePath: string, contentId: string) {
     const content = fs.readFileSync(filePath, 'utf8');
 
-    const baseTag = `<base href="${BASE_URL_TEMPLATE}${contentId}/" target="_blank">`;
+    const baseTag = `<base href="${BASE_URL_TEMPLATE}${contentId}/" target="_blank"><meta http-equiv="Content-Security-Policy" content="default-src 'self' oatts: tauri: http://oatts.localhost https://oatts.localhost http://tauri.localhost https://tauri.localhost; script-src 'self' oatts: tauri: http://oatts.localhost https://oatts.localhost http://tauri.localhost https://tauri.localhost 'unsafe-inline' 'unsafe-eval'; style-src 'self' oatts: tauri: http://oatts.localhost https://oatts.localhost http://tauri.localhost https://tauri.localhost 'unsafe-inline'; img-src 'self' oatts: tauri: http://oatts.localhost https://oatts.localhost http://tauri.localhost https://tauri.localhost data: blob: https:; font-src 'self' oatts: tauri: http://oatts.localhost https://oatts.localhost http://tauri.localhost https://tauri.localhost data:; connect-src 'self' oatts: tauri: http://oatts.localhost https://oatts.localhost http://tauri.localhost https://tauri.localhost ws://localhost:* wss://localhost:*;">`;
 
     if (content.includes('<base ')) {
         console.log(`Skipping ${filePath} - already has <base> tag`);

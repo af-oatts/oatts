@@ -69,12 +69,22 @@ pub fn run() {
             // Handle mapped assets from YAML
             // Expected format: /oatts/{uuid}/{filepath}
             let mut asset_path = path.strip_prefix('/').unwrap_or(path).to_string();
+                        let mut original_extension: Option<String> = None;
 
             if let Some(stripped) = path.strip_prefix("/oatts/content/") {
                 let parts: Vec<&str> = stripped.splitn(2, '/').collect();
                 if parts.len() == 2 {
                     let uuid = parts[0];
                     let file_path = parts[1];
+
+                                        // Extract the original file extension
+                    if let Some(ext) = std::path::Path::new(file_path)
+                        .extension()
+                        .and_then(|e| e.to_str())
+                    {
+                        original_extension = Some(ext.to_string());
+                        println!("File: {} Extension: {}", file_path, ext.to_string());
+                    }
 
                     if let Some(uuid_map) = REDIRECTS.get(uuid) {
                         if let Some(&id) = uuid_map.get(file_path) {
@@ -87,15 +97,31 @@ pub fn run() {
             }
 
             // Hand back to "Default" (Bundled Assets)
+            let bleh = asset_path.clone();
             match app_handle.asset_resolver().get(asset_path) {
-                Some(asset) => Response::builder()
-                    .status(StatusCode::OK)
-                    .header("Content-Type", asset.mime_type)
-                    .header("Access-Control-Allow-Origin", "*")
-                    .header("Cache-Control", "no-cache, no-store, must-revalidate")
-                    .header("Expires", "0")
-                    .body(asset.bytes.to_vec())
-                    .unwrap(),
+                Some(asset) => {
+                    let mime_type = if let Some(ext) = original_extension {
+                        let from_extension = mime_guess::from_ext(&ext).first_or_octet_stream();
+                        if asset.mime_type == "application/octet-stream"
+                        || asset.mime_type == "text/plain"
+                        {
+                            asset.mime_type.to_string()
+                        } else {
+                            from_extension.to_string()
+                        }
+                    } else {
+                        asset.mime_type.to_string()
+                    };
+                    println!("Found asset {}. determined mime type:  {}", bleh, mime_type);
+                    return Response::builder()
+                        .status(StatusCode::OK)
+                        .header("Content-Type", &mime_type)
+                        .header("Access-Control-Allow-Origin", "*")
+                        .header("Expires", "0")
+                        .body(asset.bytes.to_vec()).unwrap();
+
+
+                },
                 None => Response::builder()
                     .status(StatusCode::NOT_FOUND)
                     .header("Content-Type", "text/plain")

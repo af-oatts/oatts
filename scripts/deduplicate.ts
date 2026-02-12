@@ -63,29 +63,28 @@ function determineHashID(hash: string, preExistingHashes: Map<string, number>): 
 }
 
 function pointersToYaml(pointers: { location: string, id: number }[], existingStructure: any = {}): string {
-  const structure: any = { ...existingStructure };
-  
-  pointers.forEach(({ location, id }) => {
-    const parts = location.split('/').filter(p => p);
-    let current = structure;
-    
-    for (let i = 0; i < parts.length - 1; i++) {
-      if (!current[parts[i]]) {
-        current[parts[i]] = {};
-      }
-      current = current[parts[i]];
-    }
-    
-    current[parts[parts.length - 1]] = id;
-  });
-  
-  return yaml.stringify(structure);
+    const structure: any = { ...existingStructure };
+
+    pointers.forEach(({ location, id }) => {
+        const parts = location.split('/').filter(p => p);
+        let current = structure;
+
+        for (let i = 0; i < parts.length - 1; i++) {
+            if (!current[parts[i]]) {
+                current[parts[i]] = {};
+            }
+            current = current[parts[i]];
+        }
+
+        current[parts[parts.length - 1]] = id;
+    });
+
+    return yaml.stringify(structure);
 }
 
 export function deduplicate(
     baseDir: string,
     searchPaths: string[],
-    deleted: string[]
 ): void {
     const hashMap = new Map<string, string[]>();
 
@@ -129,7 +128,7 @@ export function deduplicate(
 
         locations.forEach(location => pointers.push({ location, id }));
     }
-    
+
     const redirectsPath = path.join(process.cwd(), 'src-tauri', 'assets', 'redirects.yml');
     let existingStructure: any = {};
 
@@ -139,11 +138,21 @@ export function deduplicate(
     }
 
     const yml = pointersToYaml(pointers, existingStructure);
-    
+
     const assetsDir = path.dirname(redirectsPath);
     if (!fs.existsSync(assetsDir)) {
         fs.mkdirSync(assetsDir, { recursive: true });
     }
     fs.writeFileSync(redirectsPath, yml, 'utf-8');
     console.log(`Updated redirects.yml with ${pointers.length} pointer(s)`);
+
+    // Delete files that are now redirected
+    console.log(`Deleting ${pointers.length} deduplicated file(s)...`);
+    for (const { location } of pointers) {
+        const filePath = path.join(baseDir, location);
+        if (fs.existsSync(filePath)) {
+            fs.unlinkSync(filePath);
+            verboseLog(`Deleted ${location}`);
+        }
+    }
 }

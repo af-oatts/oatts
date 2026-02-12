@@ -9,11 +9,9 @@ const sourceDir = path.join(process.cwd(), 'content');
 const destDir = path.join(process.cwd(), 'public', 'oatts');
 
 // First copy all the stuff over. 
-let {created, deleted} = copyAndExtractContent(sourceDir, destDir);
+let createdContent = copyAndExtractContent(sourceDir, destDir);
 
-// Then de-duplicate.
-
-deduplicate(destDir, created, deleted);
-
-// Then put in the base tags.
-addIndexBaseTags(destDir);
+if(createdContent.length > 1) {
+    deduplicate(destDir, createdContent);
+    addIndexBaseTags(destDir);
+}
