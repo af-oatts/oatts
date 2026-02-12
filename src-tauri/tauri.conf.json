@@ -18,38 +18,38 @@
       }
     ],
     "security": {
-"csp": "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' http://oatts.localhost https://oatts.localhost; style-src 'self' 'unsafe-inline' http://oatts.localhost https://oatts.localhost; img-src 'self' data: blob: https: http://oatts.localhost https://oatts.localhost; font-src 'self' data: http://oatts.localhost https://oatts.localhost; connect-src 'self' http://oatts.localhost https://oatts.localhost http://tauri.localhost ws://localhost:* wss://localhost:*; media-src 'self' data: blob: http://oatts.localhost https://oatts.localhost; object-src 'none'; frame-src 'self' http://oatts.localhost https://oatts.localhost; child-src 'self' http://oatts.localhost https://oatts.localhost;"    }
-  },
-  "bundle": {
-    "active": true,
-    "targets": "all",
-    "category": "Education",
-    "icon": [
-      "icons/32x32.png",
-      "icons/128x128.png",
-      "icons/128x128@2x.png",
-      "icons/icon.icns",
-      "icons/icon.ico"
-    ],
-    "macOS": {
-      "signingIdentity": "-",
-      "dmg": {
-        "appPosition": {
-          "x": 180,
-          "y": 170
+      "csp": "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' http://oatts.localhost https://oatts.localhost oatts://localhost; style-src 'self' 'unsafe-inline' http://oatts.localhost https://oatts.localhost oatts://localhost; img-src 'self' data: blob: https: http://oatts.localhost https://oatts.localhost oatts://localhost; font-src 'self' data: http://oatts.localhost https://oatts.localhost oatts://localhost; connect-src 'self' http://oatts.localhost https://oatts.localhost oatts://localhost http://tauri.localhost ws://localhost:* wss://localhost:*; media-src 'self' data: blob: http://oatts.localhost https://oatts.localhost oatts://localhost; object-src 'none'; frame-src 'self' http://oatts.localhost https://oatts.localhost oatts://localhost; child-src 'self' http://oatts.localhost https://oatts.localhost oatts://localhost;"
+    },
+    "bundle": {
+      "active": true,
+      "targets": "all",
+      "category": "Education",
+      "icon": [
+        "icons/32x32.png",
+        "icons/128x128.png",
+        "icons/128x128@2x.png",
+        "icons/icon.icns",
+        "icons/icon.ico"
+      ],
+      "macOS": {
+        "signingIdentity": "-",
+        "dmg": {
+          "appPosition": {
+            "x": 180,
+            "y": 170
+          },
+          "applicationFolderPosition": {
+            "x": 480,
+            "y": 170
+          },
+          "windowSize": {
+            "height": 400,
+            "width": 660
+          }
         },
-        "applicationFolderPosition": {
-          "x": 480,
-          "y": 170
-        },
-        "windowSize": {
-          "height": 400,
-          "width": 660
-        }
-      },
-      "files": {},
-      "hardenedRuntime": true,
-      "minimumSystemVersion": "10.13"
+        "files": {},
+        "hardenedRuntime": true,
+        "minimumSystemVersion": "10.13"
+      }
     }
   }
-}
