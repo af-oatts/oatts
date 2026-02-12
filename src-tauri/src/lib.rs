@@ -7,7 +7,7 @@ use tauri::http::{Response, StatusCode};
 use tauri::Manager;
 
 static REDIRECTS: Lazy<HashMap<String, HashMap<String, u32>>> = Lazy::new(|| {
-    let yaml_content = include_str!("assets/redirects.yml");
+    let yaml_content = include_str!(concat!(env!("CARGO_MANIFEST_DIR"), "/assets/redirects.yml"));
     let root: Value = serde_yaml::from_str(yaml_content).expect("Failed to parse redirects.yml");
 
     let mut result = HashMap::new();
@@ -54,7 +54,6 @@ pub fn run() {
         .register_uri_scheme_protocol("oatts", move |ctx, request| {
             let app_handle = ctx.app_handle();
             let path = request.uri().path();
-            println!("{}", path);
 
             // Handle CORS preflight
             if request.method() == "OPTIONS" {
@@ -71,7 +70,7 @@ pub fn run() {
             // Expected format: /oatts/{uuid}/{filepath}
             let mut asset_path = path.strip_prefix('/').unwrap_or(path).to_string();
 
-            if let Some(stripped) = path.strip_prefix("/oatts/") {
+            if let Some(stripped) = path.strip_prefix("/oatts/content/") {
                 let parts: Vec<&str> = stripped.splitn(2, '/').collect();
                 if parts.len() == 2 {
                     let uuid = parts[0];
@@ -94,7 +93,6 @@ pub fn run() {
                     .header("Content-Type", asset.mime_type)
                     .header("Access-Control-Allow-Origin", "*")
                     .header("Cache-Control", "no-cache, no-store, must-revalidate")
-                    .header("Pragma", "no-cache")
                     .header("Expires", "0")
                     .body(asset.bytes.to_vec())
                     .unwrap(),
@@ -102,7 +100,6 @@ pub fn run() {
                     .status(StatusCode::NOT_FOUND)
                     .header("Content-Type", "text/plain")
                     .header("Access-Control-Allow-Origin", "*")
-                    .header("Cache-Control", "no-cache")
                     .body("Asset not found".as_bytes().to_vec())
                     .unwrap(),
             }

@@ -27,3 +27,4 @@ target
 public/oatts
 
 !public/**/dist
+src-tauri/assets/redirects.yml

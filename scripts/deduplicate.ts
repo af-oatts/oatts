@@ -130,7 +130,7 @@ export function deduplicate(
         locations.forEach(location => pointers.push({ location, id }));
     }
     
-    const redirectsPath = path.join(baseDir, 'src-tauri', 'assets', 'redirects.yml');
+    const redirectsPath = path.join(process.cwd(), 'src-tauri', 'assets', 'redirects.yml');
     let existingStructure: any = {};
 
     if (fs.existsSync(redirectsPath)) {
