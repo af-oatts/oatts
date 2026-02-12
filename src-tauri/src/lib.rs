@@ -1,7 +1,51 @@
 mod db;
 mod utils;
+use once_cell::sync::Lazy;
+use serde_yaml::Value;
+use std::collections::HashMap;
 use tauri::http::{Response, StatusCode};
 use tauri::Manager;
+
+static REDIRECTS: Lazy<HashMap<String, HashMap<String, u32>>> = Lazy::new(|| {
+    let yaml_content = include_str!("assets/redirects.yml");
+    let root: Value = serde_yaml::from_str(yaml_content).expect("Failed to parse redirects.yml");
+
+    let mut result = HashMap::new();
+
+    if let Some(content) = root.get("content").and_then(|v| v.as_mapping()) {
+        for (uuid, files) in content {
+            if let (Some(uuid_str), Some(files_map)) = (uuid.as_str(), files.as_mapping()) {
+                let mut file_map = HashMap::new();
+                flatten_yaml_to_map(files_map, String::new(), &mut file_map);
+                result.insert(uuid_str.to_string(), file_map);
+            }
+        }
+    }
+
+    result
+});
+
+fn flatten_yaml_to_map(
+    mapping: &serde_yaml::Mapping,
+    prefix: String,
+    result: &mut HashMap<String, u32>,
+) {
+    for (key, val) in mapping {
+        if let Some(key_str) = key.as_str() {
+            let new_path = if prefix.is_empty() {
+                key_str.to_string()
+            } else {
+                format!("{}/{}", prefix, key_str)
+            };
+
+            if let Some(num) = val.as_u64() {
+                result.insert(new_path, num as u32);
+            } else if let Some(sub_mapping) = val.as_mapping() {
+                flatten_yaml_to_map(sub_mapping, new_path, result);
+            }
+        }
+    }
+}
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
@@ -23,21 +67,28 @@ pub fn run() {
                     .unwrap();
             }
 
-            // 1. Handle redirect logic
-            if path == "/oatts/assets/ccc5a2a6-571b-4248-ac8e-3e79bb207ffb.jpg" {
-                return Response::builder()
-                    .status(StatusCode::FOUND)
-                    .header("Location", "/oatts/assets/rick.jpg")
-                    .header("Access-Control-Allow-Origin", "*")
-                    .header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
-                    .header("Access-Control-Allow-Headers", "*")
-                    .body(Vec::new())
-                    .unwrap();
+            // Handle mapped assets from YAML
+            // Expected format: /oatts/{uuid}/{filepath}
+            let mut asset_path = path.strip_prefix('/').unwrap_or(path).to_string();
+
+            if let Some(stripped) = path.strip_prefix("/oatts/") {
+                let parts: Vec<&str> = stripped.splitn(2, '/').collect();
+                if parts.len() == 2 {
+                    let uuid = parts[0];
+                    let file_path = parts[1];
+
+                    if let Some(uuid_map) = REDIRECTS.get(uuid) {
+                        if let Some(&id) = uuid_map.get(file_path) {
+                            // Serve the asset directly from /oatts/repo/{id}
+                            asset_path = format!("oatts/repo/{}", id);
+                            println!("Mapped {} -> {}", path, asset_path);
+                        }
+                    }
+                }
             }
 
-            // 3. Hand back to "Default" (Bundled Assets)
-            let asset_path = path.strip_prefix('/').unwrap_or(path);
-            match app_handle.asset_resolver().get(asset_path.to_string()) {
+            // Hand back to "Default" (Bundled Assets)
+            match app_handle.asset_resolver().get(asset_path) {
                 Some(asset) => Response::builder()
                     .status(StatusCode::OK)
                     .header("Content-Type", asset.mime_type)
