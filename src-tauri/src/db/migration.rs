@@ -1,7 +1,7 @@
 use tauri_plugin_sql::{Migration, MigrationKind};
 
 pub fn create_migrations() -> Vec<Migration> {
-  let migrations = vec![
+    let migrations = vec![
     Migration {
       version: 1,
       description: "Establish the user table",
@@ -42,5 +42,5 @@ pub fn create_migrations() -> Vec<Migration> {
     }
   ];
 
-  migrations
+    migrations
 }

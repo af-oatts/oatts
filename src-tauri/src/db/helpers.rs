@@ -4,26 +4,28 @@ use sqlx::sqlite::SqlitePoolOptions;
 
 #[derive(sqlx::FromRow)]
 pub struct UserContentState {
-  #[sqlx(rename = "contentUri")]
-  pub content_uri: String,
-  pub data: String
+    #[sqlx(rename = "contentUri")]
+    pub content_uri: String,
+    pub data: String,
 }
 
-pub async fn get_exportable_states(db_path: &Path, email: &str) -> Result<Vec<UserContentState>, sqlx::Error> {
-  let pool = SqlitePoolOptions::new()
-    .connect(format!("sqlite:{}", db_path.display()).as_str())
-    .await?;
+pub async fn get_exportable_states(
+    db_path: &Path,
+    email: &str,
+) -> Result<Vec<UserContentState>, sqlx::Error> {
+    let pool = SqlitePoolOptions::new()
+        .connect(format!("sqlite:{}", db_path.display()).as_str())
+        .await?;
 
-  let state_query = 
-    r#"
+    let state_query = r#"
     SELECT scorm.* FROM scorm
     INNER JOIN users ON users.id = scorm.userId
     WHERE users.email = $1"#;
 
-  let results = sqlx::query_as::<_, UserContentState>(state_query)
-    .bind(email)
-    .fetch_all(&pool)
-    .await?;
+    let results = sqlx::query_as::<_, UserContentState>(state_query)
+        .bind(email)
+        .fetch_all(&pool)
+        .await?;
 
-  Ok(results)
+    Ok(results)
 }

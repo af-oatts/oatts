@@ -1,22 +1,25 @@
-use aes_gcm::{ aead::{ rand_core::RngCore, Aead, OsRng }, Aes256Gcm, KeyInit, Nonce };
+use aes_gcm::{
+    aead::{rand_core::RngCore, Aead, OsRng},
+    Aes256Gcm, KeyInit, Nonce,
+};
+use base64::{engine::general_purpose::STANDARD as B64, Engine};
 use pkcs8::DecodePublicKey;
+use rsa::{Oaep, RsaPublicKey};
+use sanitise_file_name::sanitise;
 use serde::Serialize;
-use sha2::{ Sha256, Digest };
+use sha2::{Digest, Sha256};
 use std::{
     env::temp_dir,
     error::Error,
-    fs::{ self, File },
-    io::{ Read, Write },
-    path::{ Path, PathBuf },
-    time::{ SystemTime, UNIX_EPOCH },
+    fs::{self, File},
+    io::{Read, Write},
+    path::{Path, PathBuf},
+    time::{SystemTime, UNIX_EPOCH},
 };
-use base64::{ engine::general_purpose::STANDARD as B64, Engine };
-use rsa::{ Oaep, RsaPublicKey };
-use sanitise_file_name::sanitise;
 use tauri::Manager;
 use zip::write::SimpleFileOptions;
 
-use crate::db::helpers::{ get_exportable_states, UserContentState };
+use crate::db::helpers::{get_exportable_states, UserContentState};
 const PUBKEY_PEM: &str = include_str!(concat!(env!("CARGO_MANIFEST_DIR"), "/assets/key.pub"));
 
 #[derive(Serialize)]
@@ -38,7 +41,7 @@ struct EncryptionResult {
 pub async fn export_legalese(
     app_handle: tauri::AppHandle,
     contents: String,
-    suggested_name: String
+    suggested_name: String,
 ) -> Result<(), String> {
     use tauri_plugin_dialog::DialogExt;
 
@@ -54,7 +57,9 @@ pub async fn export_legalese(
         return Ok(());
     };
 
-    let path = filepath.into_path().map_err(|e| format!("Could not resolve save path: {e}"))?;
+    let path = filepath
+        .into_path()
+        .map_err(|e| format!("Could not resolve save path: {e}"))?;
     fs::write(&path, contents).map_err(|e| e.to_string())?;
     Ok(())
 }
@@ -65,9 +70,12 @@ pub async fn export_data(
     user_email: &str,
     destination: &str,
     informed_consent_attestation: &str,
-    oatts_version: &str
+    oatts_version: &str,
 ) -> Result<(), String> {
-    let db_path = Path::join(app_handle.path().app_data_dir().unwrap().as_path(), "test2.db");
+    let db_path = Path::join(
+        app_handle.path().app_data_dir().unwrap().as_path(),
+        "test2.db",
+    );
     let content_states = match get_exportable_states(db_path.as_path(), user_email).await {
         Ok(s) => s,
         Err(sqlx_err) => {
@@ -75,7 +83,13 @@ pub async fn export_data(
         }
     };
 
-    match build_bundle(&content_states, destination, informed_consent_attestation, oatts_version, user_email) {
+    match build_bundle(
+        &content_states,
+        destination,
+        informed_consent_attestation,
+        oatts_version,
+        user_email,
+    ) {
         Ok(_) => {}
         Err(err) => {
             return Err(err.to_string());
@@ -90,7 +104,7 @@ fn build_bundle(
     save_path: &str,
     informed_consent_attestation: &str,
     oatts_version: &str,
-    user_email: &str
+    user_email: &str,
 ) -> Result<(), Box<dyn Error>> {
     let salt =
         format!("{} Oatts Salt (ew salty oats) that is only helpful for stopping rainbow tables assembled by other hacked apps, not helpful for oatts-specific rainbow tables. But it lets the same email become the same hash no matter the computer. This is the salt btw. This super crazy long string. Security is a joke.", user_email);
@@ -177,7 +191,7 @@ fn encrypt(src_path: &str) -> Result<EncryptionResult, Box<dyn Error>> {
 fn archive_states(
     states: &Vec<UserContentState>,
     save_path: &PathBuf,
-    informed_consent_attestation: &str
+    informed_consent_attestation: &str,
 ) -> zip::result::ZipResult<String> {
     let path = save_path.join("data.zip");
     let file = std::fs::File::create(&path).unwrap();
