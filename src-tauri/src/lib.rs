@@ -97,7 +97,6 @@ pub fn run() {
             }
 
             // Hand back to "Default" (Bundled Assets)
-            let bleh = asset_path.clone();
             match app_handle.asset_resolver().get(asset_path) {
                 Some(asset) => {
                     let mime_type = if let Some(ext) = original_extension {
@@ -112,7 +111,6 @@ pub fn run() {
                     } else {
                         asset.mime_type.to_string()
                     };
-                    println!("Found asset {}. determined mime type:  {}", bleh, mime_type);
                     return Response::builder()
                         .status(StatusCode::OK)
                         .header("Content-Type", &mime_type)
