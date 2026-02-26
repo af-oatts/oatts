@@ -1,9 +1,9 @@
 import { Box, Divider } from "@mui/material";
 import { motion } from "motion/react";
 
-import { CourseContentView } from "./CourseContentView";
-import { CourseContentSideNav } from "./CourseContentSideNav";
-import { CourseController } from "../../contexts/models/CourseController";
+import { OLD_CourseContentView } from "./OLD_CourseContentView";
+import { OLD_CourseContentSideNav } from "./OLD_CourseContentSideNav";
+import { CourseController } from "../../../contexts/models/CourseController";
 
 export default function OLD_CourseView({ controller }: { controller: CourseController }) {
   return (
@@ -23,9 +23,9 @@ export default function OLD_CourseView({ controller }: { controller: CourseContr
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1, transition: { duration: 0.25, ease: "easeOut" } }}
     >
-      <CourseContentSideNav {...{ controller }} />
+      <OLD_CourseContentSideNav {...{ controller }} />
       <Divider orientation="vertical" sx={{ gridColumn: "2" }} />
-      <CourseContentView {...{ controller }} />
+      <OLD_CourseContentView {...{ controller }} />
     </Box>
   );
 }

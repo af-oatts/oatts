@@ -1,4 +1,4 @@
-import OLD_CourseView from "@/components/module/OLD_CourseView";
+import OLD_CourseView from "@/components/module/old/OLD_CourseView";
 import { usePostquizController } from "@/contexts/hooks/usePostquizController";
 import { createFileRoute } from "@tanstack/react-router";
 

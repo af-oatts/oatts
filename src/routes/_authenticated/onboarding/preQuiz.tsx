@@ -1,6 +1,6 @@
 import { useStatuses } from "@/contexts/hooks/useStatus";
 import { usePrequizCourses } from "@/contexts/providers/CourseContextProvider";
-import { CourseContent } from "@/core/model/OattsModel";
+import { Course, CourseContent } from "@/core/model/OattsModel";
 import { FlattenCourse } from "@/utils/Flattener";
 import { createFileRoute, Navigate } from "@tanstack/react-router";
 import { useMemo } from "react";
@@ -13,8 +13,15 @@ function RouteComponent() {
 
   const [courses] = usePrequizCourses();
   const contents = useMemo(() => courses?.reduce<CourseContent[]>((acc: CourseContent[], course) => [...acc, ...FlattenCourse(course)], []), [courses]);
-  const statuses = useMemo(() => contents ? useStatuses(contents.map(c => c.id)) : undefined, []);
-  
+  const statuses = useMemo(() => contents ? useStatuses(contents.map(c => c.id)) : undefined, [contents]);
+  const syntheticCourse: Course = contents && courses? {
+    contents: contents,
+    id: "PREQUIZ",
+    name: "OATTS Prequiz",
+    roleIds: [],
+    paNumber: courses[0].paNumber
+  } : undefined
+
 
   return (
     <Navigate
