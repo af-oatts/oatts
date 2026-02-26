@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import CourseView from "@/components/module/CourseView";
+import OLD_CourseView from "@/components/module/OLD_CourseView";
 import { useContentController } from "@/contexts/hooks/useContentController";
 
 export const Route = createFileRoute("/_authenticated/_authorized/courses/$courseId/content/$contentId")({
@@ -9,5 +9,5 @@ export const Route = createFileRoute("/_authenticated/_authorized/courses/$cours
 
 function RouteComponent() {
   const controller = useContentController();
-  return <CourseView {...{ controller }} />;
+  return <OLD_CourseView {...{ controller }} />;
 }

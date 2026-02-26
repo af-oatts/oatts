@@ -5,7 +5,7 @@ import { CourseContentView } from "./CourseContentView";
 import { CourseContentSideNav } from "./CourseContentSideNav";
 import { CourseController } from "../../contexts/models/CourseController";
 
-export default function CourseView({ controller }: { controller: CourseController }) {
+export default function OLD_CourseView({ controller }: { controller: CourseController }) {
   return (
     <Box
       layout

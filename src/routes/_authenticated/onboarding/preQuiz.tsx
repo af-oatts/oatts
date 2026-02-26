@@ -1,14 +1,19 @@
-import { usePrequizController } from "@/contexts/hooks/usePrequizController";
+import { useStatuses } from "@/contexts/hooks/useStatus";
+import { usePrequizCourses } from "@/contexts/providers/CourseContextProvider";
+import { CourseContent } from "@/core/model/OattsModel";
+import { FlattenCourse } from "@/utils/Flattener";
 import { createFileRoute, Navigate } from "@tanstack/react-router";
+import { useMemo } from "react";
 
 export const Route = createFileRoute("/_authenticated/onboarding/preQuiz")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  const controller = usePrequizController();
 
-  if (controller.isLoading) return <></>;
+  const [courses] = usePrequizCourses();
+  const contents = useMemo(() => courses?.reduce<CourseContent[]>((acc: CourseContent[], course) => [...acc, ...FlattenCourse(course)], []), [courses]);
+  const statuses = useMemo(() => contents ? useStatuses(contents.map(c => c.id)) : undefined, []);
   
 
   return (

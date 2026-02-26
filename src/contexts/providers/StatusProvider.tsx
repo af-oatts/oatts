@@ -9,7 +9,7 @@ import { useUser } from "../hooks/useUser";
  * Copyright © 2026 DCS Corporation, 6909 Metro Park Drive Suite 500, Alexandria, VA 22310.
  * See the LICENSE file for rights & permissions.
  */
-export function StatusProvider({ children }: { children: ReactElement[] }) {
+export function StatusProvider({ children }: { children: ReactElement[] | ReactElement }) {
     const databasePromise = useMemo(loadDatabase, []); // So we don't go loading the database again. 
     const [statuses, _setStatuses] = useState<Map<string, Status> | undefined>();
     const user = useUser().user;

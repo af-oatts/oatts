@@ -71,13 +71,13 @@ export function useCourseContent(courseId: string, contentId: string): [CourseCo
   return [content, manifestContext.isLoading];
 }
 
-export function usePrequizContents(): [Course | undefined, CourseContent[] | undefined, boolean] {
+export function usePrequizCourses(): [Course[] | undefined, boolean] {
   const manifestContext = useManifestContext();
   const { config } = manifestContext;
   const { prequizzes, roles } = config;
-  const contents = getFlattenedRoleSpecificQuizzes(prequizzes || [], roles);
+  const tailored = prequizzes?.filter(prequiz => prequiz.roleIds.some(rid => roles.some(other => other.id === rid)));
 
-  return [(prequizzes || [])[0], contents, manifestContext.isLoading];
+  return [tailored, manifestContext.isLoading];
 }
 
 export function usePostquizContents(): [Course | undefined, CourseContent[] | undefined, boolean] {
