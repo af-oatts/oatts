@@ -8,13 +8,19 @@ export function FlattenCourse(course: Course) {
     return FlattenContents(course.contents);
 }
 
-export function FlattenContents(contents: CourseContent[]) {
-    let arr : CourseContent[] = [ ]
-    for( let content of contents) {
-        if(!content.children) {
-            continue;
+
+/** Depth first traversal. */
+export function FlattenContents(contents: CourseContent[]): CourseContent[] {
+    const result: CourseContent[] = [];
+    const stack = [...contents];
+
+    while (stack.length > 0) {
+        const item = stack.pop()!;
+        result.push(item);
+        if (item.children) {
+            stack.push(...item.children);
         }
-        arr = [...arr, ...FlattenContents(content.children)]
     }
-    return arr;
+
+    return result;
 }

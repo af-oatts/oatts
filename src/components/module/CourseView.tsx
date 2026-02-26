@@ -4,18 +4,40 @@
  */
 import { Box, Divider } from "@mui/material";
 import { motion } from "motion/react";
-import { Course } from "@/core/model/OattsModel";
+import { CompletionStatus, Course, CourseContent } from "@/core/model/OattsModel";
 import { CourseContentSideNav } from "./CourseContentSideNav";
 import { CourseContentView } from "./CourseContentView";
+import ErrorPage from "../error-page";
+import { FlattenContents } from "@/utils/Flattener";
+import { useStatuses } from "@/contexts/hooks/useStatus";
+import { useCallback, useMemo } from "react";
+import { Status } from "@/core/model/Status";
 
 interface CourseViewProps {
     course: Course,
     contentID: string,
     setContentID: (id: string) => void,
-    paNumberOverrides?: Map<string, string>
+    finish: () => void,
+    paNumber?: string
 }
 
-export default function CourseView({ course, contentID, setContentID, paNumberOverrides }: CourseViewProps) {
+export default function CourseView({ course, contentID, setContentID, finish, paNumber }: CourseViewProps) {
+    const allContent = FlattenContents(course.contents);
+    const contentIndex = allContent.findIndex(c => c.id === contentID);
+    const content = contentIndex ? allContent[contentIndex] : undefined;
+    const statuses = useStatuses(allContent.map(c => c.id));
+    const next = useMemo(() => statuses ? determineNext(allContent, statuses, contentIndex) : undefined, [statuses]);
+    const progress = useCallback(() => {
+        if(next) {
+            setContentID(next.id);
+            return;
+        }
+        finish();
+    }, [next])
+    if (!content) {
+        return <ErrorPage details={`Cannot find content ${contentID} in course ${course.id} (even in its deepest descendants)`}></ErrorPage>
+    }
+
     return (
         <Box
             layout
@@ -35,7 +57,30 @@ export default function CourseView({ course, contentID, setContentID, paNumberOv
         >
             <CourseContentSideNav course={course} contentId={contentID} setContentId={setContentID} />
             <Divider orientation="vertical" sx={{ gridColumn: "2" }} />
-            <CourseContentView course={course} path={path} paNumberOverrides={paNumberOverrides} />
+            <CourseContentView content={content} courseName={course.name} hasNext={next != undefined} progress={progress} paNumber={paNumber}  />
         </Box>
     );
+}
+
+
+
+// content needs to be depth first.
+function determineNext(contents: CourseContent[], statuses: Map<string, Status | undefined>, currentIndex: number) {
+    // Try to go forwards first if possible. 
+    for (let i = currentIndex; i < contents.length; i++) {
+        const content = contents[i];
+        const status = statuses.get(content.id);
+        if (status && status.completionStatus !== CompletionStatus.Completed) {
+            return content;
+        }
+    }
+    // Otherwise find the next closest.
+    for (let i = 0; i < currentIndex; i++) {
+        const content = contents[i];
+        const status = statuses.get(content.id);
+        if (status && status.completionStatus !== CompletionStatus.Completed) {
+            return content;
+        }
+    }
+    return undefined;
 }
