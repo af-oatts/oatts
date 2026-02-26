@@ -1,19 +1,20 @@
-import { CompletionStatus, ContentState, CourseContentItemType, CourseContent } from "@/core/model/OattsModel";
+import { CompletionStatus, CourseContentItemType, CourseContent } from "@/core/model/OattsModel";
 import { Box } from "@mui/material";
 import { useRouteContext } from "@tanstack/react-router";
 import { motion, useAnimate } from "motion/react";
 import { useEffect, useRef } from "react";
 import { loadModel } from "../../core/scorm/ScormHelper";
 import { GetContentURL } from "@/core/modules/ModuleUtils";
-import { ScormStateToInternalState } from "@/core/scorm/ScormInternalizer";
-import { useSetContentState } from "@/contexts/hooks/useSetContentState";
+import { ScormStateToStatus } from "@/core/scorm/ScormInternalizer";
 
 import { setupCSPViolationReporting } from "../../utils/CSPHelper";
+import { useSetStatus, useStatus } from "@/contexts/hooks/useStatus";
 
-export default function ContentViewer({ content, state }: { content: CourseContent; state: ContentState }) {
+export default function ContentViewer({ content }: { content: CourseContent}) {
   const contentFrameRef = useRef<HTMLIFrameElement>(null);
   const [frameScope, frameAnimate] = useAnimate();
-  const setContentState = useSetContentState();
+  const status = useStatus(content.id);
+  const setStatus = useSetStatus();
 
   let user = useRouteContext({
     from: "/_authenticated",
@@ -45,8 +46,8 @@ export default function ContentViewer({ content, state }: { content: CourseConte
         window.API_1484_11.SetModel(model);
         window.API_1484_11.SetContent(content);
         window.API_1484_11.SetUpdateStateCallback((scormState) => {
-          let newState = ScormStateToInternalState(scormState, content.id);
-          setContentState(content.id, newState);
+          let newStatus = ScormStateToStatus(scormState);
+          setStatus(content.id, newStatus);
         });
       });
     }
@@ -95,7 +96,7 @@ export default function ContentViewer({ content, state }: { content: CourseConte
       return;
     }
     const timeout = setTimeout(() => {
-      setContentState(content.id, { ...state, completionStatus: CompletionStatus.Completed });
+      setStatus(content.id, {...status, completionStatus: CompletionStatus.Completed})
     }, 1000);
     return () => clearTimeout(timeout);
   }, [content]);

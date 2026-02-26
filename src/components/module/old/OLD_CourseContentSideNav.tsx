@@ -1,5 +1,5 @@
 import { Box, List } from "@mui/material";
-import { ContentMenuItem } from "@/components/common/ContentMenu";
+import { OLD_ContentMenuItem } from "@/components/module/old/OLD_ContentMenu";
 import { useNavigate, useParams } from "@tanstack/react-router";
 import { CourseController } from "../../../contexts/models/CourseController";
 import { getFileRoute, getShortFileRoute } from "../getFileRoute";
@@ -16,7 +16,7 @@ export function OLD_CourseContentSideNav({ controller }: { controller: CourseCon
     <Box sx={{ overflowY: "auto" }}>
       <List component="nav">
         {(controller.contents || []).map((c) => (
-          <ContentMenuItem
+          <OLD_ContentMenuItem
             key={c.id}
             getState={(id) => controller.getState(id)}
             contentItem={c}

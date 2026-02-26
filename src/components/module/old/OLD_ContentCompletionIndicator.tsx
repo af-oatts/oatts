@@ -4,7 +4,7 @@ import WarningIcon from "@mui/icons-material/Warning";
 import { CompletionStatus } from "@/core/model/OattsModel";
 import { motion } from "motion/react";
 
-export function ContentCompletionIndicator({ completion }: { completion: CompletionStatus | undefined }) {
+export function OLD_ContentCompletionIndicator({ completion }: { completion: CompletionStatus | undefined }) {
   switch (completion) {
     case CompletionStatus.Completed:
       return (

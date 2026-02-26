@@ -19,7 +19,7 @@ function RouteComponent() {
     id: "PREQUIZ",
     name: "OATTS Prequiz",
     roleIds: [],
-    paNumber: courses[0].paNumber
+    paNumber: [],
   } : undefined
 
 

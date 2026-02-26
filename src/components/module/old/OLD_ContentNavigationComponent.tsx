@@ -1,10 +1,10 @@
 import { Button, Typography } from "@mui/material";
 
 import { useNavigate, useParams } from "@tanstack/react-router";
-import { ContentType } from "../../contexts/models/ContentType";
-import { getFileRoute, getShortFileRoute } from "./getFileRoute";
+import { ContentType } from "../../../contexts/models/ContentType";
+import { getFileRoute, getShortFileRoute } from "../getFileRoute";
 
-export function ContentNavigationComponent({
+export function OLD_ContentNavigationComponent({
   next,
   contentName,
   contentType = "content",

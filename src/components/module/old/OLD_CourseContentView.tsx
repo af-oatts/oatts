@@ -3,7 +3,7 @@ import { motion, useAnimate } from "motion/react";
 import ContentViewer from "@/components/module/ContentViewer";
 
 import { useParams } from "@tanstack/react-router";
-import { ContentNavigationComponent } from "@/components/module/ContentNavigationComponent";
+import { OLD_ContentNavigationComponent } from "@/components/module/old/OLD_ContentNavigationComponent";
 
 import { CourseController } from "../../../contexts/models/CourseController";
 import { getFileRoute } from "../getFileRoute";
@@ -47,7 +47,7 @@ export function OLD_CourseContentView({ controller }: { controller: CourseContro
         }}
       >
         <Box sx={{ alignItems: "center", margin: "5px", display: "grid", gridTemplateColumns: "1fr 1fr" }}>
-          <ContentNavigationComponent
+          <OLD_ContentNavigationComponent
             next={controller.getNext()}
             contentName={content?.name}
             contentType={controller.contentType}
