@@ -4,7 +4,7 @@
  */
 import { Box, Divider } from "@mui/material";
 import { motion } from "motion/react";
-import { CompletionStatus, Course, CourseContent } from "@/core/model/OattsModel";
+import { CompletionStatus, CourseContent } from "@/core/model/OattsModel";
 import { CourseContentSideNav } from "./CourseContentSideNav";
 import { CourseContentView } from "./CourseContentView";
 import ErrorPage from "../error-page";

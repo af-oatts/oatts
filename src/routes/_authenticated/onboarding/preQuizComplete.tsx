@@ -1,4 +1,3 @@
-import { usePrequizController } from "@/contexts/hooks/usePrequizController";
 import { PostPreQuiz } from "@/components/quiz/PostPreQuiz";
 import { addUserStatusFlag } from "@/core/authentication/UserStatusFlag";
 import { UserStatusFlag } from "@/core/model/UserModel";
