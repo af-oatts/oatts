@@ -25,11 +25,13 @@ interface CourseViewProps {
 export default function CourseView({ contents, courseName, contentID, setContentID, finish, paNumber }: CourseViewProps) {
     const allContent = FlattenContents(contents);
     const contentIndex = allContent.findIndex(c => c.id === contentID);
-    const content = contentIndex ? allContent[contentIndex] : undefined;
+    const content = contentIndex !== undefined ? allContent[contentIndex] : undefined;
     const statuses = useStatuses(allContent.map(c => c.id));
     const next = useMemo(() => statuses ? determineNext(allContent, statuses, contentIndex) : undefined, [statuses]);
 
     const progress = useCallback(() => {
+        console.log(next);
+        
         if (next) {
             setContentID(next.id);
             return;
@@ -73,16 +75,22 @@ function determineNext(contents: CourseContent[], statuses: Map<string, Status |
     // Try to go forwards first if possible. 
     for (let i = currentIndex; i < contents.length; i++) {
         const content = contents[i];
+        if (content.children) {
+            continue;
+        }
         const status = statuses.get(content.id);
-        if (status && status.completionStatus !== CompletionStatus.Completed) {
+        if (!status || status.completionStatus !== CompletionStatus.Completed) {
             return content;
         }
     }
     // Otherwise find the next closest.
     for (let i = 0; i < currentIndex; i++) {
         const content = contents[i];
+        if (content.children) {
+            continue;
+        }
         const status = statuses.get(content.id);
-        if (status && status.completionStatus !== CompletionStatus.Completed) {
+        if (!status || status.completionStatus !== CompletionStatus.Completed) {
             return content;
         }
     }

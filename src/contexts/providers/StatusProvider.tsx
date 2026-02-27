@@ -36,6 +36,7 @@ export function StatusProvider({ children }: { children: ReactElement[] | ReactE
     }
 
     const setStatus = (id: string, status: Status) => {
+        
         _setStatuses((prev) => {
             if (!prev) {
                 console.error('Tried to set status before database statuses could be loaded. Rejecting.')

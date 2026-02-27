@@ -9,18 +9,19 @@ export function FlattenCourse(course: Course) {
 }
 
 
-/** Depth first traversal. */
+/** Depth first inorder traversal. */
 export function FlattenContents(contents: CourseContent[]): CourseContent[] {
     const result: CourseContent[] = [];
-    const stack = [...contents];
 
-    while (stack.length > 0) {
-        const item = stack.pop()!;
-        result.push(item);
-        if (item.children) {
-            stack.push(...item.children);
+    function traverse(items: CourseContent[]) {
+        for (const item of items) {
+            result.push(item);
+            if (item.children) {
+                traverse(item.children);
+            }
         }
     }
 
+    traverse(contents);
     return result;
 }

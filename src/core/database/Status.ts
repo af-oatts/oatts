@@ -8,7 +8,7 @@ import { Status } from "../model/Status";
 import User from "../model/UserModel";
 type DbStatus = {
     userId: string;
-    contentId: string;
+    contentUri: string;
     data: string;
 };
 
@@ -22,13 +22,14 @@ export async function GetStatusesFromDB(db: Database, user: User): Promise<Map<s
         `,
         [user.email],
     );
+    
 
     const statuses = rows.reduce<Map<string, Status>>((acc: Map<string, Status>, row) => {
         try {
             const status: Status = JSON.parse(row.data);
-            return acc.set(row.contentId, status);
+            return acc.set(row.contentUri, status);
         } catch (_) {
-            console.error(`Malformed status found in database for user ${row.contentId} content ${row.contentId}. Skipping.`);
+            console.error(`Malformed status found in database for user ${row.contentUri} content ${row.contentUri}. Skipping.`);
             return acc;
         }
     }, new Map());
@@ -38,6 +39,7 @@ export async function GetStatusesFromDB(db: Database, user: User): Promise<Map<s
 
 
 export async function WriteStatusToDB(db: Database, user: User, id: string, status: Status) {
+
     await db.execute(
         `
         INSERT OR REPLACE INTO userContentState (userId, contentUri, data)
