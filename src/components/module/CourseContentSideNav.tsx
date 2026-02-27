@@ -3,15 +3,15 @@
  * See the LICENSE file for rights & permissions.
  */
 import { Box, List } from "@mui/material";
-import { Course } from "@/core/model/OattsModel";
+import { Course, CourseContent } from "@/core/model/OattsModel";
 import { ContentMenuItem } from "./ContentMenu";
 
-export function CourseContentSideNav({ course, contentId, setContentId }: { course: Course, contentId: string, setContentId: (id : string) => void }) {
+export function CourseContentSideNav({ contents, contentId, setContentId }: { contents: CourseContent[], contentId: string, setContentId: (id : string) => void }) {
 
     return (
         <Box sx={{ overflowY: "auto" }}>
             <List component="nav">
-                {(course.contents || []).map((c) => (
+                {(contents || []).map((c) => (
                     <ContentMenuItem
                         key={c.id}
                         contentItem={c}

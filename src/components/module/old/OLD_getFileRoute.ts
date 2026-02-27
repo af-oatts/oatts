@@ -1,6 +1,6 @@
-import { ContentType } from "../../contexts/models/ContentType";
+import { ContentType } from "../../../contexts/models/ContentType";
 
-export function getFileRoute(contentType: ContentType) {
+export function OLD_getFileRoute(contentType: ContentType) {
   switch (contentType) {
     case "content":
       return `/_authenticated/_authorized/courses/$courseId/content/$contentId`;
@@ -13,7 +13,7 @@ export function getFileRoute(contentType: ContentType) {
   }
 }
 
-export function getShortFileRoute(contentType: ContentType) {
+export function OLD_getShortFileRoute(contentType: ContentType) {
   switch (contentType) {
     case "content":
       return `/courses/$courseId/content/$contentId`;

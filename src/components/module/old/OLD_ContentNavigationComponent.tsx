@@ -2,7 +2,7 @@ import { Button, Typography } from "@mui/material";
 
 import { useNavigate, useParams } from "@tanstack/react-router";
 import { ContentType } from "../../../contexts/models/ContentType";
-import { getFileRoute, getShortFileRoute } from "../getFileRoute";
+import { OLD_getFileRoute, OLD_getShortFileRoute } from "./OLD_getFileRoute";
 
 export function OLD_ContentNavigationComponent({
   next,
@@ -13,8 +13,8 @@ export function OLD_ContentNavigationComponent({
   contentName?: string;
   contentType?: ContentType;
 }) {
-  const FILE_ROUTE = getFileRoute(contentType);
-  const SHORT_FILE_ROUTE = getShortFileRoute(contentType);
+  const FILE_ROUTE = OLD_getFileRoute(contentType);
+  const SHORT_FILE_ROUTE = OLD_getShortFileRoute(contentType);
   const { courseId } = useParams({ from: FILE_ROUTE });
   const navigate = useNavigate();
 

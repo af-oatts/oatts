@@ -1,6 +1,7 @@
 import { Course, CourseContent, Goal, OattsManifest } from "@/core/model/OattsModel";
 import LoadConfig from "@/core/utils/ConfigLoader";
 import { getFlattenedRoleSpecificQuizzes } from "@/core/utils/QuizUtils";
+import { FlattenCourse } from "@/utils/Flattener";
 import { createContext, useContext, useEffect, useState } from "react";
 
 type ManifestContextType = {
@@ -71,6 +72,25 @@ export function useCourseContent(courseId: string, contentId: string): [CourseCo
   return [content, manifestContext.isLoading];
 }
 
+
+/// Null means prequizzes are decidedly empty. They do not exist. Undefined means it just hasn't loaded yet.
+export function usePrequiz(): Course[] | undefined | null {
+  const manifestContext = useManifestContext();
+  const { config, isLoading } = manifestContext;
+  if(isLoading) {
+    return undefined;
+  }
+  const { prequizzes, roles } = config;
+  const courses = prequizzes?.filter(prequiz => prequiz.roleIds.some(rid => roles.some(other => other.id === rid)));
+  return courses ?? null;
+}
+
+
+
+
+
+
+
 export function usePrequizCourses(): [Course[] | undefined, boolean] {
   const manifestContext = useManifestContext();
   const { config } = manifestContext;
@@ -89,7 +109,7 @@ export function usePostquizContents(): [Course | undefined, CourseContent[] | un
   return [(postquizzes || [])[0], contents, manifestContext.isLoading];
 }
 
-export function useGoals() : [Goal[] | undefined, boolean] {
+export function useGoals(): [Goal[] | undefined, boolean] {
   const manifestCtx = useManifestContext();
   return [manifestCtx.config.goals, manifestCtx.isLoading];
 

@@ -6,12 +6,12 @@ import { useParams } from "@tanstack/react-router";
 import { OLD_ContentNavigationComponent } from "@/components/module/old/OLD_ContentNavigationComponent";
 
 import { CourseController } from "../../../contexts/models/CourseController";
-import { getFileRoute } from "../getFileRoute";
+import { OLD_getFileRoute } from "./OLD_getFileRoute";
 import { CompletionStatus } from "@/core/model/OattsModel";
 import { useEffect } from "react";
 
 export function OLD_CourseContentView({ controller }: { controller: CourseController }) {
-  const FILE_ROUTE = getFileRoute(controller.contentType);
+  const FILE_ROUTE = OLD_getFileRoute(controller.contentType);
   const { contentId } = useParams({ from: FILE_ROUTE });
   const [scope, animate] = useAnimate();
 
@@ -34,7 +34,7 @@ export function OLD_CourseContentView({ controller }: { controller: CourseContro
     <Box id="context-box" sx={{ width: "100%", display: "grid", gridTemplateRows: "1fr auto", overflow: "hidden" }}>
       <div style={{ height: "100%", gridArea: "1 / 1", display: "flex", flexDirection: "column" }}>
         <Box sx={{ flex: 1 }}>
-          <ContentViewer content={content} state={state} />
+          <ContentViewer content={content}  />
         </Box>
         <Box sx={{ textAlign: "center", flexShrink: 0 }}>{controller.course.paNumber}</Box>
       </div>

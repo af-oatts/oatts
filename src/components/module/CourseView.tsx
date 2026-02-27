@@ -14,28 +14,32 @@ import { useCallback, useMemo } from "react";
 import { Status } from "@/core/model/Status";
 
 interface CourseViewProps {
-    course: Course,
+    contents: CourseContent[],
+    courseName: string,
     contentID: string,
     setContentID: (id: string) => void,
     finish: () => void,
     paNumber?: string
 }
 
-export default function CourseView({ course, contentID, setContentID, finish, paNumber }: CourseViewProps) {
-    const allContent = FlattenContents(course.contents);
+export default function CourseView({ contents, courseName, contentID, setContentID, finish, paNumber }: CourseViewProps) {
+    const allContent = FlattenContents(contents);
     const contentIndex = allContent.findIndex(c => c.id === contentID);
     const content = contentIndex ? allContent[contentIndex] : undefined;
     const statuses = useStatuses(allContent.map(c => c.id));
     const next = useMemo(() => statuses ? determineNext(allContent, statuses, contentIndex) : undefined, [statuses]);
+
     const progress = useCallback(() => {
-        if(next) {
+        if (next) {
             setContentID(next.id);
             return;
         }
         finish();
-    }, [next])
+    }, [next]);
+
+
     if (!content) {
-        return <ErrorPage details={`Cannot find content ${contentID} in course ${course.id} (even in its deepest descendants)`}></ErrorPage>
+        return <ErrorPage details={`Cannot find content ${contentID} in course ${courseName} (even in its deepest descendants)`}></ErrorPage>
     }
 
     return (
@@ -55,9 +59,9 @@ export default function CourseView({ course, contentID, setContentID, finish, pa
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1, transition: { duration: 0.25, ease: "easeOut" } }}
         >
-            <CourseContentSideNav course={course} contentId={contentID} setContentId={setContentID} />
+            <CourseContentSideNav contents={contents} contentId={contentID} setContentId={setContentID} />
             <Divider orientation="vertical" sx={{ gridColumn: "2" }} />
-            <CourseContentView content={content} courseName={course.name} hasNext={next != undefined} progress={progress} paNumber={paNumber}  />
+            <CourseContentView content={content} courseName={courseName} hasNext={next != undefined} progress={progress} paNumber={paNumber} />
         </Box>
     );
 }
