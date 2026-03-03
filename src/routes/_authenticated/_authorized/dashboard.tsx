@@ -3,9 +3,9 @@ import { useRequiredAndOptionalCourses } from "@/contexts/hooks/useRequiredAndOp
 import { CoursesView } from "@/components/dashboard/CoursesView";
 import { BigLoadingScreen } from "@/components/common/BigLoadingScreen";
 import { checkIfRequirementsAreComplete } from "@/core/modules/ModuleUtils";
-import { useCourseContentStates } from "@/contexts/hooks/useCourseContentStates";
 import { useUser } from "@/contexts/hooks/useUser";
 import { UserStatusFlag } from "@/core/model/UserModel";
+import { useAllStatuses, useCompletion } from "@/contexts/hooks/useStatus";
 
 export const Route = createFileRoute("/_authenticated/_authorized/dashboard")({
   component: DashboardPage,
@@ -19,14 +19,11 @@ export default function DashboardPage() {
   const { required, optional } = useRequiredAndOptionalCourses();
   const context = Route.useRouteContext();
   const { user } = useUser();
-  const [states, isLoading] = useCourseContentStates(required.flatMap((x) => x.contents));
+  const isEachRequirementComplete = useCompletion(required.map(c => c.id));
 
-  if (isLoading) return <BigLoadingScreen name="modules"></BigLoadingScreen>;
-
-  const isEachRequirementComplete = checkIfRequirementsAreComplete(required, states);
   const isPostQuizComplete = !!user?.statusFlags.find((flag) => flag === UserStatusFlag.PostQuizzed);
 
-  if (!isLoading && isEachRequirementComplete && !isPostQuizComplete) {
+  if (isEachRequirementComplete && !isPostQuizComplete) {
     return <Navigate to={"/postquiz"} />;
   }
 

@@ -1,4 +1,4 @@
-import { Course } from "@/core/model/OattsModel";
+import { CompletionStatus, Course, CourseContent } from "@/core/model/OattsModel";
 import {
   Alert,
   Box,
@@ -11,18 +11,21 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { calculateCoursesProgress, checkIfRequirementsAreComplete } from "../../core/modules/ModuleUtils";
+import { checkIfRequirementsAreComplete } from "../../core/modules/ModuleUtils";
 import LinearProgressWithLabel from "../common/LinearProgressWithLabel";
 import { ExportUserProgress } from "../../core/utils/DataExporter";
-import { useNavigate, useRouteContext } from "@tanstack/react-router";
-import { useState } from "react";
+import { useNavigate } from "@tanstack/react-router";
+import { useMemo, useState } from "react";
 import User from "@/core/model/UserModel";
 import { useSetOverlay } from "@/contexts/hooks/useOverlay";
 import InformedConsent from "@/components/dashboard/InformedConsent";
-import { useCourseContentStates } from "@/contexts/hooks/useCourseContentStates";
+import { FlattenContents } from "@/utils/Flattener";
+import { useUser } from "@/contexts/hooks/useUser";
+import { useSetStatus, useStatuses } from "@/contexts/hooks/useStatus";
+import { Status } from "@/core/model/Status";
 
 export interface StatusTileProps extends CardOwnProps {
-  courses: Course[];
+  requiredCourses: Course[];
   mayCollectData: boolean;
 }
 
@@ -46,17 +49,31 @@ function FailedAlert(msg?: string) {
 }
 
 export default function DashboardStatusBar(props: StatusTileProps) {
-  const { courses: modules, ...rest } = props;
-  const navigate = useNavigate();
+  const { requiredCourses: courses, ...rest } = props;
   const [snackOpen, setSnackOpen] = useState(false);
   const [snackContent, setSnackContent] = useState(<Box></Box>);
-  const ctx = useRouteContext({ from: "/_authenticated/_authorized" });
-  const [states, isLoading] = useCourseContentStates(modules.flatMap((x) => x.contents));
+  const allContents = courses.reduce((acc: CourseContent[], course) => [...acc, ...FlattenContents(course.contents)], []).filter(c => !c.children);
+  const statuses = useStatuses(allContents.map(c => c.id));
+  const progress = allContents && statuses ? calculateProgress(allContents, statuses) : 0;
   const setOverlay = useSetOverlay();
+  const navigate = useNavigate();
+  const user = useUser();
 
-  if (isLoading) return <></>;
-  const modulesProgress = Math.round(calculateCoursesProgress(modules, states) * 100);
-  const isComplete = checkIfRequirementsAreComplete(modules, states || {});
+  const setStatus = useSetStatus();
+  useMemo(() => {
+    // @ts-ignore
+    window.SET_EVERY_STATUS = async (status: CompletionStatus) => {
+      for (let content of allContents) {
+        if (content.children) {
+          continue;
+        }
+        setStatus(content.id, { completionStatus: status});
+        await new Promise(resolve => setTimeout(resolve, 100));
+      }
+    };
+  }, []);
+
+  const isComplete = progress == 100;
 
   function handleClose(_event: React.SyntheticEvent | Event, reason?: SnackbarCloseReason) {
     if (reason === "clickaway") {
@@ -104,11 +121,11 @@ export default function DashboardStatusBar(props: StatusTileProps) {
           >
             <Typography sx={{ gridArea: "1 / 1", userSelect: "none" }}>Progress</Typography>
             <Box sx={{ gridArea: "1 / 3" }}>
-              <LinearProgressWithLabel value={modulesProgress} />
+              <LinearProgressWithLabel value={progress} />
             </Box>
           </Box>
           {props.mayCollectData ? (
-            <Button sx={{ gridColumn: "3" }} size="small" onClick={() => DoExport(ctx.authentication.user)}>
+            <Button sx={{ gridColumn: "3" }} size="small" onClick={() => DoExport(user.user)}>
               Export Data to Participate Research
             </Button>
           ) : (
@@ -131,4 +148,15 @@ export default function DashboardStatusBar(props: StatusTileProps) {
       </Snackbar>
     </>
   );
+}
+
+
+
+function calculateProgress(contents: CourseContent[], statuses: Map<string, Status | undefined>) {
+  if (contents.length <= 0) {
+    return 100;
+  }
+  let numComplete = contents.filter(content => statuses.get(content.id)?.completionStatus === CompletionStatus.Completed).length;
+  
+  return (numComplete / contents.length) * 100;
 }

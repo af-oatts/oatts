@@ -8,12 +8,12 @@ import { SecondsToTimeString } from "../../core/utils/TimeStuff";
 import { useRouter } from "@tanstack/react-router";
 import { MoreVert } from "@mui/icons-material";
 import { useState } from "react";
-import { useCourseCompletionStatus } from "@/contexts/hooks/useCourseCompletionStatus";
 import { useResetCourse } from "@/contexts/hooks/useResetCourse";
+import { useCourseStatus } from "@/contexts/hooks/useStatus";
 
 export default function CourseCard({ course }: { course: Course }) {
   let [menuAnchor, setMenuAnchor] = useState<null | HTMLElement>(null);
-  const [completionStatus, _] = useCourseCompletionStatus(course);
+  const completionStatus = useCourseStatus(course);
   const router = useRouter();
   const theme = useTheme();
   const resetCourse = useResetCourse();
@@ -87,7 +87,7 @@ export default function CourseCard({ course }: { course: Course }) {
           <Menu id="long-menu" anchorEl={menuAnchor} open={menuAnchor != null} onClose={closeMenu}>
             <MenuItem
               key="reset"
-              disabled={completionStatus == CompletionStatus.NotStarted}
+              disabled={!completionStatus || completionStatus === CompletionStatus.NotStarted}
               onClick={(e) => {
                 e.stopPropagation();
                 e.preventDefault();
@@ -144,7 +144,7 @@ export default function CourseCard({ course }: { course: Course }) {
               )}
 
               <Typography sx={{ textAlign: "center" }} variant="caption">
-                {CompletionStatusToString(completionStatus)}
+                {completionStatus? CompletionStatusToString(completionStatus) : "Not started"}
               </Typography>
             </Box>
           </Box>

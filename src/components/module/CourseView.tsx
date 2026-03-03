@@ -9,7 +9,7 @@ import { CourseContentSideNav } from "./CourseContentSideNav";
 import { CourseContentView } from "./CourseContentView";
 import ErrorPage from "../error-page";
 import { FlattenContents } from "@/utils/Flattener";
-import { useStatuses } from "@/contexts/hooks/useStatus";
+import { useSetStatus, useStatuses } from "@/contexts/hooks/useStatus";
 import { useCallback, useMemo } from "react";
 import { Status } from "@/core/model/Status";
 
@@ -28,6 +28,7 @@ export default function CourseView({ contents, courseName, contentID, setContent
     const content = contentIndex !== undefined ? allContent[contentIndex] : undefined;
     const statuses = useStatuses(allContent.map(c => c.id));
     const next = useMemo(() => statuses ? determineNext(allContent, statuses, contentIndex) : undefined, [statuses]);
+
 
     const progress = useCallback(() => {
         console.log(next);

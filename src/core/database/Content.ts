@@ -100,7 +100,3 @@ export function deleteUserScorm(user: User, contentUri: string) {
   );
 }
 
-export async function resetUserAssessment(user: User, contentUri: string) {
-  await resetUserContentState(user, contentUri);
-  await deleteUserScorm(user, contentUri);
-}
