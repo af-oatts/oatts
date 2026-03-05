@@ -23,6 +23,8 @@ export default function DashboardPage() {
   const isPostQuizComplete = !!user?.statusFlags.find((flag) => flag === UserStatusFlag.PostQuizzed);
 
   if (isEachRequirementComplete && !isPostQuizComplete) {
+    console.log("REDIRECTING TO POSTQUIZ");
+    
     return <Navigate to={"/postquiz"} />;
   }
 

@@ -9,7 +9,7 @@ import { CourseContentSideNav } from "./CourseContentSideNav";
 import { CourseContentView } from "./CourseContentView";
 import ErrorPage from "../error-page";
 import { FlattenContents } from "@/utils/Flattener";
-import { useSetStatus, useStatuses } from "@/contexts/hooks/useStatus";
+import { useStatuses } from "@/contexts/hooks/useStatus";
 import { useCallback, useMemo } from "react";
 import { Status } from "@/core/model/Status";
 
@@ -74,6 +74,11 @@ export default function CourseView({ contents, courseName, contentID, setContent
 // content needs to be depth first.
 function determineNext(contents: CourseContent[], statuses: Map<string, Status | undefined>, currentIndex: number) {
     // Try to go forwards first if possible. 
+    
+
+    if(currentIndex <= -1) {
+        return contents.find(content => statuses.get(content.id)?.completionStatus !== CompletionStatus.Completed);
+    }
     for (let i = currentIndex; i < contents.length; i++) {
         const content = contents[i];
         if (content.children) {

@@ -86,6 +86,20 @@ export function usePrequiz(): Course[] | undefined | null {
 }
 
 
+/// Null means prequizzes are decidedly empty. They do not exist. Undefined means it just hasn't loaded yet.
+export function usePostquiz(): Course[] | undefined | null {
+  const manifestContext = useManifestContext();
+  const { config, isLoading } = manifestContext;
+  if(isLoading) {
+    return undefined;
+  }
+  const { postquizzes, roles } = config;
+  const courses = postquizzes?.filter(postquiz => postquiz.roleIds.some(rid => roles.some(other => other.id === rid)));
+  return courses ?? null;
+}
+
+
+
 
 
 

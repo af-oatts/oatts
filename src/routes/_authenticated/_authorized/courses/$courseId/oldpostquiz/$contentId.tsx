@@ -2,7 +2,7 @@ import OLD_CourseView from "@/components/module/old/OLD_CourseView";
 import { usePostquizController } from "@/contexts/hooks/usePostquizController";
 import { createFileRoute } from "@tanstack/react-router";
 
-export const Route = createFileRoute("/_authenticated/_authorized/courses/$courseId/postquiz/$contentId")({
+export const Route = createFileRoute("/_authenticated/_authorized/courses/$courseId/oldpostquiz/$contentId")({
   component: RouteComponent,
 });
 

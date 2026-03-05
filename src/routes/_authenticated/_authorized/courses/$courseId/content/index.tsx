@@ -1,5 +1,5 @@
 import ErrorPage from "@/components/error-page";
-import { useCourseStatus, useStatuses } from "@/contexts/hooks/useStatus";
+import { useStatuses } from "@/contexts/hooks/useStatus";
 import { useCourse } from "@/contexts/providers/CourseContextProvider";
 import { CompletionStatus, CourseContent } from "@/core/model/OattsModel";
 import { Status } from "@/core/model/Status";

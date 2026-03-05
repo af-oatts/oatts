@@ -1,9 +1,9 @@
 import { Navigate, useNavigate } from "@tanstack/react-router";
-import { addUserStatusFlag } from "../../core/authentication/UserStatusFlag";
+import { addUserStatusFlag } from "../../../core/authentication/UserStatusFlag";
 import { UserStatusFlag } from "@/core/model/UserModel";
 
 import { usePostquizController } from "@/contexts/hooks/usePostquizController";
-import { BigLoadingScreen } from "../common/BigLoadingScreen";
+import { BigLoadingScreen } from "../../common/BigLoadingScreen";
 import { useUser } from "@/contexts/hooks/useUser";
 
 export default function PostQuizPage() {
