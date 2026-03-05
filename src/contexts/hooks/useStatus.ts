@@ -53,7 +53,7 @@ export function useSetStatus() {
 }
 
 
-export function useCompletion(courses: Course[]) {
+export function useIsComplete(courses: Course[]) {
     const contentIds = courses.reduce((acc : string[], course) => [...acc, ...FlattenCourse(course).filter(content => !content.children).map(c => c.id)], []);
     const statuses = useStatuses(contentIds);
     const isComplete = useMemo(() => contentIds?.every(id => statuses?.get(id)?.completionStatus === CompletionStatus.Completed), [statuses]);

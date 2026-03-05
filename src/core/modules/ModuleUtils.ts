@@ -56,12 +56,6 @@ function calculateCourseProgress(course: Course, states: ContentStateMap | undef
 }
 
 
-// DELETE ME : Replace with utils/flattener
-export function FlattenContents(contents: CourseContent[]): CourseContent[] {
-  const flattenedContents = contents.flatMap(FlattenContentItem);
-  return flattenedContents;
-}
-
 function FlattenContentItem(content: CourseContent): CourseContent[] {
   if (Array.isArray(content.children)) {
     return content.children.flatMap(FlattenContentItem);

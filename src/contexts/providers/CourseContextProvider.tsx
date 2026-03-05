@@ -1,7 +1,6 @@
 import { Course, CourseContent, Goal, OattsManifest } from "@/core/model/OattsModel";
 import LoadConfig from "@/core/utils/ConfigLoader";
 import { getFlattenedRoleSpecificQuizzes } from "@/core/utils/QuizUtils";
-import { FlattenCourse } from "@/utils/Flattener";
 import { createContext, useContext, useEffect, useState } from "react";
 
 type ManifestContextType = {

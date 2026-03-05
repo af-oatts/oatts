@@ -4,7 +4,7 @@ import { CoursesView } from "@/components/dashboard/CoursesView";
 import { BigLoadingScreen } from "@/components/common/BigLoadingScreen";
 import { useUser } from "@/contexts/hooks/useUser";
 import { UserStatusFlag } from "@/core/model/UserModel";
-import { useCompletion } from "@/contexts/hooks/useStatus";
+import { useIsComplete } from "@/contexts/hooks/useStatus";
 
 export const Route = createFileRoute("/_authenticated/_authorized/dashboard")({
   component: DashboardPage,
@@ -18,7 +18,7 @@ export default function DashboardPage() {
   const { required, optional } = useRequiredAndOptionalCourses();
   const context = Route.useRouteContext();
   const { user } = useUser();
-  const isEachRequirementComplete = useCompletion(required);
+  const isEachRequirementComplete = useIsComplete(required);
 
   const isPostQuizComplete = !!user?.statusFlags.find((flag) => flag === UserStatusFlag.PostQuizzed);
 
