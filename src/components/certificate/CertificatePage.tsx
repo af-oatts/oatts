@@ -4,7 +4,6 @@ import { useCourseContentStates } from "@/contexts/hooks/useCourseContentStates"
 import { useRequiredAndOptionalCourses } from "@/contexts/hooks/useRequiredAndOptionalCourses";
 import { useIsComplete } from "@/contexts/hooks/useStatus";
 
-import { checkIfRequirementsAreComplete } from "@/core/modules/ModuleUtils";
 import { Navigate } from "@tanstack/react-router";
 
 export function CertificatePage() {
