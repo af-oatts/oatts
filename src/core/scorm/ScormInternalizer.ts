@@ -1,5 +1,6 @@
 import { CompletionStatus, ScormModel } from "@/core/model/ScormModel";
-import { ContentState, ContentStateType, CompletionStatus as InternalCompletionStatus } from "@/core/model/OattsModel";
+import { ContentStateType, CompletionStatus as InternalCompletionStatus } from "@/core/model/OattsModel";
+import { Status } from "../model/Status";
 
 export function internalizeCompletionStatus(completionStatus: CompletionStatus): InternalCompletionStatus {
   switch (completionStatus) {
@@ -30,10 +31,7 @@ export function internalizeScormState(model: ScormModel): ContentStateType {
 }
 
 
-export function ScormStateToInternalState(scormModel: ScormModel, contentID: string) : ContentState {
+export function ScormStateToStatus(scormModel: ScormModel): Status {
   const completionStatus = internalizeCompletionStatus(scormModel.cmi.completion_status);
-  return {
-    completionStatus: completionStatus,
-    contentID: contentID
-  }
+  return { completionStatus };
 }

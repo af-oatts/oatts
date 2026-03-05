@@ -4,7 +4,7 @@ import RefreshRoundedIcon from '@mui/icons-material/RefreshRounded';
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
 
 
-export default function ErrorPage() {
+export default function ErrorPage({ details }: { details?: string }) {
 
   const handleHome = () => {
     try {
@@ -48,10 +48,10 @@ export default function ErrorPage() {
             <Typography variant="h3" component="h1" fontWeight={700}>
               Something Broke.
             </Typography>
-            <img src='error.png' style={{borderRadius:'10px'}}/>
-            
+            <img src='error.png' style={{ borderRadius: '10px' }} />
+
             <Typography variant="h6" color="text.secondary">
-              No Details Available.
+              {details ? details : 'No Details Available.'}
             </Typography>
 
             <Divider sx={{ my: 1.5 }} />

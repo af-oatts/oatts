@@ -1,30 +1,21 @@
-import { resetUserAssessment } from "@/core/database/Content";
-import { Course } from "@/core/model/OattsModel";
-import { FlattenContents } from "@/core/modules/ModuleUtils";
+import { deleteUserScorm } from "@/core/database/Content";
+import { CompletionStatus, Course } from "@/core/model/OattsModel";
 import { useUser } from "@/contexts/hooks/useUser";
-import { useCallback, useContext } from "react";
-import { ContentStatesContext } from "../ContentStatesContext";
+import { useCallback } from "react";
+import { useSetStatus } from "./useStatus";
+import { FlattenCourse } from "@/utils/Flattener";
 
 export function useResetCourse() {
-  const context = useContext(ContentStatesContext);
   const { user } = useUser();
+  const setStatus = useSetStatus();
 
   if (!user) throw new Error("User should be defined");
-  if (!context) throw new Error("useResetCourse must be used within ContentStatesProvider");
 
-  return useCallback(
-    async (course: Course, noDbWrite: boolean = false) => {
-      let flatCourse = FlattenContents(course.contents);
-      const next = { ...context.states };
-      for (let content of flatCourse) {
-        delete next[content.id];
-
-        if (!noDbWrite) {
-          await resetUserAssessment(user, content.id);
-        }
-      }
-      context.setStates(next);
-    },
-    [context, user],
-  );
+  return useCallback(async (course: Course,) => {
+    const contents = FlattenCourse(course);
+    for (let content of contents) {
+      setStatus(content.id, { completionStatus: CompletionStatus.NotStarted });
+      deleteUserScorm(user, content.id);
+    };
+  }, [setStatus, user]);
 }

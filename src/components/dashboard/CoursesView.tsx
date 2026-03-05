@@ -36,7 +36,7 @@ export function CoursesView({
       })}
     >
       <Box sx={{ margin: "5px" }}>
-        <DashboardStatusBar sx={{ height: "100%" }} courses={required} mayCollectData={mayCollectData} />
+        <DashboardStatusBar sx={{ height: "100%" }} requiredCourses={required} mayCollectData={mayCollectData} />
       </Box>
       <CoursesRack label="Focused Modules" courses={required} />
       <CoursesRack label="Supplemental Modules" courses={optional} />

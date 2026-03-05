@@ -9,15 +9,22 @@ function isCourseComplete(course: Course, states: ContentStateMap) {
 function isCourseStarted(course: Course, states: ContentStateMap) {
   return course.contents.some((x) => {
     const status = (states || {})[x.id]?.completionStatus;
-    return status !== CompletionStatus.NotStarted && status !== CompletionStatus.Unknown;
+    return status !== undefined && status !== CompletionStatus.NotStarted && status !== CompletionStatus.Unknown;
   });
 }
 
+
+// Culprit.
 export function useCourseCompletionStatus(course: Course): [CompletionStatus, boolean] {
   const [states, isLoading] = useCourseContentStates(course.contents);
+  console.log(states);
+  
 
-  if (isLoading) return [CompletionStatus.Unknown, isLoading];
-  else if (isCourseComplete(course, states || {})) return [CompletionStatus.Completed, isLoading];
-  else if (isCourseStarted(course, states || {})) return [CompletionStatus.Started, isLoading];
-  else return [CompletionStatus.NotStarted, isLoading];
+  if (isLoading) 
+    return [CompletionStatus.Unknown, isLoading];
+  if (isCourseComplete(course, states || {})) 
+    return [CompletionStatus.Completed, isLoading];
+  if (isCourseStarted(course, states || {})) 
+    return [CompletionStatus.Started, isLoading];
+  return [CompletionStatus.NotStarted, isLoading];
 }

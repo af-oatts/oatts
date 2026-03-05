@@ -71,13 +71,46 @@ export function useCourseContent(courseId: string, contentId: string): [CourseCo
   return [content, manifestContext.isLoading];
 }
 
-export function usePrequizContents(): [Course | undefined, CourseContent[] | undefined, boolean] {
+
+/// Null means prequizzes are decidedly empty. They do not exist. Undefined means it just hasn't loaded yet.
+export function usePrequiz(): Course[] | undefined | null {
+  const manifestContext = useManifestContext();
+  const { config, isLoading } = manifestContext;
+  if(isLoading) {
+    return undefined;
+  }
+  const { prequizzes, roles } = config;
+  const courses = prequizzes?.filter(prequiz => prequiz.roleIds.some(rid => roles.some(other => other.id === rid)));
+  return courses ?? null;
+}
+
+
+/// Null means prequizzes are decidedly empty. They do not exist. Undefined means it just hasn't loaded yet.
+export function usePostquiz(): Course[] | undefined | null {
+  const manifestContext = useManifestContext();
+  const { config, isLoading } = manifestContext;
+  if(isLoading) {
+    return undefined;
+  }
+  const { postquizzes, roles } = config;
+  const courses = postquizzes?.filter(postquiz => postquiz.roleIds.some(rid => roles.some(other => other.id === rid)));
+  return courses ?? null;
+}
+
+
+
+
+
+
+
+
+export function usePrequizCourses(): [Course[] | undefined, boolean] {
   const manifestContext = useManifestContext();
   const { config } = manifestContext;
   const { prequizzes, roles } = config;
-  const contents = getFlattenedRoleSpecificQuizzes(prequizzes || [], roles);
+  const tailored = prequizzes?.filter(prequiz => prequiz.roleIds.some(rid => roles.some(other => other.id === rid)));
 
-  return [(prequizzes || [])[0], contents, manifestContext.isLoading];
+  return [tailored, manifestContext.isLoading];
 }
 
 export function usePostquizContents(): [Course | undefined, CourseContent[] | undefined, boolean] {
@@ -89,7 +122,7 @@ export function usePostquizContents(): [Course | undefined, CourseContent[] | un
   return [(postquizzes || [])[0], contents, manifestContext.isLoading];
 }
 
-export function useGoals() : [Goal[] | undefined, boolean] {
+export function useGoals(): [Goal[] | undefined, boolean] {
   const manifestCtx = useManifestContext();
   return [manifestCtx.config.goals, manifestCtx.isLoading];
 

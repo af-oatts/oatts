@@ -53,6 +53,9 @@ export type Goal = {
 // Unlike module metadata, for example, the state is meant to change throughout the module's lifecycle.
 // Like the completion status, that is not really information about the module, but it does indicate
 // what state the module is in for a given user
+
+/* @deprecated use Status instead.
+ */
 export type ContentStateType = {
   completionStatus: CompletionStatus;
 };

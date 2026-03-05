@@ -1,6 +1,6 @@
 import DashboardHeader from "@/components/dashboard/DashboardHeader";
 import { useOverlayContent } from "@/contexts/hooks/useOverlay";
-import { ContentStatesProvider } from "@/contexts/providers/ContentStatesProvider";
+import { StatusProvider } from "@/contexts/providers/StatusProvider";
 import User from "@/core/model/UserModel";
 import { IScormApi, ScormApi } from "@/core/scorm/ScormApi";
 import { Divider, Stack } from "@mui/material";
@@ -21,7 +21,7 @@ function Layout() {
   const { user } = ctx.authentication;
 
   return (
-    <ContentStatesProvider>
+    <StatusProvider>
       <ScormInitializer user={user}>
         <div style={{ display: "grid", width: "100%", height: "100%" }}>
           <Overlay />
@@ -34,7 +34,7 @@ function Layout() {
           </div>
         </div>
       </ScormInitializer>
-    </ContentStatesProvider>
+    </StatusProvider>
   );
 }
 
