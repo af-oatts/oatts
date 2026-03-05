@@ -2,10 +2,9 @@ import { createFileRoute, Navigate } from "@tanstack/react-router";
 import { useRequiredAndOptionalCourses } from "@/contexts/hooks/useRequiredAndOptionalCourses";
 import { CoursesView } from "@/components/dashboard/CoursesView";
 import { BigLoadingScreen } from "@/components/common/BigLoadingScreen";
-import { checkIfRequirementsAreComplete } from "@/core/modules/ModuleUtils";
 import { useUser } from "@/contexts/hooks/useUser";
 import { UserStatusFlag } from "@/core/model/UserModel";
-import { useAllStatuses, useCompletion } from "@/contexts/hooks/useStatus";
+import { useCompletion } from "@/contexts/hooks/useStatus";
 
 export const Route = createFileRoute("/_authenticated/_authorized/dashboard")({
   component: DashboardPage,
@@ -19,7 +18,7 @@ export default function DashboardPage() {
   const { required, optional } = useRequiredAndOptionalCourses();
   const context = Route.useRouteContext();
   const { user } = useUser();
-  const isEachRequirementComplete = useCompletion(required.map(c => c.id));
+  const isEachRequirementComplete = useCompletion(required);
 
   const isPostQuizComplete = !!user?.statusFlags.find((flag) => flag === UserStatusFlag.PostQuizzed);
 

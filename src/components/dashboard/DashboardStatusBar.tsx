@@ -60,18 +60,20 @@ export default function DashboardStatusBar(props: StatusTileProps) {
   const user = useUser();
 
   const setStatus = useSetStatus();
-  useMemo(() => {
-    // @ts-ignore
-    window.SET_EVERY_STATUS = async (status: CompletionStatus) => {
-      for (let content of allContents) {
-        if (content.children) {
-          continue;
+  if (process.env.NODE_ENV !== 'production') {
+    useMemo(() => {
+      // @ts-ignore
+      window.SET_EVERY_STATUS = async (status: CompletionStatus) => {
+        for (let content of allContents) {
+          if (content.children) {
+            continue;
+          }
+          setStatus(content.id, { completionStatus: status });
+          await new Promise(resolve => setTimeout(resolve, 100));
         }
-        setStatus(content.id, { completionStatus: status});
-        await new Promise(resolve => setTimeout(resolve, 100));
-      }
-    };
-  }, []);
+      };
+    }, []);
+  }
 
   const isComplete = progress == 100;
 
@@ -157,6 +159,6 @@ function calculateProgress(contents: CourseContent[], statuses: Map<string, Stat
     return 100;
   }
   let numComplete = contents.filter(content => statuses.get(content.id)?.completionStatus === CompletionStatus.Completed).length;
-  
+
   return (numComplete / contents.length) * 100;
 }

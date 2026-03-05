@@ -1,8 +1,8 @@
-import { useCallback, useContext, useMemo } from "react";
+import { useContext, useMemo } from "react";
 import { StatusContext } from "../StatusContext";
 import { Status } from "@/core/model/Status";
-import { CompletionStatus, Course } from "@/core/model/OattsModel";
-import { FlattenContents } from "@/utils/Flattener";
+import { CompletionStatus, Course, CourseContent } from "@/core/model/OattsModel";
+import { FlattenContents, FlattenCourse } from "@/utils/Flattener";
 
 /*
  * Copyright © 2026 DCS Corporation, 6909 Metro Park Drive Suite 500, Alexandria, VA 22310.
@@ -53,7 +53,8 @@ export function useSetStatus() {
 }
 
 
-export function useCompletion(contentIds: string[]) {
+export function useCompletion(courses: Course[]) {
+    const contentIds = courses.reduce((acc : string[], course) => [...acc, ...FlattenCourse(course).filter(content => !content.children).map(c => c.id)], []);
     const statuses = useStatuses(contentIds);
     const isComplete = useMemo(() => contentIds?.every(id => statuses?.get(id)?.completionStatus === CompletionStatus.Completed), [statuses]);
     return isComplete;
