@@ -4,222 +4,153 @@ FRONTEND LICENSES
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/emotion-js/emotion/tree/main/packages/react
 │  ├─ publisher: Emotion Contributors
-│  ├─ path: C:\Users\ahooper\Code\OATTS\oatts\node_modules\@emotion\react
-│  └─ licenseFile: C:\Users\ahooper\Code\OATTS\oatts\node_modules\@emotion\react\LICENSE
 ├─ @emotion/styled
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/emotion-js/emotion/tree/main/packages/styled
-│  ├─ path: C:\Users\ahooper\Code\OATTS\oatts\node_modules\@emotion\styled
-│  └─ licenseFile: C:\Users\ahooper\Code\OATTS\oatts\node_modules\@emotion\styled\LICENSE
 ├─ @fontsource/inter
 │  ├─ licenses: OFL-1.1
 │  ├─ repository: https://github.com/fontsource/font-files
 │  ├─ publisher: Google Inc.
-│  ├─ path: C:\Users\ahooper\Code\OATTS\oatts\node_modules\@fontsource\inter
-│  └─ licenseFile: C:\Users\ahooper\Code\OATTS\oatts\node_modules\@fontsource\inter\LICENSE
 ├─ @mui/icons-material
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/mui/material-ui
 │  ├─ publisher: MUI Team
-│  ├─ path: C:\Users\ahooper\Code\OATTS\oatts\node_modules\@mui\icons-material
-│  └─ licenseFile: C:\Users\ahooper\Code\OATTS\oatts\node_modules\@mui\icons-material\LICENSE
 ├─ @mui/material
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/mui/material-ui
 │  ├─ publisher: MUI Team
-│  ├─ path: C:\Users\ahooper\Code\OATTS\oatts\node_modules\@mui\material
-│  └─ licenseFile: C:\Users\ahooper\Code\OATTS\oatts\node_modules\@mui\material\LICENSE
 ├─ @tanstack/react-router
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/TanStack/router
 │  ├─ publisher: Tanner Linsley
-│  ├─ path: C:\Users\ahooper\Code\OATTS\oatts\node_modules\@tanstack\react-router
-│  └─ licenseFile: C:\Users\ahooper\Code\OATTS\oatts\node_modules\@tanstack\react-router\LICENSE
 ├─ @tanstack/router-devtools
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/TanStack/router
 │  ├─ publisher: Tanner Linsley
-│  ├─ path: C:\Users\ahooper\Code\OATTS\oatts\node_modules\@tanstack\router-devtools
-│  └─ licenseFile: C:\Users\ahooper\Code\OATTS\oatts\node_modules\@tanstack\router-devtools\LICENSE
 ├─ @tanstack/router-plugin
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/TanStack/router
 │  ├─ publisher: Tanner Linsley
-│  ├─ path: C:\Users\ahooper\Code\OATTS\oatts\node_modules\@tanstack\router-plugin
-│  └─ licenseFile: C:\Users\ahooper\Code\OATTS\oatts\node_modules\@tanstack\router-plugin\LICENSE
 ├─ @tauri-apps/api
 │  ├─ licenses: Apache-2.0 OR MIT
 │  ├─ repository: https://github.com/tauri-apps/tauri
-│  ├─ path: C:\Users\ahooper\Code\OATTS\oatts\node_modules\@tauri-apps\api
-│  └─ licenseFile: C:\Users\ahooper\Code\OATTS\oatts\node_modules\@tauri-apps\api\README.md
 ├─ @tauri-apps/cli
 │  ├─ licenses: Apache-2.0 OR MIT
 │  ├─ repository: https://github.com/tauri-apps/tauri
-│  ├─ path: C:\Users\ahooper\Code\OATTS\oatts\node_modules\@tauri-apps\cli
-│  └─ licenseFile: C:\Users\ahooper\Code\OATTS\oatts\node_modules\@tauri-apps\cli\README.md
 ├─ @tauri-apps/plugin-dialog
 │  ├─ licenses: MIT OR Apache-2.0
 │  ├─ repository: https://github.com/tauri-apps/plugins-workspace
-│  ├─ path: C:\Users\ahooper\Code\OATTS\oatts\node_modules\@tauri-apps\plugin-dialog
-│  └─ licenseFile: C:\Users\ahooper\Code\OATTS\oatts\node_modules\@tauri-apps\plugin-dialog\LICENSE.spdx
 ├─ @tauri-apps/plugin-fs
 │  ├─ licenses: MIT OR Apache-2.0
 │  ├─ repository: https://github.com/tauri-apps/plugins-workspace
-│  ├─ path: C:\Users\ahooper\Code\OATTS\oatts\node_modules\@tauri-apps\plugin-fs
-│  └─ licenseFile: C:\Users\ahooper\Code\OATTS\oatts\node_modules\@tauri-apps\plugin-fs\LICENSE.spdx
 ├─ @tauri-apps/plugin-shell
 │  ├─ licenses: MIT OR Apache-2.0
 │  ├─ repository: https://github.com/tauri-apps/plugins-workspace
-│  ├─ path: C:\Users\ahooper\Code\OATTS\oatts\node_modules\@tauri-apps\plugin-shell
-│  └─ licenseFile: C:\Users\ahooper\Code\OATTS\oatts\node_modules\@tauri-apps\plugin-shell\LICENSE.spdx
 ├─ @tauri-apps/plugin-sql
 │  ├─ licenses: MIT OR Apache-2.0
 │  ├─ repository: https://github.com/tauri-apps/plugins-workspace
-│  ├─ path: C:\Users\ahooper\Code\OATTS\oatts\node_modules\@tauri-apps\plugin-sql
-│  └─ licenseFile: C:\Users\ahooper\Code\OATTS\oatts\node_modules\@tauri-apps\plugin-sql\LICENSE.spdx
 ├─ @types/canvas-confetti
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/DefinitelyTyped/DefinitelyTyped
-│  ├─ path: C:\Users\ahooper\Code\OATTS\oatts\node_modules\@types\canvas-confetti
-│  └─ licenseFile: C:\Users\ahooper\Code\OATTS\oatts\node_modules\@types\canvas-confetti\LICENSE
 ├─ @types/react-dom
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/DefinitelyTyped/DefinitelyTyped
-│  ├─ path: C:\Users\ahooper\Code\OATTS\oatts\node_modules\@types\react-dom
-│  └─ licenseFile: C:\Users\ahooper\Code\OATTS\oatts\node_modules\@types\react-dom\LICENSE
 ├─ @types/react
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/DefinitelyTyped/DefinitelyTyped
-│  ├─ path: C:\Users\ahooper\Code\OATTS\oatts\node_modules\@types\react
-│  └─ licenseFile: C:\Users\ahooper\Code\OATTS\oatts\node_modules\@types\react\LICENSE
 ├─ @types/xml2js
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/DefinitelyTyped/DefinitelyTyped
-│  ├─ path: C:\Users\ahooper\Code\OATTS\oatts\node_modules\@types\xml2js
-│  └─ licenseFile: C:\Users\ahooper\Code\OATTS\oatts\node_modules\@types\xml2js\LICENSE
 ├─ @vitejs/plugin-react
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/vitejs/vite-plugin-react
 │  ├─ publisher: Evan You
-│  ├─ path: C:\Users\ahooper\Code\OATTS\oatts\node_modules\@vitejs\plugin-react
-│  └─ licenseFile: C:\Users\ahooper\Code\OATTS\oatts\node_modules\@vitejs\plugin-react\LICENSE
 ├─ canvas-confetti@1.9.3
 │  ├─ licenses: ISC
 │  ├─ repository: https://github.com/catdad/canvas-confetti
 │  ├─ publisher: Kiril Vatev
 │  ├─ email: vatev.1@gmail.com
-│  ├─ path: C:\Users\ahooper\Code\OATTS\oatts\node_modules\canvas-confetti
-│  └─ licenseFile: C:\Users\ahooper\Code\OATTS\oatts\node_modules\canvas-confetti\LICENSE
 ├─ dayjs@1.11.13
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/iamkun/dayjs
 │  ├─ publisher: iamkun
-│  ├─ path: C:\Users\ahooper\Code\OATTS\oatts\node_modules\dayjs
-│  └─ licenseFile: C:\Users\ahooper\Code\OATTS\oatts\node_modules\dayjs\LICENSE
 ├─ duration@0.2.2
 │  ├─ licenses: ISC
 │  ├─ repository: https://github.com/medikoo/duration
 │  ├─ publisher: Mariusz Nowak
 │  ├─ email: medyk@medikoo.com
 │  ├─ url: http://www.medikoo.com/
-│  ├─ path: C:\Users\ahooper\Code\OATTS\oatts\node_modules\duration
-│  └─ licenseFile: C:\Users\ahooper\Code\OATTS\oatts\node_modules\duration\LICENSE
 ├─ events@3.3.0
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/Gozala/events
 │  ├─ publisher: Irakli Gozalishvili
 │  ├─ email: rfobic@gmail.com
 │  ├─ url: http://jeditoolkit.com
-│  ├─ path: C:\Users\ahooper\Code\OATTS\oatts\node_modules\events
-│  └─ licenseFile: C:\Users\ahooper\Code\OATTS\oatts\node_modules\events\LICENSE
 ├─ i18next-http-backend@1.0.10
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/i18next/i18next-http-backend
-│  ├─ path: C:\Users\ahooper\Code\OATTS\oatts\node_modules\i18next-http-backend
-│  └─ licenseFile: C:\Users\ahooper\Code\OATTS\oatts\node_modules\i18next-http-backend\licence
 ├─ i18next@24.2.3
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/i18next/i18next
 │  ├─ publisher: Jan Mühlemann
 │  ├─ email: jan.muehlemann@gmail.com
 │  ├─ url: https://github.com/jamuhl
-│  ├─ path: C:\Users\ahooper\Code\OATTS\oatts\node_modules\i18next
-│  └─ licenseFile: C:\Users\ahooper\Code\OATTS\oatts\node_modules\i18next\LICENSE
+├─ magicui
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/magicuidesign/magicui
 ├─ motion@12.5.0
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/motiondivision/motion
 │  ├─ publisher: Matt Perry
-│  ├─ path: C:\Users\ahooper\Code\OATTS\oatts\node_modules\motion
-│  └─ licenseFile: C:\Users\ahooper\Code\OATTS\oatts\node_modules\motion\LICENSE.md
 ├─ oatts@0.3.1
 │  ├─ licenses: UNLICENSED
 │  ├─ private: true
-│  ├─ path: C:\Users\ahooper\Code\OATTS\oatts
-│  └─ licenseFile: C:\Users\ahooper\Code\OATTS\oatts\README.md
 ├─ react-dom@19.0.0
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/facebook/react
-│  ├─ path: C:\Users\ahooper\Code\OATTS\oatts\node_modules\react-dom
-│  └─ licenseFile: C:\Users\ahooper\Code\OATTS\oatts\node_modules\react-dom\LICENSE
 ├─ react-i18next@15.4.1
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/i18next/react-i18next
 │  ├─ publisher: Jan Mühlemann
 │  ├─ email: jan.muehlemann@gmail.com
 │  ├─ url: https://github.com/jamuhl
-│  ├─ path: C:\Users\ahooper\Code\OATTS\oatts\node_modules\react-i18next
-│  └─ licenseFile: C:\Users\ahooper\Code\OATTS\oatts\node_modules\react-i18next\LICENSE
 ├─ react-markdown@10.1.0
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/remarkjs/react-markdown
 │  ├─ publisher: Espen Hovlandsdal
 │  ├─ email: espen@hovlandsdal.com
-│  ├─ path: C:\Users\ahooper\Code\OATTS\oatts\node_modules\react-markdown
-│  └─ licenseFile: C:\Users\ahooper\Code\OATTS\oatts\node_modules\react-markdown\license
 ├─ react@19.0.0
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/facebook/react
-│  ├─ path: C:\Users\ahooper\Code\OATTS\oatts\node_modules\react
-│  └─ licenseFile: C:\Users\ahooper\Code\OATTS\oatts\node_modules\react\LICENSE
 ├─ rxjs@7.8.2
 │  ├─ licenses: Apache-2.0
 │  ├─ repository: https://github.com/reactivex/rxjs
 │  ├─ publisher: Ben Lesh
 │  ├─ email: ben@benlesh.com
-│  ├─ path: C:\Users\ahooper\Code\OATTS\oatts\node_modules\rxjs
-│  └─ licenseFile: C:\Users\ahooper\Code\OATTS\oatts\node_modules\rxjs\LICENSE.txt
 ├─ typescript@5.8.2
 │  ├─ licenses: Apache-2.0
 │  ├─ repository: https://github.com/microsoft/TypeScript
 │  ├─ publisher: Microsoft Corp.
-│  ├─ path: C:\Users\ahooper\Code\OATTS\oatts\node_modules\typescript
-│  └─ licenseFile: C:\Users\ahooper\Code\OATTS\oatts\node_modules\typescript\LICENSE.txt
 ├─ uuid@11.1.0
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/uuidjs/uuid
-│  ├─ path: C:\Users\ahooper\Code\OATTS\oatts\node_modules\uuid
-│  └─ licenseFile: C:\Users\ahooper\Code\OATTS\oatts\node_modules\uuid\LICENSE.md
 ├─ vite@6.2.2
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/vitejs/vite
 │  ├─ publisher: Evan You
-│  ├─ path: C:\Users\ahooper\Code\OATTS\oatts\node_modules\vite
-│  └─ licenseFile: C:\Users\ahooper\Code\OATTS\oatts\node_modules\vite\LICENSE.md
 ├─ xml2js@0.6.2
 │  ├─ licenses: MIT
 │  ├─ repository: https://github.com/Leonidas-from-XIV/node-xml2js
 │  ├─ publisher: Marek Kubica
 │  ├─ email: marek@xivilization.net
 │  ├─ url: https://xivilization.net
-│  ├─ path: C:\Users\ahooper\Code\OATTS\oatts\node_modules\xml2js
-│  └─ licenseFile: C:\Users\ahooper\Code\OATTS\oatts\node_modules\xml2js\LICENSE
 └─ yaml@2.7.0
    ├─ licenses: ISC
    ├─ repository: https://github.com/eemeli/yaml
    ├─ publisher: Eemeli Aro
    ├─ email: eemeli@gmail.com
-   ├─ path: C:\Users\ahooper\Code\OATTS\oatts\node_modules\yaml
-   └─ licenseFile: C:\Users\ahooper\Code\OATTS\oatts\node_modules\yaml\LICENSE
+
+
 
 
 BACKEND LICENSES
