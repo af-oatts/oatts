@@ -50,7 +50,7 @@ export function CourseContentView({ content, hasNext, progress, courseName, paNu
         <Box sx={{ alignItems: "center", margin: "5px", display: "grid", gridTemplateColumns: "1fr 1fr" }}>
           <Typography variant="h6">{hasNext? content.name : courseName} Complete</Typography>
           <Button sx={{ width: "10em", justifySelf: "end" }} variant="contained" onClick={progress}>
-            Next
+            {hasNext? "Next" : "Dashboard"}
           </Button>
         </Box>
       </Box>
