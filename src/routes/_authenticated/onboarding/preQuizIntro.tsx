@@ -10,7 +10,7 @@ function RouteComponent() {
 
   return (
     <QuizIntro
-      onNext={() => navigate({ to: "/onboarding/preQuiz" })}
+      onNext={() => navigate({ to: "/onboarding/prequiz" })}
       onPrevious={() => navigate({ to: "/onboarding/interests" })}
     />
   );

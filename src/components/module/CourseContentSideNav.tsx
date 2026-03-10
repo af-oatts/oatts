@@ -3,7 +3,7 @@
  * See the LICENSE file for rights & permissions.
  */
 import { Box, List } from "@mui/material";
-import { Course, CourseContent } from "@/core/model/OattsModel";
+import { CourseContent } from "@/core/model/OattsModel";
 import { ContentMenuItem } from "./ContentMenu";
 
 export function CourseContentSideNav({ contents, contentId, setContentId }: { contents: CourseContent[], contentId: string, setContentId: (id : string) => void }) {

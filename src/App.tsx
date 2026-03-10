@@ -6,7 +6,7 @@ import ErrorPage from "./components/error-page";
 import { useAuth } from "./contexts/hooks/useAuth";
 import CoursesContext from "./core/modules/ContentContext";
 
-const router = createRouter({ routeTree: routeTree, defaultNotFoundComponent: ErrorPage, context: undefined! });
+const router = createRouter({ routeTree: routeTree, defaultNotFoundComponent: () => <ErrorPage/>, context: undefined! });
 
 declare module "@tanstack/react-router" {
   interface Register {
