@@ -1,3 +1,9 @@
+
+/*
+ * Copyright © 2026 DCS Corporation, 6909 Metro Park Drive Suite 500, Alexandria, VA 22310.
+ * See the LICENSE file for rights & permissions.
+ */
+
 import { createFileRoute, Navigate } from "@tanstack/react-router";
 import { useRequiredAndOptionalCourses } from "@/contexts/hooks/useRequiredAndOptionalCourses";
 import { CoursesView } from "@/components/dashboard/CoursesView";

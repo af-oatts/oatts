@@ -1,3 +1,9 @@
+
+/*
+ * Copyright © 2026 DCS Corporation, 6909 Metro Park Drive Suite 500, Alexandria, VA 22310.
+ * See the LICENSE file for rights & permissions.
+ */
+
 import { Button, Checkbox, FormControlLabel, FormGroup, Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import Legalese from "@/components/common/Legalese";

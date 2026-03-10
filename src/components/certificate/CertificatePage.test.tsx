@@ -1,3 +1,9 @@
+
+/*
+ * Copyright © 2026 DCS Corporation, 6909 Metro Park Drive Suite 500, Alexandria, VA 22310.
+ * See the LICENSE file for rights & permissions.
+ */
+
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, waitFor } from "@testing-library/react";
 import { CertificatePage } from "./CertificatePage";
