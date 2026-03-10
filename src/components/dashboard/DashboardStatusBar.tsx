@@ -54,7 +54,7 @@ function FailedAlert(msg?: string) {
 }
 
 export default function DashboardStatusBar(props: StatusTileProps) {
-  const { requiredCourses: courses, ...rest } = props;
+  const { requiredCourses: courses, mayCollectData, ...rest } = props;
   const [snackOpen, setSnackOpen] = useState(false);
   const [snackContent, setSnackContent] = useState(<Box></Box>);
   const allContents = courses.reduce((acc: CourseContent[], course) => [...acc, ...FlattenContents(course.contents)], []).filter(c => !c.children);
@@ -131,7 +131,7 @@ export default function DashboardStatusBar(props: StatusTileProps) {
               <LinearProgressWithLabel value={progress} />
             </Box>
           </Box>
-          {props.mayCollectData ? (
+          {mayCollectData ? (
             <Button sx={{ gridColumn: "3" }} size="small" onClick={() => DoExport(user.user)}>
               Export Data to Participate Research
             </Button>

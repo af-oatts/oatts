@@ -31,6 +31,7 @@ zip = "2.2.3"
 tempfile = "3.21.0"
 aes-gcm = "0.10.3"
 rand_core = "0.9.3"
+reqwest = { version = "0.12", features = ["json"] }
 rsa = {version="0.9.8", features = ["pem"] }
 pkcs8 = "0.10"
 rand = "0.8"

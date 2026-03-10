@@ -3,3 +3,4 @@
  * See the LICENSE file for rights & permissions.
  */
 pub mod exporter;
+pub mod github_fetch;

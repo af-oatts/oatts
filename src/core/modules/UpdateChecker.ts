@@ -4,6 +4,7 @@
  * See the LICENSE file for rights & permissions.
  */
 
+import { invoke } from "@tauri-apps/api/core";
 import getOattsVersion from "../utils/Version";
 
 export type UpdateCheckResult = {
@@ -29,11 +30,7 @@ type ReleaseLite = {
 };
 
 async function getLatestFromGithub(owner: string, repo: string) {
-    const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/releases/latest`, {
-        headers: { Accept: "application/vnd.github+json" }
-    });
-    if (!res.ok) throw new Error(`GitHub API error ${res.status}`);
-    const data = (await res.json()) as ReleaseLite;
+    const data : ReleaseLite = await invoke('get_latest_from_github', {owner: owner, repo: repo});
     return {
         tag: data.tag_name,
         name: data.name ?? data.tag_name,
