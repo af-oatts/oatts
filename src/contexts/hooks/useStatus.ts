@@ -1,7 +1,7 @@
 import { useContext, useMemo } from "react";
 import { StatusContext } from "../StatusContext";
 import { Status } from "@/core/model/Status";
-import { CompletionStatus, Course, CourseContent } from "@/core/model/OattsModel";
+import { CompletionStatus, Course } from "@/core/model/OattsModel";
 import { FlattenContents, FlattenCourse } from "@/utils/Flattener";
 
 /*

@@ -11,7 +11,6 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { checkIfRequirementsAreComplete } from "../../core/modules/ModuleUtils";
 import LinearProgressWithLabel from "../common/LinearProgressWithLabel";
 import { ExportUserProgress } from "../../core/utils/DataExporter";
 import { useNavigate } from "@tanstack/react-router";
