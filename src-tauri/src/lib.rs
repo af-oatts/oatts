@@ -142,7 +142,8 @@ pub fn run() {
         )
         .invoke_handler(tauri::generate_handler![
             utils::exporter::export_data,
-            utils::exporter::export_legalese
+            utils::exporter::export_legalese,
+            utils::github_fetch::get_latest_from_github
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
