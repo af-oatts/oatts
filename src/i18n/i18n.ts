@@ -1,3 +1,9 @@
+
+/*
+ * Copyright © 2026 DCS Corporation, 6909 Metro Park Drive Suite 500, Alexandria, VA 22310.
+ * See the LICENSE file for rights & permissions.
+ */
+
 import i18next from "i18next";
 import { initReactI18next } from "react-i18next";
 import HttpBackend from "i18next-http-backend"

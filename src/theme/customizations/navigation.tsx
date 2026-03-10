@@ -1,3 +1,9 @@
+
+/*
+ * Copyright © 2026 DCS Corporation, 6909 Metro Park Drive Suite 500, Alexandria, VA 22310.
+ * See the LICENSE file for rights & permissions.
+ */
+
 import * as React from "react";
 import { Theme, alpha, Components } from "@mui/material/styles";
 import { SvgIconProps } from "@mui/material/SvgIcon";

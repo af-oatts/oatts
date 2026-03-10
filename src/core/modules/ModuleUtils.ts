@@ -1,3 +1,9 @@
+
+/*
+ * Copyright © 2026 DCS Corporation, 6909 Metro Park Drive Suite 500, Alexandria, VA 22310.
+ * See the LICENSE file for rights & permissions.
+ */
+
 import { CompletionStatus, Course, CourseContent } from "@/core/model/OattsModel";
 import { OATTS_ROOT } from "../utils/Globals";
 import { ContentStateMap } from "@/contexts/models/ContentStateMap";
