@@ -10,7 +10,7 @@
  */
 import { Box, Button, Typography } from "@mui/material";
 import { motion, useAnimate } from "motion/react";
-import ContentViewer from "@/components/module/ContentViewer";
+import ContentViewer from "@/components/module/content/ContentViewer";
 import { CompletionStatus, CourseContent } from "@/core/model/OattsModel";
 import { useEffect } from "react";
 import { useStatus } from "@/contexts/hooks/useStatus";
