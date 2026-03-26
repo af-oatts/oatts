@@ -23,7 +23,7 @@ export function GenericContentViewer({ content }: { content: CourseContent }) {
         setupCSPViolationReporting();
     }, [content]);
 
-    
+
     // Whenever content changes, we slightly obscure the frame by changing the size/opacity and then
     // set the source for the frame so it can load while being "obscured"
     useEffect(() => {
@@ -87,11 +87,12 @@ export function GenericContentViewer({ content }: { content: CourseContent }) {
                     ref={frameScope}
                 >
                     <iframe
+                        key={content.id}
                         style={{ border: 0 }}
-                        width="100%"
-                        height="100%"
                         ref={contentFrameRef}
                         onLoad={animateScope}
+                        width="100%"
+                        height="100%"
                         title="Content Viewer"
                     ></iframe>
                 </Box>
