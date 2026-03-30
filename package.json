@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "prebuild": "tsx scripts/preprocess-content.ts --verbose",
+    "prebuild": "npx tsx scripts/preprocess-content.ts --verbose",
     "preview": "vite preview",
     "tauri": "tauri",
     "test": "vitest",
