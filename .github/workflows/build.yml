@@ -67,7 +67,7 @@ jobs:
 
 
       - name: install frontend dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
 
 
       - name: Read content version (Linux/macOS)
