@@ -1,7 +1,8 @@
 import fs from 'fs';
 import path from 'path';
+import * as os from 'os'
 
-const BASE_URL_TEMPLATE = 'http://oatts.localhost/oatts/content/';
+const BASE_URL_TEMPLATE = os.platform() === 'win32' ? 'http://oatts.localhost/oatts/content/' : 'oatts://localhost/oatts/content'; 
 
 function processHtml(filePath: string, contentId: string) {
     const content = fs.readFileSync(filePath, 'utf8');
