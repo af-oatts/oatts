@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import * as os from 'os'
 
-const BASE_URL_TEMPLATE = os.platform() === 'win32' ? 'http://oatts.localhost/oatts/content/' : 'oatts://localhost/oatts/content'; 
+const BASE_URL_TEMPLATE = os.platform() === 'win32' ? 'http://oatts.localhost/oatts/content/' : 'oatts://localhost/oatts/content/'; 
 
 console.log("Setting base to " + BASE_URL_TEMPLATE)
 
