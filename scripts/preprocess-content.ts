@@ -1,5 +1,4 @@
 import path from 'path';
-import fs from 'fs';
 import { copyAndExtractContent } from './copycontent';
 import { deduplicate } from './deduplicate';
 import { addIndexBaseTags } from './base-html';
