@@ -49,10 +49,6 @@ function RouteComponent() {
     return <Navigate to="/certificate" />
   }
   
-  if (courses == undefined) {
-    return <CircularProgress />
-  }
-  
   
   const contents = useMemo(() => courses?.reduce((acc: CourseContent[], course) => [...acc, ...course.contents], []), [courses])
 
