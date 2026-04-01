@@ -34,11 +34,6 @@ function RouteComponent() {
   if (prequizCourses == null) {
     return <Navigate to="/dashboard"/>
   }
-  
-  if (prequizCourses == undefined) {
-    return <CircularProgress />
-  }
-
 
   const contents = useMemo(() => prequizCourses?.reduce((acc: CourseContent[], course) => [...acc, ...course.contents], []), [prequizCourses])
 
