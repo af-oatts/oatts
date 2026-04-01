@@ -8,325 +8,433 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-// Import Routes
+import { Route as rootRouteImport } from './routes/__root'
+import { Route as AuthenticationRouteImport } from './routes/_authentication'
+import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
+import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticationRegisterRouteImport } from './routes/_authentication/register'
+import { Route as AuthenticationLoginRouteImport } from './routes/_authentication/login'
+import { Route as AuthenticatedOnboardingRouteImport } from './routes/_authenticated/onboarding'
+import { Route as AuthenticatedAuthorizedRouteImport } from './routes/_authenticated/_authorized'
+import { Route as AuthenticatedOnboardingPreQuizIntroRouteImport } from './routes/_authenticated/onboarding/preQuizIntro'
+import { Route as AuthenticatedOnboardingPreQuizCompleteRouteImport } from './routes/_authenticated/onboarding/preQuizComplete'
+import { Route as AuthenticatedOnboardingIntroRouteImport } from './routes/_authenticated/onboarding/intro'
+import { Route as AuthenticatedOnboardingInterestsRouteImport } from './routes/_authenticated/onboarding/interests'
+import { Route as AuthenticatedOnboardingCourseIdRouteImport } from './routes/_authenticated/onboarding/$courseId'
+import { Route as AuthenticatedAuthorizedDashboardRouteImport } from './routes/_authenticated/_authorized/dashboard'
+import { Route as AuthenticatedAuthorizedCertificateRouteImport } from './routes/_authenticated/_authorized/certificate'
+import { Route as AuthenticatedOnboardingPrequizIndexRouteImport } from './routes/_authenticated/onboarding/prequiz/index'
+import { Route as AuthenticatedAuthorizedPostquizIndexRouteImport } from './routes/_authenticated/_authorized/postquiz/index'
+import { Route as AuthenticatedOnboardingPrequizContentIdRouteImport } from './routes/_authenticated/onboarding/prequiz/$contentId'
+import { Route as AuthenticatedAuthorizedPostquizContentIdRouteImport } from './routes/_authenticated/_authorized/postquiz/$contentId'
+import { Route as AuthenticatedAuthorizedCoursesCourseIdRouteImport } from './routes/_authenticated/_authorized/courses/$courseId'
+import { Route as AuthenticatedAuthorizedCoursesCourseIdContentIndexRouteImport } from './routes/_authenticated/_authorized/courses/$courseId/content/index'
+import { Route as AuthenticatedAuthorizedCoursesCourseIdContentContentIdRouteImport } from './routes/_authenticated/_authorized/courses/$courseId/content/$contentId'
 
-import { Route as rootRoute } from './routes/__root'
-import { Route as AuthenticationImport } from './routes/_authentication'
-import { Route as AuthenticatedImport } from './routes/_authenticated'
-import { Route as IndexImport } from './routes/index'
-import { Route as AuthenticationRegisterImport } from './routes/_authentication/register'
-import { Route as AuthenticationLoginImport } from './routes/_authentication/login'
-import { Route as AuthenticatedOnboardingImport } from './routes/_authenticated/onboarding'
-import { Route as AuthenticatedAuthorizedImport } from './routes/_authenticated/_authorized'
-import { Route as AuthenticatedOnboardingPreQuizIntroImport } from './routes/_authenticated/onboarding/preQuizIntro'
-import { Route as AuthenticatedOnboardingPreQuizCompleteImport } from './routes/_authenticated/onboarding/preQuizComplete'
-import { Route as AuthenticatedOnboardingIntroImport } from './routes/_authenticated/onboarding/intro'
-import { Route as AuthenticatedOnboardingInterestsImport } from './routes/_authenticated/onboarding/interests'
-import { Route as AuthenticatedOnboardingCourseIdImport } from './routes/_authenticated/onboarding/$courseId'
-import { Route as AuthenticatedAuthorizedDashboardImport } from './routes/_authenticated/_authorized/dashboard'
-import { Route as AuthenticatedAuthorizedCertificateImport } from './routes/_authenticated/_authorized/certificate'
-import { Route as AuthenticatedOnboardingPrequizIndexImport } from './routes/_authenticated/onboarding/prequiz/index'
-import { Route as AuthenticatedAuthorizedPostquizIndexImport } from './routes/_authenticated/_authorized/postquiz/index'
-import { Route as AuthenticatedOnboardingPrequizContentIdImport } from './routes/_authenticated/onboarding/prequiz/$contentId'
-import { Route as AuthenticatedAuthorizedPostquizContentIdImport } from './routes/_authenticated/_authorized/postquiz/$contentId'
-import { Route as AuthenticatedAuthorizedCoursesCourseIdImport } from './routes/_authenticated/_authorized/courses/$courseId'
-import { Route as AuthenticatedAuthorizedCoursesCourseIdContentIndexImport } from './routes/_authenticated/_authorized/courses/$courseId/content/index'
-import { Route as AuthenticatedAuthorizedCoursesCourseIdContentContentIdImport } from './routes/_authenticated/_authorized/courses/$courseId/content/$contentId'
-
-// Create/Update Routes
-
-const AuthenticationRoute = AuthenticationImport.update({
+const AuthenticationRoute = AuthenticationRouteImport.update({
   id: '/_authentication',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const AuthenticatedRoute = AuthenticatedImport.update({
+const AuthenticatedRoute = AuthenticatedRouteImport.update({
   id: '/_authenticated',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const IndexRoute = IndexImport.update({
+const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const AuthenticationRegisterRoute = AuthenticationRegisterImport.update({
+const AuthenticationRegisterRoute = AuthenticationRegisterRouteImport.update({
   id: '/register',
   path: '/register',
   getParentRoute: () => AuthenticationRoute,
 } as any)
-
-const AuthenticationLoginRoute = AuthenticationLoginImport.update({
+const AuthenticationLoginRoute = AuthenticationLoginRouteImport.update({
   id: '/login',
   path: '/login',
   getParentRoute: () => AuthenticationRoute,
 } as any)
-
-const AuthenticatedOnboardingRoute = AuthenticatedOnboardingImport.update({
+const AuthenticatedOnboardingRoute = AuthenticatedOnboardingRouteImport.update({
   id: '/onboarding',
   path: '/onboarding',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
-
-const AuthenticatedAuthorizedRoute = AuthenticatedAuthorizedImport.update({
+const AuthenticatedAuthorizedRoute = AuthenticatedAuthorizedRouteImport.update({
   id: '/_authorized',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
-
 const AuthenticatedOnboardingPreQuizIntroRoute =
-  AuthenticatedOnboardingPreQuizIntroImport.update({
+  AuthenticatedOnboardingPreQuizIntroRouteImport.update({
     id: '/preQuizIntro',
     path: '/preQuizIntro',
     getParentRoute: () => AuthenticatedOnboardingRoute,
   } as any)
-
 const AuthenticatedOnboardingPreQuizCompleteRoute =
-  AuthenticatedOnboardingPreQuizCompleteImport.update({
+  AuthenticatedOnboardingPreQuizCompleteRouteImport.update({
     id: '/preQuizComplete',
     path: '/preQuizComplete',
     getParentRoute: () => AuthenticatedOnboardingRoute,
   } as any)
-
 const AuthenticatedOnboardingIntroRoute =
-  AuthenticatedOnboardingIntroImport.update({
+  AuthenticatedOnboardingIntroRouteImport.update({
     id: '/intro',
     path: '/intro',
     getParentRoute: () => AuthenticatedOnboardingRoute,
   } as any)
-
 const AuthenticatedOnboardingInterestsRoute =
-  AuthenticatedOnboardingInterestsImport.update({
+  AuthenticatedOnboardingInterestsRouteImport.update({
     id: '/interests',
     path: '/interests',
     getParentRoute: () => AuthenticatedOnboardingRoute,
   } as any)
-
 const AuthenticatedOnboardingCourseIdRoute =
-  AuthenticatedOnboardingCourseIdImport.update({
+  AuthenticatedOnboardingCourseIdRouteImport.update({
     id: '/$courseId',
     path: '/$courseId',
     getParentRoute: () => AuthenticatedOnboardingRoute,
   } as any)
-
 const AuthenticatedAuthorizedDashboardRoute =
-  AuthenticatedAuthorizedDashboardImport.update({
+  AuthenticatedAuthorizedDashboardRouteImport.update({
     id: '/dashboard',
     path: '/dashboard',
     getParentRoute: () => AuthenticatedAuthorizedRoute,
   } as any)
-
 const AuthenticatedAuthorizedCertificateRoute =
-  AuthenticatedAuthorizedCertificateImport.update({
+  AuthenticatedAuthorizedCertificateRouteImport.update({
     id: '/certificate',
     path: '/certificate',
     getParentRoute: () => AuthenticatedAuthorizedRoute,
   } as any)
-
 const AuthenticatedOnboardingPrequizIndexRoute =
-  AuthenticatedOnboardingPrequizIndexImport.update({
+  AuthenticatedOnboardingPrequizIndexRouteImport.update({
     id: '/prequiz/',
     path: '/prequiz/',
     getParentRoute: () => AuthenticatedOnboardingRoute,
   } as any)
-
 const AuthenticatedAuthorizedPostquizIndexRoute =
-  AuthenticatedAuthorizedPostquizIndexImport.update({
+  AuthenticatedAuthorizedPostquizIndexRouteImport.update({
     id: '/postquiz/',
     path: '/postquiz/',
     getParentRoute: () => AuthenticatedAuthorizedRoute,
   } as any)
-
 const AuthenticatedOnboardingPrequizContentIdRoute =
-  AuthenticatedOnboardingPrequizContentIdImport.update({
+  AuthenticatedOnboardingPrequizContentIdRouteImport.update({
     id: '/prequiz/$contentId',
     path: '/prequiz/$contentId',
     getParentRoute: () => AuthenticatedOnboardingRoute,
   } as any)
-
 const AuthenticatedAuthorizedPostquizContentIdRoute =
-  AuthenticatedAuthorizedPostquizContentIdImport.update({
+  AuthenticatedAuthorizedPostquizContentIdRouteImport.update({
     id: '/postquiz/$contentId',
     path: '/postquiz/$contentId',
     getParentRoute: () => AuthenticatedAuthorizedRoute,
   } as any)
-
 const AuthenticatedAuthorizedCoursesCourseIdRoute =
-  AuthenticatedAuthorizedCoursesCourseIdImport.update({
+  AuthenticatedAuthorizedCoursesCourseIdRouteImport.update({
     id: '/courses/$courseId',
     path: '/courses/$courseId',
     getParentRoute: () => AuthenticatedAuthorizedRoute,
   } as any)
-
 const AuthenticatedAuthorizedCoursesCourseIdContentIndexRoute =
-  AuthenticatedAuthorizedCoursesCourseIdContentIndexImport.update({
+  AuthenticatedAuthorizedCoursesCourseIdContentIndexRouteImport.update({
     id: '/content/',
     path: '/content/',
     getParentRoute: () => AuthenticatedAuthorizedCoursesCourseIdRoute,
   } as any)
-
 const AuthenticatedAuthorizedCoursesCourseIdContentContentIdRoute =
-  AuthenticatedAuthorizedCoursesCourseIdContentContentIdImport.update({
+  AuthenticatedAuthorizedCoursesCourseIdContentContentIdRouteImport.update({
     id: '/content/$contentId',
     path: '/content/$contentId',
     getParentRoute: () => AuthenticatedAuthorizedCoursesCourseIdRoute,
   } as any)
 
-// Populate the FileRoutesByPath interface
+export interface FileRoutesByFullPath {
+  '/': typeof IndexRoute
+  '/onboarding': typeof AuthenticatedOnboardingRouteWithChildren
+  '/login': typeof AuthenticationLoginRoute
+  '/register': typeof AuthenticationRegisterRoute
+  '/certificate': typeof AuthenticatedAuthorizedCertificateRoute
+  '/dashboard': typeof AuthenticatedAuthorizedDashboardRoute
+  '/onboarding/$courseId': typeof AuthenticatedOnboardingCourseIdRoute
+  '/onboarding/interests': typeof AuthenticatedOnboardingInterestsRoute
+  '/onboarding/intro': typeof AuthenticatedOnboardingIntroRoute
+  '/onboarding/preQuizComplete': typeof AuthenticatedOnboardingPreQuizCompleteRoute
+  '/onboarding/preQuizIntro': typeof AuthenticatedOnboardingPreQuizIntroRoute
+  '/courses/$courseId': typeof AuthenticatedAuthorizedCoursesCourseIdRouteWithChildren
+  '/postquiz/$contentId': typeof AuthenticatedAuthorizedPostquizContentIdRoute
+  '/onboarding/prequiz/$contentId': typeof AuthenticatedOnboardingPrequizContentIdRoute
+  '/postquiz/': typeof AuthenticatedAuthorizedPostquizIndexRoute
+  '/onboarding/prequiz/': typeof AuthenticatedOnboardingPrequizIndexRoute
+  '/courses/$courseId/content/$contentId': typeof AuthenticatedAuthorizedCoursesCourseIdContentContentIdRoute
+  '/courses/$courseId/content/': typeof AuthenticatedAuthorizedCoursesCourseIdContentIndexRoute
+}
+export interface FileRoutesByTo {
+  '/': typeof IndexRoute
+  '/onboarding': typeof AuthenticatedOnboardingRouteWithChildren
+  '/login': typeof AuthenticationLoginRoute
+  '/register': typeof AuthenticationRegisterRoute
+  '/certificate': typeof AuthenticatedAuthorizedCertificateRoute
+  '/dashboard': typeof AuthenticatedAuthorizedDashboardRoute
+  '/onboarding/$courseId': typeof AuthenticatedOnboardingCourseIdRoute
+  '/onboarding/interests': typeof AuthenticatedOnboardingInterestsRoute
+  '/onboarding/intro': typeof AuthenticatedOnboardingIntroRoute
+  '/onboarding/preQuizComplete': typeof AuthenticatedOnboardingPreQuizCompleteRoute
+  '/onboarding/preQuizIntro': typeof AuthenticatedOnboardingPreQuizIntroRoute
+  '/courses/$courseId': typeof AuthenticatedAuthorizedCoursesCourseIdRouteWithChildren
+  '/postquiz/$contentId': typeof AuthenticatedAuthorizedPostquizContentIdRoute
+  '/onboarding/prequiz/$contentId': typeof AuthenticatedOnboardingPrequizContentIdRoute
+  '/postquiz': typeof AuthenticatedAuthorizedPostquizIndexRoute
+  '/onboarding/prequiz': typeof AuthenticatedOnboardingPrequizIndexRoute
+  '/courses/$courseId/content/$contentId': typeof AuthenticatedAuthorizedCoursesCourseIdContentContentIdRoute
+  '/courses/$courseId/content': typeof AuthenticatedAuthorizedCoursesCourseIdContentIndexRoute
+}
+export interface FileRoutesById {
+  __root__: typeof rootRouteImport
+  '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteWithChildren
+  '/_authentication': typeof AuthenticationRouteWithChildren
+  '/_authenticated/_authorized': typeof AuthenticatedAuthorizedRouteWithChildren
+  '/_authenticated/onboarding': typeof AuthenticatedOnboardingRouteWithChildren
+  '/_authentication/login': typeof AuthenticationLoginRoute
+  '/_authentication/register': typeof AuthenticationRegisterRoute
+  '/_authenticated/_authorized/certificate': typeof AuthenticatedAuthorizedCertificateRoute
+  '/_authenticated/_authorized/dashboard': typeof AuthenticatedAuthorizedDashboardRoute
+  '/_authenticated/onboarding/$courseId': typeof AuthenticatedOnboardingCourseIdRoute
+  '/_authenticated/onboarding/interests': typeof AuthenticatedOnboardingInterestsRoute
+  '/_authenticated/onboarding/intro': typeof AuthenticatedOnboardingIntroRoute
+  '/_authenticated/onboarding/preQuizComplete': typeof AuthenticatedOnboardingPreQuizCompleteRoute
+  '/_authenticated/onboarding/preQuizIntro': typeof AuthenticatedOnboardingPreQuizIntroRoute
+  '/_authenticated/_authorized/courses/$courseId': typeof AuthenticatedAuthorizedCoursesCourseIdRouteWithChildren
+  '/_authenticated/_authorized/postquiz/$contentId': typeof AuthenticatedAuthorizedPostquizContentIdRoute
+  '/_authenticated/onboarding/prequiz/$contentId': typeof AuthenticatedOnboardingPrequizContentIdRoute
+  '/_authenticated/_authorized/postquiz/': typeof AuthenticatedAuthorizedPostquizIndexRoute
+  '/_authenticated/onboarding/prequiz/': typeof AuthenticatedOnboardingPrequizIndexRoute
+  '/_authenticated/_authorized/courses/$courseId/content/$contentId': typeof AuthenticatedAuthorizedCoursesCourseIdContentContentIdRoute
+  '/_authenticated/_authorized/courses/$courseId/content/': typeof AuthenticatedAuthorizedCoursesCourseIdContentIndexRoute
+}
+export interface FileRouteTypes {
+  fileRoutesByFullPath: FileRoutesByFullPath
+  fullPaths:
+    | '/'
+    | '/onboarding'
+    | '/login'
+    | '/register'
+    | '/certificate'
+    | '/dashboard'
+    | '/onboarding/$courseId'
+    | '/onboarding/interests'
+    | '/onboarding/intro'
+    | '/onboarding/preQuizComplete'
+    | '/onboarding/preQuizIntro'
+    | '/courses/$courseId'
+    | '/postquiz/$contentId'
+    | '/onboarding/prequiz/$contentId'
+    | '/postquiz/'
+    | '/onboarding/prequiz/'
+    | '/courses/$courseId/content/$contentId'
+    | '/courses/$courseId/content/'
+  fileRoutesByTo: FileRoutesByTo
+  to:
+    | '/'
+    | '/onboarding'
+    | '/login'
+    | '/register'
+    | '/certificate'
+    | '/dashboard'
+    | '/onboarding/$courseId'
+    | '/onboarding/interests'
+    | '/onboarding/intro'
+    | '/onboarding/preQuizComplete'
+    | '/onboarding/preQuizIntro'
+    | '/courses/$courseId'
+    | '/postquiz/$contentId'
+    | '/onboarding/prequiz/$contentId'
+    | '/postquiz'
+    | '/onboarding/prequiz'
+    | '/courses/$courseId/content/$contentId'
+    | '/courses/$courseId/content'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authenticated'
+    | '/_authentication'
+    | '/_authenticated/_authorized'
+    | '/_authenticated/onboarding'
+    | '/_authentication/login'
+    | '/_authentication/register'
+    | '/_authenticated/_authorized/certificate'
+    | '/_authenticated/_authorized/dashboard'
+    | '/_authenticated/onboarding/$courseId'
+    | '/_authenticated/onboarding/interests'
+    | '/_authenticated/onboarding/intro'
+    | '/_authenticated/onboarding/preQuizComplete'
+    | '/_authenticated/onboarding/preQuizIntro'
+    | '/_authenticated/_authorized/courses/$courseId'
+    | '/_authenticated/_authorized/postquiz/$contentId'
+    | '/_authenticated/onboarding/prequiz/$contentId'
+    | '/_authenticated/_authorized/postquiz/'
+    | '/_authenticated/onboarding/prequiz/'
+    | '/_authenticated/_authorized/courses/$courseId/content/$contentId'
+    | '/_authenticated/_authorized/courses/$courseId/content/'
+  fileRoutesById: FileRoutesById
+}
+export interface RootRouteChildren {
+  IndexRoute: typeof IndexRoute
+  AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
+  AuthenticationRoute: typeof AuthenticationRouteWithChildren
+}
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
+    '/_authentication': {
+      id: '/_authentication'
+      path: ''
       fullPath: '/'
-      preLoaderRoute: typeof IndexImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof AuthenticationRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/_authenticated': {
       id: '/_authenticated'
       path: ''
-      fullPath: ''
-      preLoaderRoute: typeof AuthenticatedImport
-      parentRoute: typeof rootRoute
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/_authentication': {
-      id: '/_authentication'
-      path: ''
-      fullPath: ''
-      preLoaderRoute: typeof AuthenticationImport
-      parentRoute: typeof rootRoute
-    }
-    '/_authenticated/_authorized': {
-      id: '/_authenticated/_authorized'
-      path: ''
-      fullPath: ''
-      preLoaderRoute: typeof AuthenticatedAuthorizedImport
-      parentRoute: typeof AuthenticatedImport
-    }
-    '/_authenticated/onboarding': {
-      id: '/_authenticated/onboarding'
-      path: '/onboarding'
-      fullPath: '/onboarding'
-      preLoaderRoute: typeof AuthenticatedOnboardingImport
-      parentRoute: typeof AuthenticatedImport
-    }
-    '/_authentication/login': {
-      id: '/_authentication/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof AuthenticationLoginImport
-      parentRoute: typeof AuthenticationImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/_authentication/register': {
       id: '/_authentication/register'
       path: '/register'
       fullPath: '/register'
-      preLoaderRoute: typeof AuthenticationRegisterImport
-      parentRoute: typeof AuthenticationImport
+      preLoaderRoute: typeof AuthenticationRegisterRouteImport
+      parentRoute: typeof AuthenticationRoute
     }
-    '/_authenticated/_authorized/certificate': {
-      id: '/_authenticated/_authorized/certificate'
-      path: '/certificate'
-      fullPath: '/certificate'
-      preLoaderRoute: typeof AuthenticatedAuthorizedCertificateImport
-      parentRoute: typeof AuthenticatedAuthorizedImport
+    '/_authentication/login': {
+      id: '/_authentication/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof AuthenticationLoginRouteImport
+      parentRoute: typeof AuthenticationRoute
     }
-    '/_authenticated/_authorized/dashboard': {
-      id: '/_authenticated/_authorized/dashboard'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof AuthenticatedAuthorizedDashboardImport
-      parentRoute: typeof AuthenticatedAuthorizedImport
+    '/_authenticated/onboarding': {
+      id: '/_authenticated/onboarding'
+      path: '/onboarding'
+      fullPath: '/onboarding'
+      preLoaderRoute: typeof AuthenticatedOnboardingRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
-    '/_authenticated/onboarding/$courseId': {
-      id: '/_authenticated/onboarding/$courseId'
-      path: '/$courseId'
-      fullPath: '/onboarding/$courseId'
-      preLoaderRoute: typeof AuthenticatedOnboardingCourseIdImport
-      parentRoute: typeof AuthenticatedOnboardingImport
-    }
-    '/_authenticated/onboarding/interests': {
-      id: '/_authenticated/onboarding/interests'
-      path: '/interests'
-      fullPath: '/onboarding/interests'
-      preLoaderRoute: typeof AuthenticatedOnboardingInterestsImport
-      parentRoute: typeof AuthenticatedOnboardingImport
-    }
-    '/_authenticated/onboarding/intro': {
-      id: '/_authenticated/onboarding/intro'
-      path: '/intro'
-      fullPath: '/onboarding/intro'
-      preLoaderRoute: typeof AuthenticatedOnboardingIntroImport
-      parentRoute: typeof AuthenticatedOnboardingImport
-    }
-    '/_authenticated/onboarding/preQuizComplete': {
-      id: '/_authenticated/onboarding/preQuizComplete'
-      path: '/preQuizComplete'
-      fullPath: '/onboarding/preQuizComplete'
-      preLoaderRoute: typeof AuthenticatedOnboardingPreQuizCompleteImport
-      parentRoute: typeof AuthenticatedOnboardingImport
+    '/_authenticated/_authorized': {
+      id: '/_authenticated/_authorized'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedAuthorizedRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/onboarding/preQuizIntro': {
       id: '/_authenticated/onboarding/preQuizIntro'
       path: '/preQuizIntro'
       fullPath: '/onboarding/preQuizIntro'
-      preLoaderRoute: typeof AuthenticatedOnboardingPreQuizIntroImport
-      parentRoute: typeof AuthenticatedOnboardingImport
+      preLoaderRoute: typeof AuthenticatedOnboardingPreQuizIntroRouteImport
+      parentRoute: typeof AuthenticatedOnboardingRoute
     }
-    '/_authenticated/_authorized/courses/$courseId': {
-      id: '/_authenticated/_authorized/courses/$courseId'
-      path: '/courses/$courseId'
-      fullPath: '/courses/$courseId'
-      preLoaderRoute: typeof AuthenticatedAuthorizedCoursesCourseIdImport
-      parentRoute: typeof AuthenticatedAuthorizedImport
+    '/_authenticated/onboarding/preQuizComplete': {
+      id: '/_authenticated/onboarding/preQuizComplete'
+      path: '/preQuizComplete'
+      fullPath: '/onboarding/preQuizComplete'
+      preLoaderRoute: typeof AuthenticatedOnboardingPreQuizCompleteRouteImport
+      parentRoute: typeof AuthenticatedOnboardingRoute
     }
-    '/_authenticated/_authorized/postquiz/$contentId': {
-      id: '/_authenticated/_authorized/postquiz/$contentId'
-      path: '/postquiz/$contentId'
-      fullPath: '/postquiz/$contentId'
-      preLoaderRoute: typeof AuthenticatedAuthorizedPostquizContentIdImport
-      parentRoute: typeof AuthenticatedAuthorizedImport
+    '/_authenticated/onboarding/intro': {
+      id: '/_authenticated/onboarding/intro'
+      path: '/intro'
+      fullPath: '/onboarding/intro'
+      preLoaderRoute: typeof AuthenticatedOnboardingIntroRouteImport
+      parentRoute: typeof AuthenticatedOnboardingRoute
+    }
+    '/_authenticated/onboarding/interests': {
+      id: '/_authenticated/onboarding/interests'
+      path: '/interests'
+      fullPath: '/onboarding/interests'
+      preLoaderRoute: typeof AuthenticatedOnboardingInterestsRouteImport
+      parentRoute: typeof AuthenticatedOnboardingRoute
+    }
+    '/_authenticated/onboarding/$courseId': {
+      id: '/_authenticated/onboarding/$courseId'
+      path: '/$courseId'
+      fullPath: '/onboarding/$courseId'
+      preLoaderRoute: typeof AuthenticatedOnboardingCourseIdRouteImport
+      parentRoute: typeof AuthenticatedOnboardingRoute
+    }
+    '/_authenticated/_authorized/dashboard': {
+      id: '/_authenticated/_authorized/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AuthenticatedAuthorizedDashboardRouteImport
+      parentRoute: typeof AuthenticatedAuthorizedRoute
+    }
+    '/_authenticated/_authorized/certificate': {
+      id: '/_authenticated/_authorized/certificate'
+      path: '/certificate'
+      fullPath: '/certificate'
+      preLoaderRoute: typeof AuthenticatedAuthorizedCertificateRouteImport
+      parentRoute: typeof AuthenticatedAuthorizedRoute
+    }
+    '/_authenticated/onboarding/prequiz/': {
+      id: '/_authenticated/onboarding/prequiz/'
+      path: '/prequiz'
+      fullPath: '/onboarding/prequiz/'
+      preLoaderRoute: typeof AuthenticatedOnboardingPrequizIndexRouteImport
+      parentRoute: typeof AuthenticatedOnboardingRoute
+    }
+    '/_authenticated/_authorized/postquiz/': {
+      id: '/_authenticated/_authorized/postquiz/'
+      path: '/postquiz'
+      fullPath: '/postquiz/'
+      preLoaderRoute: typeof AuthenticatedAuthorizedPostquizIndexRouteImport
+      parentRoute: typeof AuthenticatedAuthorizedRoute
     }
     '/_authenticated/onboarding/prequiz/$contentId': {
       id: '/_authenticated/onboarding/prequiz/$contentId'
       path: '/prequiz/$contentId'
       fullPath: '/onboarding/prequiz/$contentId'
-      preLoaderRoute: typeof AuthenticatedOnboardingPrequizContentIdImport
-      parentRoute: typeof AuthenticatedOnboardingImport
+      preLoaderRoute: typeof AuthenticatedOnboardingPrequizContentIdRouteImport
+      parentRoute: typeof AuthenticatedOnboardingRoute
     }
-    '/_authenticated/_authorized/postquiz/': {
-      id: '/_authenticated/_authorized/postquiz/'
-      path: '/postquiz'
-      fullPath: '/postquiz'
-      preLoaderRoute: typeof AuthenticatedAuthorizedPostquizIndexImport
-      parentRoute: typeof AuthenticatedAuthorizedImport
+    '/_authenticated/_authorized/postquiz/$contentId': {
+      id: '/_authenticated/_authorized/postquiz/$contentId'
+      path: '/postquiz/$contentId'
+      fullPath: '/postquiz/$contentId'
+      preLoaderRoute: typeof AuthenticatedAuthorizedPostquizContentIdRouteImport
+      parentRoute: typeof AuthenticatedAuthorizedRoute
     }
-    '/_authenticated/onboarding/prequiz/': {
-      id: '/_authenticated/onboarding/prequiz/'
-      path: '/prequiz'
-      fullPath: '/onboarding/prequiz'
-      preLoaderRoute: typeof AuthenticatedOnboardingPrequizIndexImport
-      parentRoute: typeof AuthenticatedOnboardingImport
+    '/_authenticated/_authorized/courses/$courseId': {
+      id: '/_authenticated/_authorized/courses/$courseId'
+      path: '/courses/$courseId'
+      fullPath: '/courses/$courseId'
+      preLoaderRoute: typeof AuthenticatedAuthorizedCoursesCourseIdRouteImport
+      parentRoute: typeof AuthenticatedAuthorizedRoute
+    }
+    '/_authenticated/_authorized/courses/$courseId/content/': {
+      id: '/_authenticated/_authorized/courses/$courseId/content/'
+      path: '/content'
+      fullPath: '/courses/$courseId/content/'
+      preLoaderRoute: typeof AuthenticatedAuthorizedCoursesCourseIdContentIndexRouteImport
+      parentRoute: typeof AuthenticatedAuthorizedCoursesCourseIdRoute
     }
     '/_authenticated/_authorized/courses/$courseId/content/$contentId': {
       id: '/_authenticated/_authorized/courses/$courseId/content/$contentId'
       path: '/content/$contentId'
       fullPath: '/courses/$courseId/content/$contentId'
-      preLoaderRoute: typeof AuthenticatedAuthorizedCoursesCourseIdContentContentIdImport
-      parentRoute: typeof AuthenticatedAuthorizedCoursesCourseIdImport
-    }
-    '/_authenticated/_authorized/courses/$courseId/content/': {
-      id: '/_authenticated/_authorized/courses/$courseId/content/'
-      path: '/content'
-      fullPath: '/courses/$courseId/content'
-      preLoaderRoute: typeof AuthenticatedAuthorizedCoursesCourseIdContentIndexImport
-      parentRoute: typeof AuthenticatedAuthorizedCoursesCourseIdImport
+      preLoaderRoute: typeof AuthenticatedAuthorizedCoursesCourseIdContentContentIdRouteImport
+      parentRoute: typeof AuthenticatedAuthorizedCoursesCourseIdRoute
     }
   }
 }
-
-// Create and export the route tree
 
 interface AuthenticatedAuthorizedCoursesCourseIdRouteChildren {
   AuthenticatedAuthorizedCoursesCourseIdContentContentIdRoute: typeof AuthenticatedAuthorizedCoursesCourseIdContentContentIdRoute
@@ -432,280 +540,11 @@ const AuthenticationRouteWithChildren = AuthenticationRoute._addFileChildren(
   AuthenticationRouteChildren,
 )
 
-export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '': typeof AuthenticatedAuthorizedRouteWithChildren
-  '/onboarding': typeof AuthenticatedOnboardingRouteWithChildren
-  '/login': typeof AuthenticationLoginRoute
-  '/register': typeof AuthenticationRegisterRoute
-  '/certificate': typeof AuthenticatedAuthorizedCertificateRoute
-  '/dashboard': typeof AuthenticatedAuthorizedDashboardRoute
-  '/onboarding/$courseId': typeof AuthenticatedOnboardingCourseIdRoute
-  '/onboarding/interests': typeof AuthenticatedOnboardingInterestsRoute
-  '/onboarding/intro': typeof AuthenticatedOnboardingIntroRoute
-  '/onboarding/preQuizComplete': typeof AuthenticatedOnboardingPreQuizCompleteRoute
-  '/onboarding/preQuizIntro': typeof AuthenticatedOnboardingPreQuizIntroRoute
-  '/courses/$courseId': typeof AuthenticatedAuthorizedCoursesCourseIdRouteWithChildren
-  '/postquiz/$contentId': typeof AuthenticatedAuthorizedPostquizContentIdRoute
-  '/onboarding/prequiz/$contentId': typeof AuthenticatedOnboardingPrequizContentIdRoute
-  '/postquiz': typeof AuthenticatedAuthorizedPostquizIndexRoute
-  '/onboarding/prequiz': typeof AuthenticatedOnboardingPrequizIndexRoute
-  '/courses/$courseId/content/$contentId': typeof AuthenticatedAuthorizedCoursesCourseIdContentContentIdRoute
-  '/courses/$courseId/content': typeof AuthenticatedAuthorizedCoursesCourseIdContentIndexRoute
-}
-
-export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '': typeof AuthenticatedAuthorizedRouteWithChildren
-  '/onboarding': typeof AuthenticatedOnboardingRouteWithChildren
-  '/login': typeof AuthenticationLoginRoute
-  '/register': typeof AuthenticationRegisterRoute
-  '/certificate': typeof AuthenticatedAuthorizedCertificateRoute
-  '/dashboard': typeof AuthenticatedAuthorizedDashboardRoute
-  '/onboarding/$courseId': typeof AuthenticatedOnboardingCourseIdRoute
-  '/onboarding/interests': typeof AuthenticatedOnboardingInterestsRoute
-  '/onboarding/intro': typeof AuthenticatedOnboardingIntroRoute
-  '/onboarding/preQuizComplete': typeof AuthenticatedOnboardingPreQuizCompleteRoute
-  '/onboarding/preQuizIntro': typeof AuthenticatedOnboardingPreQuizIntroRoute
-  '/courses/$courseId': typeof AuthenticatedAuthorizedCoursesCourseIdRouteWithChildren
-  '/postquiz/$contentId': typeof AuthenticatedAuthorizedPostquizContentIdRoute
-  '/onboarding/prequiz/$contentId': typeof AuthenticatedOnboardingPrequizContentIdRoute
-  '/postquiz': typeof AuthenticatedAuthorizedPostquizIndexRoute
-  '/onboarding/prequiz': typeof AuthenticatedOnboardingPrequizIndexRoute
-  '/courses/$courseId/content/$contentId': typeof AuthenticatedAuthorizedCoursesCourseIdContentContentIdRoute
-  '/courses/$courseId/content': typeof AuthenticatedAuthorizedCoursesCourseIdContentIndexRoute
-}
-
-export interface FileRoutesById {
-  __root__: typeof rootRoute
-  '/': typeof IndexRoute
-  '/_authenticated': typeof AuthenticatedRouteWithChildren
-  '/_authentication': typeof AuthenticationRouteWithChildren
-  '/_authenticated/_authorized': typeof AuthenticatedAuthorizedRouteWithChildren
-  '/_authenticated/onboarding': typeof AuthenticatedOnboardingRouteWithChildren
-  '/_authentication/login': typeof AuthenticationLoginRoute
-  '/_authentication/register': typeof AuthenticationRegisterRoute
-  '/_authenticated/_authorized/certificate': typeof AuthenticatedAuthorizedCertificateRoute
-  '/_authenticated/_authorized/dashboard': typeof AuthenticatedAuthorizedDashboardRoute
-  '/_authenticated/onboarding/$courseId': typeof AuthenticatedOnboardingCourseIdRoute
-  '/_authenticated/onboarding/interests': typeof AuthenticatedOnboardingInterestsRoute
-  '/_authenticated/onboarding/intro': typeof AuthenticatedOnboardingIntroRoute
-  '/_authenticated/onboarding/preQuizComplete': typeof AuthenticatedOnboardingPreQuizCompleteRoute
-  '/_authenticated/onboarding/preQuizIntro': typeof AuthenticatedOnboardingPreQuizIntroRoute
-  '/_authenticated/_authorized/courses/$courseId': typeof AuthenticatedAuthorizedCoursesCourseIdRouteWithChildren
-  '/_authenticated/_authorized/postquiz/$contentId': typeof AuthenticatedAuthorizedPostquizContentIdRoute
-  '/_authenticated/onboarding/prequiz/$contentId': typeof AuthenticatedOnboardingPrequizContentIdRoute
-  '/_authenticated/_authorized/postquiz/': typeof AuthenticatedAuthorizedPostquizIndexRoute
-  '/_authenticated/onboarding/prequiz/': typeof AuthenticatedOnboardingPrequizIndexRoute
-  '/_authenticated/_authorized/courses/$courseId/content/$contentId': typeof AuthenticatedAuthorizedCoursesCourseIdContentContentIdRoute
-  '/_authenticated/_authorized/courses/$courseId/content/': typeof AuthenticatedAuthorizedCoursesCourseIdContentIndexRoute
-}
-
-export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths:
-    | '/'
-    | ''
-    | '/onboarding'
-    | '/login'
-    | '/register'
-    | '/certificate'
-    | '/dashboard'
-    | '/onboarding/$courseId'
-    | '/onboarding/interests'
-    | '/onboarding/intro'
-    | '/onboarding/preQuizComplete'
-    | '/onboarding/preQuizIntro'
-    | '/courses/$courseId'
-    | '/postquiz/$contentId'
-    | '/onboarding/prequiz/$contentId'
-    | '/postquiz'
-    | '/onboarding/prequiz'
-    | '/courses/$courseId/content/$contentId'
-    | '/courses/$courseId/content'
-  fileRoutesByTo: FileRoutesByTo
-  to:
-    | '/'
-    | ''
-    | '/onboarding'
-    | '/login'
-    | '/register'
-    | '/certificate'
-    | '/dashboard'
-    | '/onboarding/$courseId'
-    | '/onboarding/interests'
-    | '/onboarding/intro'
-    | '/onboarding/preQuizComplete'
-    | '/onboarding/preQuizIntro'
-    | '/courses/$courseId'
-    | '/postquiz/$contentId'
-    | '/onboarding/prequiz/$contentId'
-    | '/postquiz'
-    | '/onboarding/prequiz'
-    | '/courses/$courseId/content/$contentId'
-    | '/courses/$courseId/content'
-  id:
-    | '__root__'
-    | '/'
-    | '/_authenticated'
-    | '/_authentication'
-    | '/_authenticated/_authorized'
-    | '/_authenticated/onboarding'
-    | '/_authentication/login'
-    | '/_authentication/register'
-    | '/_authenticated/_authorized/certificate'
-    | '/_authenticated/_authorized/dashboard'
-    | '/_authenticated/onboarding/$courseId'
-    | '/_authenticated/onboarding/interests'
-    | '/_authenticated/onboarding/intro'
-    | '/_authenticated/onboarding/preQuizComplete'
-    | '/_authenticated/onboarding/preQuizIntro'
-    | '/_authenticated/_authorized/courses/$courseId'
-    | '/_authenticated/_authorized/postquiz/$contentId'
-    | '/_authenticated/onboarding/prequiz/$contentId'
-    | '/_authenticated/_authorized/postquiz/'
-    | '/_authenticated/onboarding/prequiz/'
-    | '/_authenticated/_authorized/courses/$courseId/content/$contentId'
-    | '/_authenticated/_authorized/courses/$courseId/content/'
-  fileRoutesById: FileRoutesById
-}
-
-export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
-  AuthenticationRoute: typeof AuthenticationRouteWithChildren
-}
-
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   AuthenticationRoute: AuthenticationRouteWithChildren,
 }
-
-export const routeTree = rootRoute
+export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-/* ROUTE_MANIFEST_START
-{
-  "routes": {
-    "__root__": {
-      "filePath": "__root.tsx",
-      "children": [
-        "/",
-        "/_authenticated",
-        "/_authentication"
-      ]
-    },
-    "/": {
-      "filePath": "index.tsx"
-    },
-    "/_authenticated": {
-      "filePath": "_authenticated.tsx",
-      "children": [
-        "/_authenticated/_authorized",
-        "/_authenticated/onboarding"
-      ]
-    },
-    "/_authentication": {
-      "filePath": "_authentication.tsx",
-      "children": [
-        "/_authentication/login",
-        "/_authentication/register"
-      ]
-    },
-    "/_authenticated/_authorized": {
-      "filePath": "_authenticated/_authorized.tsx",
-      "parent": "/_authenticated",
-      "children": [
-        "/_authenticated/_authorized/certificate",
-        "/_authenticated/_authorized/dashboard",
-        "/_authenticated/_authorized/courses/$courseId",
-        "/_authenticated/_authorized/postquiz/$contentId",
-        "/_authenticated/_authorized/postquiz/"
-      ]
-    },
-    "/_authenticated/onboarding": {
-      "filePath": "_authenticated/onboarding.tsx",
-      "parent": "/_authenticated",
-      "children": [
-        "/_authenticated/onboarding/$courseId",
-        "/_authenticated/onboarding/interests",
-        "/_authenticated/onboarding/intro",
-        "/_authenticated/onboarding/preQuizComplete",
-        "/_authenticated/onboarding/preQuizIntro",
-        "/_authenticated/onboarding/prequiz/$contentId",
-        "/_authenticated/onboarding/prequiz/"
-      ]
-    },
-    "/_authentication/login": {
-      "filePath": "_authentication/login.tsx",
-      "parent": "/_authentication"
-    },
-    "/_authentication/register": {
-      "filePath": "_authentication/register.tsx",
-      "parent": "/_authentication"
-    },
-    "/_authenticated/_authorized/certificate": {
-      "filePath": "_authenticated/_authorized/certificate.tsx",
-      "parent": "/_authenticated/_authorized"
-    },
-    "/_authenticated/_authorized/dashboard": {
-      "filePath": "_authenticated/_authorized/dashboard.tsx",
-      "parent": "/_authenticated/_authorized"
-    },
-    "/_authenticated/onboarding/$courseId": {
-      "filePath": "_authenticated/onboarding/$courseId.tsx",
-      "parent": "/_authenticated/onboarding"
-    },
-    "/_authenticated/onboarding/interests": {
-      "filePath": "_authenticated/onboarding/interests.tsx",
-      "parent": "/_authenticated/onboarding"
-    },
-    "/_authenticated/onboarding/intro": {
-      "filePath": "_authenticated/onboarding/intro.tsx",
-      "parent": "/_authenticated/onboarding"
-    },
-    "/_authenticated/onboarding/preQuizComplete": {
-      "filePath": "_authenticated/onboarding/preQuizComplete.tsx",
-      "parent": "/_authenticated/onboarding"
-    },
-    "/_authenticated/onboarding/preQuizIntro": {
-      "filePath": "_authenticated/onboarding/preQuizIntro.tsx",
-      "parent": "/_authenticated/onboarding"
-    },
-    "/_authenticated/_authorized/courses/$courseId": {
-      "filePath": "_authenticated/_authorized/courses/$courseId.tsx",
-      "parent": "/_authenticated/_authorized",
-      "children": [
-        "/_authenticated/_authorized/courses/$courseId/content/$contentId",
-        "/_authenticated/_authorized/courses/$courseId/content/"
-      ]
-    },
-    "/_authenticated/_authorized/postquiz/$contentId": {
-      "filePath": "_authenticated/_authorized/postquiz/$contentId.tsx",
-      "parent": "/_authenticated/_authorized"
-    },
-    "/_authenticated/onboarding/prequiz/$contentId": {
-      "filePath": "_authenticated/onboarding/prequiz/$contentId.tsx",
-      "parent": "/_authenticated/onboarding"
-    },
-    "/_authenticated/_authorized/postquiz/": {
-      "filePath": "_authenticated/_authorized/postquiz/index.tsx",
-      "parent": "/_authenticated/_authorized"
-    },
-    "/_authenticated/onboarding/prequiz/": {
-      "filePath": "_authenticated/onboarding/prequiz/index.tsx",
-      "parent": "/_authenticated/onboarding"
-    },
-    "/_authenticated/_authorized/courses/$courseId/content/$contentId": {
-      "filePath": "_authenticated/_authorized/courses/$courseId/content/$contentId.tsx",
-      "parent": "/_authenticated/_authorized/courses/$courseId"
-    },
-    "/_authenticated/_authorized/courses/$courseId/content/": {
-      "filePath": "_authenticated/_authorized/courses/$courseId/content/index.tsx",
-      "parent": "/_authenticated/_authorized/courses/$courseId"
-    }
-  }
-}
-ROUTE_MANIFEST_END */
