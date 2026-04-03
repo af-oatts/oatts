@@ -238,6 +238,7 @@ jobs:
             files: 
                 ./release-files/*
   dispatch_website_build:
+    needs: release
     runs-on: ubuntu-latest
     steps:
       - name: Generate app token
