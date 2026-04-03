@@ -5,7 +5,7 @@
  */
 
 import { alpha, Button, ButtonProps } from "@mui/material";
-import { ReactNode } from "@tanstack/react-router";
+import { ReactNode } from "react";
 
 function OnboardNavButton(props: ButtonProps) {
   return <>

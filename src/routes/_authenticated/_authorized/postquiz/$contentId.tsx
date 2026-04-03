@@ -14,7 +14,6 @@ import { usePostquiz } from '@/contexts/providers/CourseContextProvider';
 import { addUserStatusFlag } from '@/core/authentication/UserStatusFlag';
 import { CourseContent } from '@/core/model/OattsModel';
 import { UserStatusFlag } from '@/core/model/UserModel';
-import { CircularProgress } from '@mui/material';
 import { createFileRoute, Navigate, useNavigate, useParams } from '@tanstack/react-router'
 import { useMemo } from 'react';
 

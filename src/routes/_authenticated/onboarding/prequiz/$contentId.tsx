@@ -7,7 +7,6 @@
 import CourseView from "@/components/module/CourseView";
 import { usePrequiz } from "@/contexts/providers/CourseContextProvider";
 import { CourseContent } from "@/core/model/OattsModel";
-import { CircularProgress } from "@mui/material";
 import { createFileRoute, Navigate, useNavigate, useParams } from "@tanstack/react-router";
 import { useMemo } from "react";
 
