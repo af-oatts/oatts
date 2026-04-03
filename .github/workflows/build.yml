@@ -237,3 +237,21 @@ jobs:
             prerelease: false
             files: 
                 ./release-files/*
+  dispatch_website_build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Generate app token
+        uses: actions/create-github-app-token@v1
+        id: app-token
+        with:
+          app-id: ${{ secrets.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+          owner: af-oatts
+
+      - name: Trigger pages rebuild
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ steps.app-token.outputs.token }}
+          repository: af-oatts/af-oatts.github.io
+          event-type: new-release
+        
