@@ -43,7 +43,7 @@ async function getLatestFromGithub(owner: string, repo: string) {
 
 export default async function CheckForUpdates(): Promise<UpdateCheckResult> {
     let latest = await getLatestFromGithub("af-oatts", 'oatts');
-    let githubVersionStr = latest.tag;
+    let githubVersionStr = latest.name;
     let githubAppVersion = getAppVersionNumbers(githubVersionStr);
     let githubContentVersion = getContentVersionNumbers(githubVersionStr);
 

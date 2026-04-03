@@ -9,8 +9,6 @@ export async function FetchFile(filePath: string, expectedContentType: string): 
   console.log("Fetching " + filePath);
   
   let response = await fetch(filePath);
-  console.log("Recieved: ");
-  console.log(response);
   
   
   if (!response.ok) {

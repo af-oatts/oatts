@@ -31,6 +31,7 @@ pub async fn get_latest_from_github(owner: &str, repo: &str) -> Result<ReleaseLi
     let data: GithubRelease = client
         .get(&url)
         .header("Accept", "application/vnd.github+json")
+        .header("User-Agent", "OATTS-Updater 1.0.0")
         .send()
         .await
         .map_err(|e| e.to_string())?
