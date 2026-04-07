@@ -53,16 +53,16 @@ export default function PersonalData({
             >
               <FormControl required>
                 <FormLabel>First Name</FormLabel>
-                <TextField type="name" name="firstname" placeholder="John" />
+                <TextField required type="name" name="firstname" placeholder="John" />
               </FormControl>
               <FormControl required>
                 <FormLabel>Last Name</FormLabel>
-                <TextField type="name" name="lastname" placeholder="Smith" />
+                <TextField required type="name" name="lastname" placeholder="Smith" />
               </FormControl>
             </Box>
             <FormControl error={error.email !== undefined} required>
               <FormLabel>Email (use .mil email if you have one)</FormLabel>
-              <TextField type="email" name="email" placeholder="john.smith.1@us.af.mil" />
+              <TextField required type="email" name="email" placeholder="john.smith.1@us.af.mil" />
               {error.email ? (
                 <Typography variant="caption" sx={{ color: "error.light" }}>
                   {error.email}
