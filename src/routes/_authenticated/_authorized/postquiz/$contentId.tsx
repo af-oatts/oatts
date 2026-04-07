@@ -12,7 +12,7 @@ import CourseView from '@/components/module/CourseView';
 import { useUser } from '@/contexts/hooks/useUser';
 import { usePostquiz } from '@/contexts/providers/CourseContextProvider';
 import { addUserStatusFlag } from '@/core/authentication/UserStatusFlag';
-import { Course, CourseContent } from '@/core/model/OattsModel';
+import { CourseContent } from '@/core/model/OattsModel';
 import { UserStatusFlag } from '@/core/model/UserModel';
 import { createFileRoute, Navigate, useNavigate, useParams } from '@tanstack/react-router'
 import { useMemo } from 'react';
