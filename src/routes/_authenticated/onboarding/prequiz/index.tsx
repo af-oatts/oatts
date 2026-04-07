@@ -27,28 +27,34 @@ function RouteComponent() {
     return <CircularProgress></CircularProgress>
   }
 
-
-  if (courses === null || next === null) {
+  if (courses === null) {
     return <Navigate to="/dashboard" />
   }
 
-  return (
-    <Navigate
-      to={"/onboarding/prequiz/$contentId"}
-      params={{
-        contentId: next,
-      }}
-    />
-  );
+  if (next === null) {
+    return <Navigate to="/onboarding/preQuizComplete"/>
+  }
+
+
+
+
+    return (
+      <Navigate
+        to={"/onboarding/prequiz/$contentId"}
+        params={{
+          contentId: next,
+        }}
+      />
+    );
 }
 
 function determineNext(allContent: CourseContent[], statuses: Map<string, Status | undefined>): string | null {
-  for(let content of allContent) {
-    if(content.children) {
+  for (let content of allContent) {
+    if (content.children) {
       continue; // Content with children have no state. 
     }
     const status = statuses.get(content.id);
-    if(!status || status.completionStatus !== CompletionStatus.Completed) {
+    if (!status || status.completionStatus !== CompletionStatus.Completed) {
       return content.id;
     }
   }
