@@ -31,5 +31,5 @@ function RouteComponent() {
   if (isLoading || !course) {
     return <CircularProgress />
   }
-  return <CourseView contentID={contentId} contents={course.contents} courseName={course.name} finish={finish} setContentID={setContentID} />;
+  return <CourseView contentID={contentId} contents={course.contents} courseName={course.name} finish={finish} setContentID={setContentID} paNumber={course.paNumber} />;
 }

@@ -36,6 +36,7 @@ function RouteComponent() {
 
   const contents = useMemo(() => prequizCourses?.reduce((acc: CourseContent[], course) => [...acc, ...course.contents], []), [prequizCourses])
 
+  const paNumber = useMemo(()=> prequizCourses?.reduce((acc: string[], course) => course.paNumber && !acc.includes(course.paNumber)? [...acc, course.paNumber]: [...acc], []), [prequizCourses])
 
-  return <CourseView contents={contents} contentID={contentId} courseName="Prequiz" finish={finish} setContentID={setContentID} />;
+  return <CourseView contents={contents} contentID={contentId} courseName="Prequiz" finish={finish} setContentID={setContentID} paNumber={paNumber.join(",")} />;
 }
