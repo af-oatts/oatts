@@ -33,6 +33,7 @@ export function CourseCompletionView() {
     setIsLoading(true);
     if(!user.user) {
       setExportButtonText("Cannot export. User is null!")
+      setIsLoading(false);
       return;
     }
     setOverlay(
