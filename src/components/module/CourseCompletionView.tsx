@@ -30,6 +30,7 @@ export function CourseCompletionView() {
 
 
   async function DoExport() {
+    setIsLoading(true);
     if(!user.user) {
       setExportButtonText("Cannot export. User is null!")
       return;
@@ -44,6 +45,7 @@ export function CourseCompletionView() {
             setExportButtonText("Failed to export. " + result.message);
           }
           setOverlay(null);
+          setIsLoading(false);
         }}
       ></InformedConsent>,
     );
