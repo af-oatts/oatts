@@ -19,8 +19,10 @@ export async function ExportUserProgress(user: User | undefined, informedConsent
     multiple: false,
     title: "Select Export Save Path"
   });
+  console.log("Over here");
+  
 
-  if (dir === undefined) {
+  if (dir === undefined || dir === null) {
     return new GenericResult(false, "Export canceled.");
   }
 
