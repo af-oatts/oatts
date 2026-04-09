@@ -1,6 +1,6 @@
 [package]
 name = "OATTS"
-version = "1.0.1"
+version = "1.0.2"
 description = "OATTS"
 authors = ["The OATTS Authors"]
 edition = "2021"
