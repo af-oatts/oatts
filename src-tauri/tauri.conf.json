@@ -52,6 +52,11 @@
       "files": {},
       "hardenedRuntime": true,
       "minimumSystemVersion": "10.13"
+    },
+    "windows": {
+      "certificateThumbprint": "2D81061F34674BC7A2C135D45AA0F3AB4B765AAC",
+      "digestAlgorithm" : "sha256",
+      "timestampUrl" : "http://timestamp.digicert.com"
     }
   }
 }

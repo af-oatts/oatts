@@ -109,6 +109,18 @@ jobs:
         run: |
           echo "${{steps.keygen.outputs.public-key}}" > public/key.pub
 
+
+      - name: Import Windows certificate
+        if: matrix.platform == 'windows-latest'
+        shell: pwsh
+        run: |
+          $cert = [System.Convert]::FromBase64String("${{ secrets.WINDOWS_CERTIFICATE }}")
+          $certPath = "$env:TEMP\cert.pfx"
+          [System.IO.File]::WriteAllBytes($certPath, $cert)
+          Import-PfxCertificate -FilePath $certPath -CertStoreLocation Cert:\CurrentUser\My -Password (ConvertTo-SecureString -String "${{ secrets.WINDOWS_CERTIFICATE_PASSWORD }}" -Force -AsPlainText)
+          Remove-Item $certPath
+
+
       - name: Build App
         uses: tauri-apps/tauri-action@v0
         env:
